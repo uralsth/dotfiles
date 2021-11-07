@@ -1,0 +1,144 @@
+* t and nil 
+* Equality
+** eq : 1 and 1 only equal
+** eql: string and list are not equal
+** equal: normal equal
+** Type specific equality predicates
+* Numbers (self evaluating)
+** Integers
+** Floating point numbers
+*** 1. and 1.0 are different
+* Operation on numbers
+** (+ 5 5) = 10
+** (* (+ 3 2 ) (-10 5))
+** (1+ 5) 
+** (1- 5)
+** truncate
+** round
+** floor
+** ceiling
+* Predicates 
+** integerp
+** floatp
+** numberp
+** zerop
+** sequencep
+** listp
+** stringp 
+** string-or-null-p
+** char-or-string-p
+** arrayp
+** 
+* Comparison 
+** =
+** <
+** >
+** max
+** min
+** char-equal  
+*** a = A  gives true
+*** case-fold-search 
+** string= or string-equal 
+** string< or string-lessp 
+** string> or string-greaterp 
+* Characters 
+** ?A
+** ?a
+** ?\n
+** ?\d
+** ?\N{U+E0}
+** ?\C-c
+** (kbd "C-c")
+* Sequence 
+** sequencep
+** =String, list and array= are sequences
+** get length of sequence  using =length=
+** get an element of any sequence with =elt=
+* Strings 
+** "Hello!"
+** "Hello \
+System Crafter"
+** make string
+*** (make-string 5 ?!) = 5 character long with "!"
+** string
+*** (string ?H ?e)
+* operation on string 
+** substring
+*** (substring "Hello!" 0 4) ;; Hell
+**** starting at 0 and ending 4
+** concat
+*** (concat "sad" " " " ")
+*** (concat)  ;; empty string
+** split-string
+*** (split-string "adsd asdas" "d")
+*** "[  !]" 
+*** Default: [ \f\t\n\t]
+* Formatting
+** (fromat "hello %d %s!" 110 "ural") 
+* Writing messge
+** (message "This is %d" 5)
+* List
+** Cons Cells
+*** pair of two values
+*** tuples
+*** car and cdr
+*** (cons 1 2)
+*** '(1 . 2)
+*** (car '(1 . 2))
+*** (cdr '(1 . 2))
+*** setcar
+*** setcdr
+** Building lists from cons
+*** chain of conses = list 
+*** first left part is value and second value is cons
+*** (cons 1 (cons 2 (cons 3 (cons 4 nil))))
+*** (cons 1 '(2 3 4))
+*** two list can be append using above ways
+*** (append '(1 2 3) 4)
+** Predicates
+*** consp 
+** Alists
+*** Association list
+*** alist-get
+*** assq
+*** rassq
+*** setf
+** Plists
+*** '(key value key value ...)
+*** plist-get
+*** plist-put
+* Arrays
+** sequences of values that are arranged continuosly in memory
+** faster than list
+** aset
+** strings can also be treated as arrays
+** fillarray
+* Logic Expression
+** and, or
+** Excpet the value nil and empty list, all are true 
+** Even 0 is true
+** not and or xor
+** (and t t t 'foo) ;; if all values are equal then only gives last value trur
+* Conditon expression
+** if expression
+*** (if t  5
+               (message "Doing sss")
+               (+ 2 2))
+*** progn
+**** enable multiple expression
+** When and unless
+*** when : t
+*** Unless: nil
+** cond
+*** list multiple condition
+** pcase
+*** 
+* Loops
+** while
+** dotimes
+***  (dotimes (count 5) (runthis loop))
+** dolist
+*** loops for each item in a list
+*** (dolist (variable-name list-or-variable-containing-loop
+** recursion
+*** 

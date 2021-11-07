@@ -1,0 +1,26 @@
+
+* 2021
+** 2021-10 October
+*** 2021-10-10 Sunday
+
+**** 02:22 PM - Notes                                              :notes:
+:LOGBOOK:
+CLOCK: [2021-10-10 Sun 14:22]--[2021-10-10 Sun 14:23] =>  0:01
+:END:
+
+ DPI: 112
+**** 03:21 PM - Notes                                              :notes:
+:LOGBOOK:
+CLOCK: [2021-10-10 Sun 15:21]--[2021-10-10 Sun 15:23] =>  0:02
+:END:
+*** 2021-10-11 Monday
+
+**** 12:32 PM - Notes                                              :notes:
+:LOGBOOK:
+CLOCK: [2021-10-11 Mon 12:32]--[2021-10-11 Mon 12:33] =>  0:01
+:END:
+
+Disable a touchpad:
+synclient Touchpadoff=1 (0 to enable)
+
+
