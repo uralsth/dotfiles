@@ -270,8 +270,10 @@ globalkeys = mytable.join(
               {description = "destroy all notifications", group = "hotkeys"}),
     -- Take a screenshot
     -- https://github.com/lcpz/dots/blob/master/bin/screenshot
-    awful.key({ altkey }, "p", function() os.execute("screenshot") end,
+    awful.key({ altkey }, "p", function() os.execute("partial-screenshot") end,
               {description = "take a screenshot", group = "hotkeys"}),
+    awful.key({ modkey, altkey }, "p", function () os.execute("full-screenshot") end,
+        {description = "Scrot", group = "screenshots"}),
 
     -- X screen locker
     awful.key({ altkey, "Control" }, "l", function () os.execute(scrlocker) end,
@@ -345,7 +347,7 @@ globalkeys = mytable.join(
     awful.key({ }, "XF86MonBrightnessUp", function ()
 	  awful.util.spawn("brightnessctl set +5%") end),
 
-    
+
     -- Sound manipulation 
     awful.key({ }, "XF86AudioLowerVolume", function ()
 	  awful.util.spawn("pactl set-sink-volume alsa_output.pci-0000_00_1f.3.analog-stereo -10%") end),
