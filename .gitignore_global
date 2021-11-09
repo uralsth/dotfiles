@@ -3,3 +3,5 @@ etc/
 elpa/
 packages/
 cask/
+.emacs.d/%back*
+.emacs.d/.last*
