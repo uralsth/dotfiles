@@ -1,0 +1,11 @@
+# Basic binds
+super + d
+      dmenu_run
+super + q
+      firefox
+super + e
+      emacsclient -c -a 'emacs'
+super + s
+      LD_PRELOAD=/usr/local/lib/spotify-adblock.so spotify
+super + shift + y
+      ytfzf -D 
