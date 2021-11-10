@@ -280,7 +280,7 @@ globalkeys = mytable.join(
               {description = "lock screen", group = "hotkeys"}),
 
     -- Show help
-    awful.key({ modkey,           }, "s",      hotkeys_popup.show_help,
+    awful.key({ modkey,  }, "`",      hotkeys_popup.show_help,
               {description="show help", group="awesome"}),
 
     -- Tag browsing
@@ -545,8 +545,8 @@ globalkeys = mytable.join(
               {description = "copy gtk to terminal", group = "hotkeys"}),
 
     -- User programs
-    awful.key({ modkey }, "q", function () awful.spawn(browser) end,
-              {description = "run browser", group = "launcher"}),
+    -- awful.key({ modkey }, "q", function () awful.spawn(browser) end,
+    --           {description = "run browser", group = "launcher"}),
 
     -- Default
     --[[ Menubar
@@ -573,17 +573,17 @@ globalkeys = mytable.join(
     -- awful.key({ modkey }, "r", function () awful.screen.focused().mypromptbox:run() end,
               -- {description = "run prompt", group = "launcher"}),
 
-    awful.key({ modkey },            "r",     function ()
-	  awful.util.spawn("rofi -show") end,
-       {description = "run rofi", group = "launcher"}),
+    -- awful.key({ modkey },            "r",     function ()
+    -- 	  awful.util.spawn("rofi -show") end,
+    --    {description = "run rofi", group = "launcher"}),
     
-    awful.key({ modkey },            "t",     function ()
-	  awful.util.spawn("LD_PRELOAD=/usr/local/lib/spotify-adblock.so spotify") end,
-       {description = "run spotify", group = "launcher"}),
+    -- awful.key({ modkey },            "t",     function ()
+    -- 	  awful.util.spawn("LD_PRELOAD=/usr/local/lib/spotify-adblock.so spotify") end,
+    --    {description = "run spotify", group = "launcher"}),
 
-    awful.key({ modkey },            "e",     function ()
-	  awful.util.spawn("emacsclient -c -a 'emacs'") end,
-       {description = "run emacs", group = "launcher"}),
+    -- awful.key({ modkey },            "e",     function ()
+    -- 	  awful.util.spawn("emacsclient -c -a 'emacs'") end,
+    --    {description = "run emacs", group = "launcher"}),
     
     awful.key({ modkey }, "x",
               function ()
