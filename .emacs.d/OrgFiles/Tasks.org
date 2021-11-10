@@ -56,9 +56,10 @@ SCHEDULED: <2021-11-09 Tue +3d>
 
 ** TODO Water a plan outside
 :PROPERTIES:
-:LAST_REPEAT: [2021-11-07 Sun 08:20]
+:LAST_REPEAT: [2021-11-09 Tue 07:15]
 :END:
 :LOGBOOK:
+- State "DONE"       from "NEXT"       [2021-11-09 Tue 07:15]
 - State "DONE"       from "NEXT"       [2021-11-07 Sun 08:20]
 - State "DONE"       from "NEXT"       [2021-11-07 Sun 08:20]
 - State "DONE"       from "NEXT"       [2021-11-05 Fri 10:44]
@@ -69,13 +70,14 @@ SCHEDULED: <2021-11-09 Tue +3d>
 - State "DONE"       from "NEXT"       [2021-10-31 Sun 17:30]
 - State "DONE"       from "NEXT"       [2021-10-31 Sun 17:29]
 :END:
-SCHEDULED: <2021-11-08 Mon +1d>
+SCHEDULED: <2021-11-09 Tue +1d>
 
 ** TODO Journal 
 :PROPERTIES:
-:LAST_REPEAT: [2021-11-08 Mon 06:58]
+:LAST_REPEAT: [2021-11-09 Tue 07:16]
 :END:
 :LOGBOOK:
+- State "DONE"       from "NEXT"       [2021-11-09 Tue 07:16]
 - State "DONE"       from "NEXT"       [2021-11-08 Mon 06:58]
 - State "DONE"       from "NEXT"       [2021-11-07 Sun 08:20]
 - State "DONE"       from "NEXT"       [2021-11-06 Sat 07:32]
@@ -86,13 +88,14 @@ SCHEDULED: <2021-11-08 Mon +1d>
 - State "DONE"       from "NEXT"       [2021-11-01 Mon 16:49]
 - State "DONE"       from "NEXT"       [2021-10-31 Sun 17:40]
 :END:
-SCHEDULED: <2021-11-09 Tue +1d>
+SCHEDULED: <2021-11-10 Wed +1d>
 
 ** TODO Books 
 :PROPERTIES:
-:LAST_REPEAT: [2021-11-08 Mon 06:58]
+:LAST_REPEAT: [2021-11-09 Tue 07:16]
 :END:
 :LOGBOOK:
+- State "DONE"       from "NEXT"       [2021-11-09 Tue 07:16]
 - State "DONE"       from "NEXT"       [2021-11-08 Mon 06:58]
 - State "DONE"       from "NEXT"       [2021-11-07 Sun 08:20]
 - State "DONE"       from "NEXT"       [2021-11-06 Sat 07:33]
@@ -103,7 +106,7 @@ SCHEDULED: <2021-11-09 Tue +1d>
 - State "DONE"       from "NEXT"       [2021-11-01 Mon 16:47]
 - State "DONE"       from "NEXT"       [2021-10-31 Sun 17:40]
 :END:
-SCHEDULED: <2021-11-09 Tue +1d>
+SCHEDULED: <2021-11-10 Wed +1d>
 
 ** TODO Django & Python
 :PROPERTIES:
