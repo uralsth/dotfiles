@@ -263,7 +263,7 @@
   ("f" nil "finished" :exit t))
 
 (gunner/leader-keys
-  "ts" '(hydra-window-size-scale/body :which-key "scale window size"))
+  "tw" '(hydra-window-size-scale/body :which-key "scale window size"))
 
 (use-package emojify
   :hook (erc-mode . emojify-mode)
