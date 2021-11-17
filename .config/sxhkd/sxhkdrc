@@ -1,6 +1,6 @@
 # Basic binds
 super + d
-      dmenu_run
+      dmenu_run -p 'Run:'
 super + q
       firefox
 super + e
