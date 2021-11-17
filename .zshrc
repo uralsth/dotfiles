@@ -144,3 +144,5 @@ bindkey '^e' edit-command-line
 
 # Load zsh-syntax-highlighting; should be last.
 source /usr/share/zsh/plugins/zsh-syntax-highlighting/zsh-syntax-highlighting.zsh 2>/dev/null
+PATH="$HOME/.local/bin:$PATH"
+PATH=$PATH:$HOME/.local/bin
