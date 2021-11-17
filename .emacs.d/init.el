@@ -2,8 +2,8 @@
 ;;       in Emacs and init.el will be generated automatically!
 
 ;; You will most likely need to adjust this font size for your system!
-(defvar gunner/default-font-size 110)
-(defvar gunner/default-variable-font-size 110)
+(defvar gunner/default-font-size 90)
+(defvar gunner/default-variable-font-size 90)
 
 ;; Make frame transparency overridable
 (defvar gunner/frame-transparency '(90 . 90))
@@ -484,6 +484,19 @@
   (setq lsp-keymap-prefix "C-c l")  ;; Or 'C-l', 's-l'
   :config
   (lsp-enable-which-key-integration t))
+
+(lsp-register-client
+  (make-lsp-client
+   :new-connection
+   (lsp-stdio-connection (list "swipl"
+                               "-g" "use_module(library(lsp_server))."
+                               "-g" "lsp_server:main"
+                               "-t" "halt"
+                               "--" "stdio"))
+   :major-modes '(prolog-mode)
+   :priority 1
+   :multi-root t
+   :server-id 'prolog-ls))
 
 (use-package lsp-ui
   :hook (lsp-mode . lsp-ui-mode)
