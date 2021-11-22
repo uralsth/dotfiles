@@ -137,3 +137,5 @@ config.set('content.javascript.enabled', True, 'chrome://*/*')
 # Enable JavaScript.
 # Type: Bool
 config.set('content.javascript.enabled', True, 'qute://*/*')
+
+config.set("colors.webpage.darkmode.enabled", True)
