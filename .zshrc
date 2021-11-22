@@ -1,5 +1,3 @@
-# Enable colors and change prompt:
-autoload -U colors && colors
 PS1="%{$fg[red]%}[%{$fg[magenta]%}%~%{$fg[red]%}]%{$reset_color%}$%b "
 
 ### EXPORT
@@ -72,8 +70,14 @@ IFS=$SAVEIFS
 
 # vim and emacs
 alias vim="nvim"
+alias svim="sudo nvim"
 alias em="/usr/bin/emacs -nw"
 alias emacs="emacsclient -c -a 'emacs'"
+
+# spotify control
+alias pspp='playerctl --player=spotify play-pause'
+alias psn='playerctl --player=spotify next'
+alias psp='playerctl --player=spotify previous'
 
 # Changing "ls" to "exa"
 alias ls='exa --color=always --group-directories-first' # my preferred listing
