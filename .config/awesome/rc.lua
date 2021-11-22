@@ -338,7 +338,7 @@ globalkeys = mytable.join(
         {description = "focus right", group = "client"}),
 
     -- Menu
-    awful.key({ modkey,           }, "w", function () awful.util.mymainmenu:show() end,
+    awful.key({ modkey,   "Shift"        }, "`", function () awful.util.mymainmenu:show() end,
               {description = "show main menu", group = "awesome"}),
 
     --Brighness manipulation
@@ -768,9 +768,26 @@ awful.rules.rules = {
       }, properties = { titlebars_enabled = true }
     },
 
-    -- Set Firefox to always map on the tag named "2" on screen 1.
-    -- { rule = { class = "Firefox" },
-    --   properties = { screen = 1, tag = "2" } },
+    -- Set Firefox to always map on the tag named "2" on screen s.
+    { rule = { class = "firefox"},
+      properties = { screen = s,
+		     tag = "2",
+      }
+    },
+
+    -- Set spotify to always map on the tag named "5" on screen 1.
+    { rule = { class = "spotify"},
+      properties = { screen = 1,
+		     tag = "5",
+      }
+    },
+
+    -- Set kitty to always map on the tag named "2"
+    { rule = { class = "kitty", instance = "kitty"},
+      properties = { screen = s,
+		     tag = "1",
+		     switch_to_tags = true
+		     } },
 }
 
 -- }}}
