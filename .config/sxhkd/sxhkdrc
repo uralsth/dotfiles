@@ -11,3 +11,6 @@ super + shift + y
       ytfzf -D 
 super + w 
 	switch
+	
+super + p 
+	bitwarden-dmenu
