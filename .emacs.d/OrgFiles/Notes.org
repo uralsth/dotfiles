@@ -23,4 +23,32 @@ CLOCK: [2021-10-11 Mon 12:32]--[2021-10-11 Mon 12:33] =>  0:01
 Disable a touchpad:
 synclient Touchpadoff=1 (0 to enable)
 
+** 2021-11 November
+
+*** 2021-11-24 Wednesday
+
+**** 03:44 PM - Notes                                              :notes:
+:LOGBOOK:
+CLOCK: [2021-11-24 Wed 15:44]--[2021-11-24 Wed 15:45] =>  0:01
+:END:
+
+***** Run xampp
+sudo /opt/lampp/lampp start
+
+**** 03:46 PM - Notes                                              :notes:
+:LOGBOOK:
+CLOCK: [2021-11-24 Wed 15:46]--[2021-11-24 Wed 15:47] =>  0:01
+:END:
+To run xampp gui
+cd /opt/lamp
+sudo ./manager .run
+
+*** 2021-11-26 Friday
+
+**** 05:38 AM - Notes                                              :notes:
+:LOGBOOK:
+CLOCK: [2021-11-26 Fri 05:38]--[2021-11-26 Fri 05:38] =>  0:00
+:END:
+
+mxlinux boot: dd bs=4M if=MX-19_x64.iso of=/dev/sde && sync
 
