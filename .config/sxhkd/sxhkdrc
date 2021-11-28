@@ -10,7 +10,10 @@ super + s
 super + shift + y
       ytfzf -D 
 super + w 
-	switch
-	
+      switch
 super + p 
-	bitwarden-dmenu
+      bitwarden-dmenu
+super + alt +p
+      maim --select | xclip -selection clipboard -t image/png
+alt + p
+       maim ~/Pictures/ss/$(date +%s).png
