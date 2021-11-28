@@ -138,4 +138,10 @@ config.set('content.javascript.enabled', True, 'chrome://*/*')
 # Type: Bool
 config.set('content.javascript.enabled', True, 'qute://*/*')
 
+# Enable darkmode
 config.set("colors.webpage.darkmode.enabled", True)
+
+# umpv bindings
+config.bind (',m', 'spawn umpv {url}')
+config.bind (',M', 'hint links spawn umpv {hint-url}')
+config.bind (';M', 'hint --rapid links spawn umpv {hint-url}')
