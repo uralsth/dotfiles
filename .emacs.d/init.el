@@ -907,3 +907,17 @@ erc-auto-query 'bury)
 
 ;; Make gc pauses faster by decreasing the threshold.
 (setq gc-cons-threshold (* 2 1000 1000))
+(custom-set-variables
+ ;; custom-set-variables was added by Custom.
+ ;; If you edit it by hand, you could mess it up, so be careful.
+ ;; Your init file should contain only one such instance.
+ ;; If there is more than one, they won't work right.
+ '(package-selected-packages
+   '(pacmacs phpactor php-mode yaml-tomato yaml-imenu xclip which-key vterm use-package undo-tree tracking telega rc-mode rainbow-mode rainbow-delimiters python-mode python-django pylint pony-mode org-bullets org-attach-screenshot no-littering minions luarocks lsp-ui lsp-python-ms lsp-pyright lsp-jedi lsp-ivy ivy-rich ivy-prescient i3wm-config-mode htmlize helpful general forge flymake-yaml flymake-python-pyflakes flymake-lua flycheck-yamllint evil-nerd-commenter evil-collection eterm-256color eshell-git-prompt emojify emms emacsql-mysql elpy elfeed editorconfig doom-themes doom-modeline djangonaut django-theme django-snippets django-mode django-manage django-commands dired-single dired-open dired-hide-dotfiles diminish dashboard-ls dap-mode counsel-projectile company-lua company-box command-log-mode ccls cask bind-map auto-package-update auctex-lua all-the-icons-dired)))
+(custom-set-faces
+ ;; custom-set-faces was added by Custom.
+ ;; If you edit it by hand, you could mess it up, so be careful.
+ ;; Your init file should contain only one such instance.
+ ;; If there is more than one, they won't work right.
+ '(mode-line ((t (:height 0.85))))
+ '(mode-line-inactive ((t (:height 0.85)))))
