@@ -546,7 +546,6 @@
   :config
   (with-eval-after-load "lsp-mode"
     (add-to-list 'lsp-disabled-clients 'pyls)))
-;;     (add-to-list 'lsp-enabled-clients 'jedi)))
 
 
 (add-hook 'python-mode-hook
@@ -793,7 +792,7 @@
 ;; telega-emoji-use-images t
 ;; telega-completing-read-function #'ivy-completing-read
 ;; telega-msg-rainbow-title nil
-;; telega-chat-fill-column 75))
+;; telega-chat-fill-column 75)
 (add-hook 'telega-load-hook
 (lambda ()
 (define-key global-map (kbd "C-c t") telega-prefix-map)))
@@ -816,7 +815,7 @@ erc-auto-query 'bury)
 
 (use-package mu4e
   :ensure nil
-  :load-path "/usr/local/share/emacs/site-lisp/mu4e/"
+  ;; :load-path "/usr/share/emacs/site-lisp/mu4e/"
   :defer 120 ; Wait until 20 seconds after startup
   :config
 
@@ -828,51 +827,19 @@ erc-auto-query 'bury)
   (setq mu4e-get-mail-command "mbsync -a")
   (setq mu4e-maildir "~/Mail")
 
-  (setq mu4e-contexts
-  (list
-  ;; Main account
-         (make-mu4e-context
-          :name "Main"
-          :match-func
-            (lambda (msg)
-            (when msg
-                (string-prefix-p "/Gmail" (mu4e-message-field msg :maildir))))
-          :vars '((user-mail-address . "shresthaural100@gmail.com")
-                  (user-full-name    . "Shrestha Ural")
-                  (mu4e-drafts-folder  . "/Gmail/[Gmail]/Drafts")
-                  (mu4e-sent-folder  . "/Gmail/[Gmail]/Sent Mail")
-                  (mu4e-refile-folder  . "/Gmail/[Gmail]/All Mail")
-                  (mu4e-trash-folder  . "/Gmail/[Gmail]/Bin")))))
+  (setq mu4e-drafts-folder "/[Gmail]/Drafts")
+  (setq mu4e-sent-folder   "/[Gmail]/Sent Mail")
+  (setq mu4e-refile-folder "/[Gmail]/All Mail")
+  (setq mu4e-trash-folder  "/[Gmail]/Trash")
 
-          ;; ;; College account
-          ;; (make-mu4e-context
-          ;;  :name "College"
-          ;;  :match-func
-          ;;    (lambda (msg)
-          ;;      (when msg
-          ;;        (string-prefix-p "/AcademiaMail" (mu4e-message-field msg :maildir))))
-          ;;  :vars '((user-mail-address . "ural@academiacollege.edu.np")
-          ;;  (user-full-name . "Academia Ural")
-          ;;          (mu4e-drafts-folder  . "/AcademiaMail/Drafts")
-          ;;          (mu4e-sent-folder  . "/AcademiaMail/Sent Mail")
-          ;;          (mu4e-refile-folder  . "/AcademiaMail/All Mail")
-          ;;          (mu4e-trash-folder  . "/AcademiaMail/Bin")))))
 
   (setq mu4e-maildir-shortcuts
-  '(("/Gmail/Inbox"             . ?i)
-  ("/Gmail/[Gmail]/Sent Mail" . ?s)
-  ("/Gmail/[Gmail]/Bin"     . ?b)
-  ("/Gmail/[Gmail]/Drafts"    . ?d)
-  ("/Gmail/[Gmail]/All Mail"  . ?a)))
+        '((:maildir "/Inbox"    :key ?i)
+          (:maildir "/[Gmail]/Sent Mail" :key ?s)
+          (:maildir "/[Gmail]/Trash"     :key ?t)
+          (:maildir "/[Gmail]/Drafts"    :key ?d)
+          (:maildir "/[Gmail]/All Mail"  :key ?a)))
 
-  (setq mu4e-bookmarks
-  '((:name "Unread messages" :query "flag:unread AND NOT flag:trashed" :key ?i)
-  (:name "Today's messages" :query "date:today..now" :key ?t)
-  (:name "Worldlink" :query "from:wlink" :key ?n)
-  (:name "Last 7 days" :query "date:7d..now" :hide-unread t :key ?w)
-  (:name "Messages with images" :query "mime:image/*" :key ?p)))
-
-  ;; Run mu4e in the background to sync mail periodically
   (mu4e t))
 
 (use-package dired
@@ -907,17 +874,3 @@ erc-auto-query 'bury)
 
 ;; Make gc pauses faster by decreasing the threshold.
 (setq gc-cons-threshold (* 2 1000 1000))
-(custom-set-variables
- ;; custom-set-variables was added by Custom.
- ;; If you edit it by hand, you could mess it up, so be careful.
- ;; Your init file should contain only one such instance.
- ;; If there is more than one, they won't work right.
- '(package-selected-packages
-   '(pacmacs phpactor php-mode yaml-tomato yaml-imenu xclip which-key vterm use-package undo-tree tracking telega rc-mode rainbow-mode rainbow-delimiters python-mode python-django pylint pony-mode org-bullets org-attach-screenshot no-littering minions luarocks lsp-ui lsp-python-ms lsp-pyright lsp-jedi lsp-ivy ivy-rich ivy-prescient i3wm-config-mode htmlize helpful general forge flymake-yaml flymake-python-pyflakes flymake-lua flycheck-yamllint evil-nerd-commenter evil-collection eterm-256color eshell-git-prompt emojify emms emacsql-mysql elpy elfeed editorconfig doom-themes doom-modeline djangonaut django-theme django-snippets django-mode django-manage django-commands dired-single dired-open dired-hide-dotfiles diminish dashboard-ls dap-mode counsel-projectile company-lua company-box command-log-mode ccls cask bind-map auto-package-update auctex-lua all-the-icons-dired)))
-(custom-set-faces
- ;; custom-set-faces was added by Custom.
- ;; If you edit it by hand, you could mess it up, so be careful.
- ;; Your init file should contain only one such instance.
- ;; If there is more than one, they won't work right.
- '(mode-line ((t (:height 0.85))))
- '(mode-line-inactive ((t (:height 0.85)))))
