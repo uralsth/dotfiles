@@ -52,3 +52,22 @@ CLOCK: [2021-11-26 Fri 05:38]--[2021-11-26 Fri 05:38] =>  0:00
 
 mxlinux boot: dd bs=4M if=MX-19_x64.iso of=/dev/sde && sync
 
+** 2021-12 December
+
+*** 2021-12-02 Thursday
+
+**** 11:57 AM - Notes                                              :notes:
+:LOGBOOK:
+CLOCK: [2021-12-02 Thu 11:57]--[2021-12-02 Thu 11:57] =>  0:00
+:END:
+
+ youtube-dl --extract-audio --audio-format mp3
+
+**** 12:21 PM - Notes                                              :notes:
+:LOGBOOK:
+CLOCK: [2021-12-02 Thu 12:21]--[2021-12-02 Thu 12:21] =>  0:00
+:END:
+
+youtube-dl -f "bestaudio/best" -ciw -o "%(title)s.%(ext)s" -v --extract-audio --audio-format mp3 --audio-quality 0  --yes-playlist https://www.youtube.com/playlist?list=c29tZVZpZGVvVVJMUGFy
+
+
