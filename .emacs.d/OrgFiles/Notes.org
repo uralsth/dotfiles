@@ -68,6 +68,6 @@ CLOCK: [2021-12-02 Thu 11:57]--[2021-12-02 Thu 11:57] =>  0:00
 CLOCK: [2021-12-02 Thu 12:21]--[2021-12-02 Thu 12:21] =>  0:00
 :END:
 
-youtube-dl -f "bestaudio/best" -ciw -o "%(title)s.%(ext)s" -v --extract-audio --audio-format mp3 --audio-quality 0  --yes-playlist https://www.youtube.com/playlist?list=c29tZVZpZGVvVVJMUGFy
+yt-dlp -f "bestaudio/best" -ciw -o "%(title)s.%(ext)s" -v --extract-audio --audio-format mp3 --audio-quality 0  --yes-playlist "https://www.youtube.com/playlist?list=PLA6lKecf6BDAmR5-_lcbxoDmfJRCZvbgr "
 
 

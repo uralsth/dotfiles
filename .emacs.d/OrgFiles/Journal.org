@@ -13,3 +13,8 @@
 
 # Today was a great day!  We learned more about Org Mode.
 
+* 2021
+
+** 2021-12 December
+
+*** 2021-12-08 Wednesday
