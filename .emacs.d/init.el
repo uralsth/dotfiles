@@ -6,7 +6,7 @@
 (defvar gunner/default-variable-font-size 110)
 
 ;; Make frame transparency overridable
-(defvar gunner/frame-transparency '(90 . 90))
+(defvar gunner/frame-transparency '(92 . 92))
 
 ;; The default is 800 kilobytes.  Measured in bytes.
 (setq gc-cons-threshold (* 50 1000 1000))
