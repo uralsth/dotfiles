@@ -104,7 +104,7 @@ local themes = {
 local chosen_theme = themes[7]
 local modkey       = "Mod4"
 local altkey       = "Mod1"
-local terminal     = "kitty"
+local terminal     = "st"
 local vi_focus     = false -- vi-like client focus https://github.com/lcpz/awesome-copycats/issues/275
 local cycle_prev   = true  -- cycle with only the previously focused client or all https://github.com/lcpz/awesome-copycats/issues/274
 local editor       = os.getenv("EDITOR") or "nvim"
@@ -447,7 +447,7 @@ globalkeys = mytable.join(
     end, {description = "restore minimized", group = "client"}),
 
     -- Widgets popups
-    awful.key({ altkey, }, "c", function () if beautiful.cal then beautiful.cal.show(7) end end,
+    awful.key({ altkey, "Control"}, "c", function () if beautiful.cal then beautiful.cal.show(7) end end,
               {description = "show calendar", group = "widgets"}),
 
     -- -- ALSA volume control
@@ -767,7 +767,7 @@ awful.rules.rules = {
     },
 
     -- Set kitty to always map on the tag named "2"
-    { rule = { class = "kitty", instance = "kitty"},
+    { rule = { instance = "st"},
       properties = { screen = s,
 		     tag = "1",
 		     switch_to_tags = true
