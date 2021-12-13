@@ -79,6 +79,9 @@ alias pspp='playerctl --player=spotify play-pause'
 alias psn='playerctl --player=spotify next'
 alias psp='playerctl --player=spotify previous'
 
+# github password
+alias gitbw='bw get password Emacs1 | xclip -selection clipboard'
+
 # Changing "ls" to "exa"
 alias ls='exa --color=always --group-directories-first' # my preferred listing
 alias la='exa -a --color=always --group-directories-first'  # all files and dirs
