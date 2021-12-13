@@ -17,3 +17,5 @@ super + alt +p
       maim --select | xclip -selection clipboard -t image/png
 alt + p
        maim ~/Pictures/ss/$(date +%s).png
+super + shift + alt + h
+	mhibernate
