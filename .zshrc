@@ -83,10 +83,10 @@ alias psp='playerctl --player=spotify previous'
 alias gitbw='bw get password Emacs1 | xclip -selection clipboard'
 
 # Changing "ls" to "exa"
-alias ls='exa --color=always --group-directories-first' # my preferred listing
-alias la='exa -a --color=always --group-directories-first'  # all files and dirs
-alias ll='exa -l --color=always --group-directories-first'  # long format
-alias lt='exa -aT --color=always --group-directories-first' # tree listing
+alias ls='exa --icons --color=always --group-directories-first' # my preferred listing
+alias la='exa --icons -a --color=always --group-directories-first'  # all files and dirs
+alias ll='exa --icons -l --color=always --group-directories-first'  # long format
+alias lt='exa --icons -aT --color=always --group-directories-first' # tree listing
 alias l.='exa -a | egrep "^\."'
 
 # adding flags
