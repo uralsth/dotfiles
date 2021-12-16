@@ -90,6 +90,7 @@
                   term-mode-hook
                   shell-mode-hook
                   vterm-mode-hook
+                  mu4e-mode-hook
                   nov-mode-hook
                   telega-chat-mode-hook
                   telega-root-mode-hook

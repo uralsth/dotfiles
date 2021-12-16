@@ -127,44 +127,45 @@ This section configures basic UI settings that remove unneeded elements to make 
 
 #+begin_src emacs-lisp
 
-  (setq inhibit-startup-message t)
+    (setq inhibit-startup-message t)
 
-  (scroll-bar-mode -1)        ; Disable visible scrollbar
-  (tool-bar-mode -1)          ; Disable the toolbar
-  (tooltip-mode -1)           ; Disable tooltips
-  (set-fringe-mode 10)        ; Give some breathing room
+    (scroll-bar-mode -1)        ; Disable visible scrollbar
+    (tool-bar-mode -1)          ; Disable the toolbar
+    (tooltip-mode -1)           ; Disable tooltips
+    (set-fringe-mode 10)        ; Give some breathing room
 
-  (menu-bar-mode -1)            ; Disable the menu bar
+    (menu-bar-mode -1)            ; Disable the menu bar
 
-  ;; Set up the visible bell
-  (setq visible-bell t)
+    ;; Set up the visible bell
+    (setq visible-bell t)
 
-  (column-number-mode)
-  (global-display-line-numbers-mode t)
+    (column-number-mode)
+    (global-display-line-numbers-mode t)
 
-  ;; Set frame transparency
-  (set-frame-parameter (selected-frame) 'alpha gunner/frame-transparency)
-  (add-to-list 'default-frame-alist `(alpha . ,gunner/frame-transparency))
-  (set-frame-parameter (selected-frame) 'fullscreen 'maximized)
-  (add-to-list 'default-frame-alist '(fullscreen . maximized))
+    ;; Set frame transparency
+    (set-frame-parameter (selected-frame) 'alpha gunner/frame-transparency)
+    (add-to-list 'default-frame-alist `(alpha . ,gunner/frame-transparency))
+    (set-frame-parameter (selected-frame) 'fullscreen 'maximized)
+    (add-to-list 'default-frame-alist '(fullscreen . maximized))
 
-  ;; Disable line numbers for some modes
-  (dolist (mode '(org-mode-hook
-                  term-mode-hook
-                  shell-mode-hook
-                  vterm-mode-hook
-                  nov-mode-hook
-                  telega-chat-mode-hook
-                  telega-root-mode-hook
-                  treemacs-mode-hook
-                  eshell-mode-hook))
-    (add-hook mode (lambda () (display-line-numbers-mode 0))))
+    ;; Disable line numbers for some modes
+    (dolist (mode '(org-mode-hook
+                    term-mode-hook
+                    shell-mode-hook
+                    vterm-mode-hook
+                    mu4e-mode-hook
+                    nov-mode-hook
+                    telega-chat-mode-hook
+                    telega-root-mode-hook
+                    treemacs-mode-hook
+                    eshell-mode-hook))
+      (add-hook mode (lambda () (display-line-numbers-mode 0))))
 
-;; (defun eshell-mode-hook-func ()
-  ;; (setq eshell-path-env (concat "/usr/local/bin:" eshell-path-env))
-  (setenv "PATH" (concat (getenv "PATH") ":/home/ural/.local/bin"))
+  ;; (defun eshell-mode-hook-func ()
+    ;; (setq eshell-path-env (concat "/usr/local/bin:" eshell-path-env))
+    (setenv "PATH" (concat (getenv "PATH") ":/home/ural/.local/bin"))
 
-;; (add-hook 'eshell-mode-hook 'eshell-mode-hook-func)
+  ;; (add-hook 'eshell-mode-hook 'eshell-mode-hook-func)
 #+end_src
 
 ** Font Configuration
