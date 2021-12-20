@@ -70,4 +70,13 @@ CLOCK: [2021-12-02 Thu 12:21]--[2021-12-02 Thu 12:21] =>  0:00
 
 yt-dlp -f "bestaudio/best" -ciw -o "%(title)s.%(ext)s" -v --extract-audio --audio-format mp3 --audio-quality 0  --yes-playlist "https://www.youtube.com/playlist?list=PLA6lKecf6BDAmR5-_lcbxoDmfJRCZvbgr "
 
+*** 2021-12-18 Saturday
+
+**** 08:14 AM - Notes                                              :notes:
+:LOGBOOK:
+CLOCK: [2021-12-18 Sat 08:14]--[2021-12-18 Sat 08:16] =>  0:02
+:END:
+
+deepakbd@ncc.edu.np
+deepakdhami99309@gmail.com
 
