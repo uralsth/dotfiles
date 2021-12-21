@@ -29,7 +29,9 @@ call plug#begin('~/.config/nvim/autoload/plugged')
     Plug 'junegunn/fzf.vim'
 
     " Statusline/tabline
-    Plug 'itchyny/lightline.vim'
+    " Plug 'itchyny/lightline.vim'
+    Plug 'vim-airline/vim-airline'
+    Plug 'vim-airline/vim-airline-themes'
 
     " Change surrounding marks
     Plug 'tpope/vim-surround'
@@ -39,7 +41,10 @@ call plug#begin('~/.config/nvim/autoload/plugged')
 
     " Hyperfocus on a range
     Plug 'junegunn/limelight.vim'
-    
+
+    " CocInstall for installing Coc-Pyright
+    Plug 'neoclide/coc.nvim', {'branch': 'master', 'do': 'yarn install --frozen-lockfile'}    
+
     " Color previews for CSS
     Plug 'ap/vim-css-color'                            
     if has("nvim")
