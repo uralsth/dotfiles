@@ -80,3 +80,12 @@ CLOCK: [2021-12-18 Sat 08:14]--[2021-12-18 Sat 08:16] =>  0:02
 deepakbd@ncc.edu.np
 deepakdhami99309@gmail.com
 
+*** 2021-12-23 Thursday
+
+**** 05:39 PM - Notes                                              :notes:
+:LOGBOOK:
+CLOCK: [2021-12-23 Thu 17:39]--[2021-12-23 Thu 17:40] =>  0:01
+:END:
+
+
+xrandr --output eDP-1 --mode 1366x768 --output HDMI-1 --mode 1024x768 --left-of HDMI-1  
