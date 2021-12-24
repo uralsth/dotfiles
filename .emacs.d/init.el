@@ -85,24 +85,27 @@
   (set-frame-parameter (selected-frame) 'fullscreen 'maximized)
   (add-to-list 'default-frame-alist '(fullscreen . maximized))
 
+;; Electric pair mode enable by default
+(electric-pair-mode 1)
+
   ;; Disable line numbers for some modes
   (dolist (mode '(org-mode-hook
-                  term-mode-hook
-                  shell-mode-hook
-                  vterm-mode-hook
-                  mu4e-mode-hook
-                  nov-mode-hook
-                  telega-chat-mode-hook
-                  telega-root-mode-hook
-                  treemacs-mode-hook
-                  eshell-mode-hook))
-    (add-hook mode (lambda () (display-line-numbers-mode 0))))
+                      term-mode-hook
+                      shell-mode-hook
+                      vterm-mode-hook
+                      mu4e-mode-hook
+                      nov-mode-hook
+                      telega-chat-mode-hook
+                      telega-root-mode-hook
+                      treemacs-mode-hook
+                      eshell-mode-hook))
+        (add-hook mode (lambda () (display-line-numbers-mode 0))))
 
-;; (defun eshell-mode-hook-func ()
-  ;; (setq eshell-path-env (concat "/usr/local/bin:" eshell-path-env))
-  (setenv "PATH" (concat (getenv "PATH") ":/home/ural/.local/bin"))
+    ;; (defun eshell-mode-hook-func ()
+      ;; (setq eshell-path-env (concat "/usr/local/bin:" eshell-path-env))
+      (setenv "PATH" (concat (getenv "PATH") ":/home/ural/.local/bin"))
 
-;; (add-hook 'eshell-mode-hook 'eshell-mode-hook-func)
+    ;; (add-hook 'eshell-mode-hook 'eshell-mode-hook-func)
 
 (set-face-attribute 'default nil :font "Fira Code Retina" :height gunner/default-font-size)
 
