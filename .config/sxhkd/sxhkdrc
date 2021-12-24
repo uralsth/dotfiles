@@ -19,3 +19,5 @@ alt + p
        maim ~/Pictures/ss/$(date +%s).png
 super + shift + alt + h
 	mhibernate
+super + period
+    rofimoji
