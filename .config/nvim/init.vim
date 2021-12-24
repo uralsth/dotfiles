@@ -20,7 +20,7 @@ syntax on               " Enable syntax
 
 set clipboard+=unnamedplus  " Copy/paste between vim and other programs
 
-:imap hj <Esc>          " Remap ESC to hj
+:imap ii <Esc>          " Remap ESC to ii
 
 
 set mouse=a             " Mouse Scrolling
