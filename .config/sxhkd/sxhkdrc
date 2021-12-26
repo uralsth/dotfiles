@@ -11,8 +11,6 @@ super + shift + y
       ytfzf -D 
 super + w 
       switch
-super + p 
-      bitwarden-dmenu
 super + alt +p
       maim --select | xclip -selection clipboard -t image/png
 alt + p
