@@ -1,15 +1,15 @@
 #!/bin/sh
 
 menu(){
-    printf "1. [URL] Expecto Shorten 🪄: Get a shorten url\n"
-    printf "2. [URL] Lumbos dl 🪄: Download file in ~/dl\n"
-    printf "3. [URL] Avada Playdavra 🪄: Play videos in mpv\n"
-    printf "4. [URL] Listenmora 🪄: Play audio in mpv\n"
-    printf "5. [Image] Imagum Savum 🪄: Save clipbaord image in ~/pix/save\n"
-    printf "6. [Text] Sendkulus 🪄: Send clipboard text with tgsend script\n"
-    printf "7. [Shell] Executa 🪄: This will run any shell command\n"
-    printf "8. [Text] Sayee it 🪄: Clipboard text to speech with espeak\n"
-    printf "9. [Magnet] Torriento 🪄: Start downloading torrent from magnet\n"
+    printf "1. Get a shorten url\n"
+    printf "2. Download file in ~/Videos\n"
+    printf "3. Play videos in mpv\n"
+    printf "4. Play audio in mpv\n"
+    printf "5. Save clipbaord image in ~/Pictures/save\n"
+    printf "6. Send clipboard text with tgsend script\n"
+    printf "7. This will run any shell command\n"
+    printf "8. Clipboard text to speech with espeak\n"
+    printf "9. Start downloading torrent from magnet\n"
 }
 
 spell_failed(){
@@ -47,11 +47,10 @@ case $choice in
 	;;
     5)
 	file=$(date +"%Y_%m_%d_%I_%M_%p")
-	xclip -selection clipboard -t image/png -o > $HOME/pix/save/$file.png ||
+	xclip -selection clipboard -t image/png -o > $HOME/Pictures/save/$file.png ||
 	    spell_failed
 	break
-	;;
-    6)
+    
 	user=$(echo "" | dmenu -p "Enter Username: ")
 	tgsend $user "$cbtext"
 	break
