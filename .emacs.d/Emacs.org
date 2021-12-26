@@ -431,9 +431,11 @@ This is an example of using [[https://github.com/abo-abo/hydra][Hydra]] to desig
 
 * Emojis in bufffers 
 #+begin_src emacs-lisp
-(use-package emojify
-  :hook (erc-mode . emojify-mode)
-  :commands emojify-mode)
+  (use-package emojify
+    :hook (erc-mode . emojify-mode)
+    :commands emojify-mode
+    :config
+  )
 #+end_src
 
 #+RESULTS:

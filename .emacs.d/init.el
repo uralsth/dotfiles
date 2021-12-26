@@ -87,7 +87,6 @@
 
 ;; Electric pair mode enable by default
 (electric-pair-mode 1)
-
   ;; Disable line numbers for some modes
   (dolist (mode '(org-mode-hook
                       term-mode-hook
@@ -271,7 +270,9 @@
 
 (use-package emojify
   :hook (erc-mode . emojify-mode)
-  :commands emojify-mode)
+  :commands emojify-mode
+  :config
+)
 
 (defun gunner/org-font-setup ()
   ;; Replace list hyphen with dot
