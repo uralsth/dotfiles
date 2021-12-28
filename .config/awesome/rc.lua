@@ -111,7 +111,7 @@ local editor       = os.getenv("EDITOR") or "nvim"
 local browser      = "firefox"
 
 awful.util.terminal = terminal
-awful.util.tagnames = { "1", "2", "3", "4", "5" }
+awful.util.tagnames = { "1", "2", "3", "4", "5", "6" }
 awful.layout.layouts = {
     -- awful.layout.suit.floating,
     awful.layout.suit.tile,
@@ -727,14 +727,35 @@ awful.rules.rules = {
     },
 
     -- Set Firefox to always map on the tag named "2" on screen s.
-    { rule = { class = "firefox"},
+    { rule_any = { class = {"firefox", "qutebrowser"}},
       properties = { screen = s,
 		     tag = "2",
       }
     },
 
+    -- Set Emacs to always map on the tag named "3" on screen s
+    { rule = { class = "Emacs"},
+      properties = { screen = s,
+		     tag = "3",
+      }
+    },
+
+    -- Set Discord to always map on the tag named "6" on screen s
+    { rule_any = { class = {"discord", "Zathura"}},
+      properties = { screen = s,
+		     tag = "6",
+      }
+    },
+
+    -- Set Brave Browser to always map on the tag named "4" on screen s
+    { rule = { class = "Brave-browser"},
+      properties = { screen = s,
+		     tag = "4",
+      }
+    },
+
     -- Set spotify to always map on the tag named "5" on screen 1.
-    { rule = { class = "spotify"},
+    { rule = { class = "Spotify"},
       properties = { screen = 1,
 		     tag = "5",
       }
