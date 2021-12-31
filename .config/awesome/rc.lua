@@ -755,8 +755,8 @@ awful.rules.rules = {
     },
 
     -- Set spotify to always map on the tag named "5" on screen 1.
-    { rule = { class = "Spotify"},
-      properties = { screen = 1,
+    { rule = { class = "Spotify", instance = "spotify"},
+      properties = { screen = s,
 		     tag = "5",
       }
     },
