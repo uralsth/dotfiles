@@ -78,9 +78,17 @@ alias emacs="emacsclient -c -a 'emacs'"
 alias pspp='playerctl --player=spotify play-pause'
 alias psn='playerctl --player=spotify next'
 alias psp='playerctl --player=spotify previous'
+alias psa='playerctl -p spotify metadata | grep artist | sed "s/spotify xesam:artist *//g"'
+alias pst='playerctl -p spotify metadata | grep title | sed "s/spotify xesam:title *//g"'
 
 # github password
 alias gitbw='bw get password Emacs1 | xclip -selection clipboard'
+
+# Dragon drag and drop
+alias ddd='dragon-drag-and-drop'
+
+# Change capslock to ctrl
+alias ctoc="setxkbmap -option 'ctrl:nocaps' & xset r rate 300 50"
 
 # Changing "ls" to "exa"
 alias ls='exa --icons --color=always --group-directories-first' # my preferred listing
