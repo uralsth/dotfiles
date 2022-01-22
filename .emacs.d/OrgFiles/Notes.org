@@ -88,4 +88,20 @@ CLOCK: [2021-12-23 Thu 17:39]--[2021-12-23 Thu 17:40] =>  0:01
 :END:
 
 
-xrandr --output eDP-1 --mode 1366x768 --output HDMI-1 --mode 1024x768 --left-of HDMI-1  
+xrandr --output eDP-1 --mode 1366x768 --output HDMI-1 --mode 1024x768 --left-of HDMI-1
+
+* 2022
+
+** 2022-01 January
+
+*** 2022-01-20 Thursday
+
+**** 06:58 AM - Notes                                              :notes:
+:LOGBOOK:
+CLOCK: [2022-01-20 Thu 06:58]--[2022-01-20 Thu 07:01] =>  0:03
+:END:
+
+ffmpeg -f x11grab -s resolution -i :0.0+1366,0 out.mkv
+
+ffmpeg -f x11grab -s resolution -i :0.0+1366,0 -f  alsa -i hw:0 out.mkv
+
