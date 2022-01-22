@@ -202,22 +202,22 @@ awful.util.mymainmenu = freedesktop.menu.build {
 }
 
 -- Hide the menu when the mouse leaves it
---[[
-awful.util.mymainmenu.wibox:connect_signal("mouse::leave", function()
-    if not awful.util.mymainmenu.active_child or
-       (awful.util.mymainmenu.wibox ~= mouse.current_wibox and
-       awful.util.mymainmenu.active_child.wibox ~= mouse.current_wibox) then
-        awful.util.mymainmenu:hide()
-    else
-        awful.util.mymainmenu.active_child.wibox:connect_signal("mouse::leave",
-        function()
-            if awful.util.mymainmenu.wibox ~= mouse.current_wibox then
-                awful.util.mymainmenu:hide()
-            end
-        end)
-    end
-end)
---]]
+-- [[
+-- awful.util.mymainmenu.wibox:connect_signal("mouse::leave", function()
+--      if not awful.util.mymainmenu.active_child or
+--         (awful.util.mymainmenu.wibox ~= mouse.current_wibox and
+--         awful.util.mymainmenu.active_child.wibox ~= mouse.current_wibox) then
+--          awful.util.mymainmenu:hide()
+--      else
+--          awful.util.mymainmenu.active_child.wibox:connect_signal("mouse::leave",
+--          function()
+--              if awful.util.mymainmenu.wibox ~= mouse.current_wibox then
+--                  awful.util.mymainmenu:hide()
+--              end
+--          end)
+--      end
+--  end)
+ --]]
 
 -- Set the Menubar terminal for applications that require it
 --menubar.utils.terminal = terminal
@@ -274,7 +274,7 @@ globalkeys = mytable.join(
               {description = "destroy all notifications", group = "hotkeys"}),
 
     -- X screen locker
-    awful.key({ altkey, "Control" }, "l", function () os.execute(scrlocker) end,
+    awful.key({ altkey, "Control" }, "l", function () os.execute("slock") end,
               {description = "lock screen", group = "hotkeys"}),
 
     -- Show help
