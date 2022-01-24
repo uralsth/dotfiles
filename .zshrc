@@ -20,6 +20,15 @@ if [ -d "$HOME/Applications" ] ;
 fi
 
 
+case ${TERM} in
+  xterm*|rxvt*|Eterm*|aterm|kterm|gnome*|alacritty|kitty|st|konsole*)
+    PROMPT_COMMAND='echo -ne "\033]0;${USER}@${HOSTNAME%%.*}:${PWD/#$HOME/\~}\007"'
+        ;;
+  screen*)
+    PROMPT_COMMAND='echo -ne "\033_${USER}@${HOSTNAME%%.*}:${PWD/#$HOME/\~}\033\\"'
+    ;;
+esac
+
 # vi mode
 bindkey -v
 export KEYTIMEOUT=1
@@ -161,3 +170,8 @@ bindkey '^e' edit-command-line
 source /usr/share/zsh/plugins/zsh-syntax-highlighting/zsh-syntax-highlighting.zsh 2>/dev/null
 PATH="$HOME/.local/bin:$PATH"
 PATH=$PATH:$HOME/.local/bin
+
+## Random color script ##
+colorscript random
+
+eval "$(starship init zsh)"
