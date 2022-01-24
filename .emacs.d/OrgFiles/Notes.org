@@ -105,3 +105,12 @@ ffmpeg -f x11grab -s resolution -i :0.0+1366,0 out.mkv
 
 ffmpeg -f x11grab -s resolution -i :0.0+1366,0 -f  alsa -i hw:0 out.mkv
 
+*** 2022-01-24 Monday
+
+**** 07:38 AM - Notes                                              :notes:
+:LOGBOOK:
+CLOCK: [2022-01-24 Mon 07:38]--[2022-01-24 Mon 07:38] =>  0:00
+:END:
+
+mount -o gid=users,fmask=113,dmask=002 /dev/sda1 /mnt/usbstick
+
