@@ -87,7 +87,8 @@
 
 ;; Electric pair mode enable by default
 (electric-pair-mode 1)
-  ;; Disable line numbers for some modes
+
+;; Disable line numbers for some modes
   (dolist (mode '(org-mode-hook
                       term-mode-hook
                       shell-mode-hook
@@ -271,6 +272,7 @@
 (use-package emojify
   :hook (erc-mode . emojify-mode)
   :commands emojify-mode
+  :ensure t
   :config
 )
 
@@ -524,8 +526,8 @@
   ;; :hook (python-mode . lsp-deferred)
   :custom
   ;; NOTE: Set these if Python 3 is called "python3" on your system!
-  (python-shell-interpreter "python3")
-  (dap-python-executable "python3")
+  ;; (python-shell-interpreter "python3")
+  ;; (dap-python-executable "python3")
   (dap-python-debugger 'debugpy)
   :config
   (require 'dap-python))
@@ -786,11 +788,13 @@
 ;; (advice-add 'exwm-workspace-switch :before #'gunner/before-exwm-workspace-switch)
 
 (use-package telega
+:init
+(setq emojify-mode nil)
 :load-path  "~/telega.el"
 :commands (telega)
-:defer t
 :config
-(setq telega-filter-button-width 20))
+(setq telega-filter-button-width 20)
+)
 ;; (setq telega-user-use-avatars nil
 ;; telega-use-tracking-for '(any pin unread)
 ;; telega-chat-use-markdown-formatting t
