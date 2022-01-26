@@ -1,5 +1,5 @@
 source $HOME/.config/nvim/vim-plug/plugins.vim
-
+let mapleader = "C" "
 set nocompatible        " Required to be iMproved
 
 " Removes filetype
@@ -20,8 +20,9 @@ syntax on               " Enable syntax
 
 set clipboard+=unnamedplus  " Copy/paste between vim and other programs
 
-:imap ii <Esc>          " Remap ESC to ii
+:imap <C-g> <Esc>
 
+set timeoutlen=100
 
 set mouse=a             " Mouse Scrolling
 
@@ -31,11 +32,4 @@ set smarttab                    " Be smart using tabs ;)
 set shiftwidth=4                " One tab == four spaces.
 set tabstop=4                   " One tab == four spaces.
 
-" LSP Mode: Pyright
-lua << EOF
-require'lspconfig'.pyright.setup{}
-EOF
-
-" vim-airline
-let g:airline_theme='base16'
 
