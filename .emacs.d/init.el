@@ -85,8 +85,6 @@
   (set-frame-parameter (selected-frame) 'fullscreen 'maximized)
   (add-to-list 'default-frame-alist '(fullscreen . maximized))
 
-;; Electric pair mode enable by default
-(electric-pair-mode 1)
 
 ;; Disable line numbers for some modes
   (dolist (mode '(org-mode-hook
@@ -602,6 +600,19 @@
   ;; - https://magit.vc/manual/forge/Token-Creation.html#Token-Creation
   ;; - https://magit.vc/manual/ghub/Getting-Started.html#Getting-Started
   (use-package forge)
+
+;; Electric pair mode enable by default
+(require 'smartparens-config)
+;; (smartparens-strict-mode 1)
+;; Always start smartparens mode in lsp-mode.
+(add-hook 'lsp-mode-hook #'smartparens-mode)
+(show-paren-mode 1)
+
+(add-hook 'html-mode-hook 'lsp)
+
+(add-hook 'sgml-mode-hook 'emmet-mode) 
+(add-hook 'html-mode-hook 'emmet-mode)
+(add-hook 'css-mode-hook  'emmet-mode) ;; enable Emmet's css abbreviation.
 
 (require 'emms-setup)
 (emms-all)

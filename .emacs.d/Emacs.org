@@ -148,8 +148,6 @@ This section configures basic UI settings that remove unneeded elements to make 
       (set-frame-parameter (selected-frame) 'fullscreen 'maximized)
       (add-to-list 'default-frame-alist '(fullscreen . maximized))
 
-    ;; Electric pair mode enable by default
-    (electric-pair-mode 1)
 
     ;; Disable line numbers for some modes
       (dolist (mode '(org-mode-hook
@@ -898,6 +896,29 @@ This snippet adds a hook to =org-mode= buffers so that =gunner/org-babel-tangle-
 
 #+RESULTS:
 
+** Smart and Show Paren Mode
+#+begin_src emacs-lisp
+
+  ;; Electric pair mode enable by default
+  (require 'smartparens-config)
+  ;; (smartparens-strict-mode 1)
+  ;; Always start smartparens mode in lsp-mode.
+  (add-hook 'lsp-mode-hook #'smartparens-mode)
+  (show-paren-mode 1)
+#+end_src
+
+** Html Mode
+#+begin_src emacs-lisp
+  (add-hook 'html-mode-hook 'lsp)
+#+end_src
+
+** Emmet for web development
+#+begin_src emacs-lisp
+  (add-hook 'sgml-mode-hook 'emmet-mode) 
+  (add-hook 'html-mode-hook 'emmet-mode)
+  (add-hook 'css-mode-hook  'emmet-mode) ;; enable Emmet's css abbreviation.
+
+#+end_src
 
 * Emms Configuration 
 
