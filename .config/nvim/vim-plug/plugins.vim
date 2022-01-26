@@ -43,7 +43,7 @@ call plug#begin('~/.config/nvim/autoload/plugged')
     Plug 'junegunn/limelight.vim'
 
     " CocInstall for installing Coc-Pyright
-    Plug 'neoclide/coc.nvim', {'branch': 'master', 'do': 'yarn install --frozen-lockfile'}    
+    Plug 'neoclide/coc.nvim', {'branch': 'release'}
 
     " Color previews for CSS
     Plug 'ap/vim-css-color'                            
