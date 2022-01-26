@@ -12,9 +12,9 @@ super + shift + y
 super + w 
       switch
 super + alt +p
-      maim --select | xclip -selection clipboard -t image/png
+      maim -u --select | xclip -selection clipboard -t image/png
 alt + p
-      maim ~/Pictures/ss/$(date +%s).png
+      maim -u ~/Pictures/ss/$(date +%s).png
 super + shift + alt + h
       mhibernate
 super + period
