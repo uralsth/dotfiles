@@ -1,9 +1,0 @@
-[submodule "dmenu"]
-	path = dmenu
-	url = https://git.suckless.org/dmenu
-[submodule ".config/dmenu"]
-	path = .config/dmenu
-	url = https://gitlab.com/dwt1/dmenu-distrotube.git
-[submodule ".config/st"]
-	path = .config/st
-	url = https://github.com/LukeSmithxyz/st.git
