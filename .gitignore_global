@@ -5,3 +5,4 @@ packages/
 cask/
 .emacs.d/%back*
 .emacs.d/.last*
+NERDTree/
