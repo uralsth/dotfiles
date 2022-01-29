@@ -748,7 +748,7 @@ awful.rules.rules = {
     },
 
     -- Set Brave Browser to always map on the tag named "4" on screen s
-    { rule = { class = "Brave-browser"},
+    { rule = { class = "Brave-browser-nightly"},
       properties = { screen = s,
 		     tag = "4",
       }
@@ -756,12 +756,12 @@ awful.rules.rules = {
 
     -- Set spotify to always map on the tag named "5" on screen 1.
     { rule = { class = "Spotify", instance = "spotify"},
-      properties = { screen = s,
+      properties = { screen = 1,
 		     tag = "5",
       }
     },
 
-    -- Set kitty to always map on the tag named "2"
+    -- Set st to always map on the tag named "2"
     { rule = { instance = "st"},
       properties = { screen = s,
 		     tag = "1",
