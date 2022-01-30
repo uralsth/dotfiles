@@ -31,10 +31,10 @@ The following variables are used to tweak some of the configuration pieces for u
 
   (defun gunner/display-startup-time ()
     (message "Emacs loaded in %s with %d garbage collections."
-               (format "%.2f seconds"
-                       (float-time
-                        (time-subtract after-init-time before-init-time)))
-               gcs-done))
+             (format "%.2f seconds"
+                     (float-time
+                      (time-subtract after-init-time before-init-time)))
+             gcs-done))
   ;; (defun gunner/eshell-at-startup()
   ;;   (eshell))
   (add-hook 'emacs-startup-hook #'gunner/display-startup-time)
@@ -63,7 +63,7 @@ Emacs has a built in package manager but it doesn't make it easy to automaticall
   (unless package-archive-contents
     (package-refresh-contents))
 
-    ;; Initialize use-package on non-Linux platforms
+  ;; Initialize use-package on non-Linux platforms
   (unless (package-installed-p 'use-package)
     (package-install 'use-package))
 
@@ -105,7 +105,7 @@ We use the [[https://github.com/emacscollective/no-littering/blob/master/no-litt
 
   ;; NOTE: If you want to move everything out of the ~/.emacs.d folder
   ;; reliably, set `user-emacs-directory` before loading no-littering!
-  ;(setq user-emacs-directory "~/.cache/emacs")
+                                          ;(setq user-emacs-directory "~/.cache/emacs")
 
   (use-package no-littering)
 
@@ -118,7 +118,7 @@ We use the [[https://github.com/emacscollective/no-littering/blob/master/no-litt
 
 * Server Mode 
 #+begin_src emacs-lisp
-;; (server-start)
+  ;; (server-start)
 #+end_src
 
 * Basic UI Configuration
@@ -127,46 +127,47 @@ This section configures basic UI settings that remove unneeded elements to make 
 
 #+begin_src emacs-lisp
 
-      (setq inhibit-startup-message t)
+    (setq inhibit-startup-message t)
 
-      (scroll-bar-mode -1)        ; Disable visible scrollbar
-      (tool-bar-mode -1)          ; Disable the toolbar
-      (tooltip-mode -1)           ; Disable tooltips
-      (set-fringe-mode 10)        ; Give some breathing room
+    (scroll-bar-mode -1)        ; Disable visible scrollbar
+    (tool-bar-mode -1)          ; Disable the toolbar
+    (tooltip-mode -1)           ; Disable tooltips
+    (set-fringe-mode 10)        ; Give some breathing room
 
-      (menu-bar-mode -1)            ; Disable the menu bar
+    (menu-bar-mode -1)            ; Disable the menu bar
 
-      ;; Set up the visible bell
-      (setq visible-bell t)
+    ;; Set up the visible bell
+    (setq visible-bell t)
 
-      (column-number-mode)
-      (global-display-line-numbers-mode t)
+    (column-number-mode)
+    (global-display-line-numbers-mode t)
 
-      ;; Set frame transparency
-      (set-frame-parameter (selected-frame) 'alpha gunner/frame-transparency)
-      (add-to-list 'default-frame-alist `(alpha . ,gunner/frame-transparency))
-      (set-frame-parameter (selected-frame) 'fullscreen 'maximized)
-      (add-to-list 'default-frame-alist '(fullscreen . maximized))
+    ;; Set frame transparency
+    (set-frame-parameter (selected-frame) 'alpha gunner/frame-transparency)
+    (add-to-list 'default-frame-alist `(alpha . ,gunner/frame-transparency))
+    (set-frame-parameter (selected-frame) 'fullscreen 'maximized)
+    (add-to-list 'default-frame-alist '(fullscreen . maximized))
 
 
     ;; Disable line numbers for some modes
-      (dolist (mode '(org-mode-hook
-                          term-mode-hook
-                          shell-mode-hook
-                          vterm-mode-hook
-                          mu4e-mode-hook
-                          nov-mode-hook
-                          telega-chat-mode-hook
-                          telega-root-mode-hook
-                          treemacs-mode-hook
-                          eshell-mode-hook))
-            (add-hook mode (lambda () (display-line-numbers-mode 0))))
+    (dolist (mode '(org-mode-hook
+                    term-mode-hook
+                    shell-mode-hook
+                    vterm-mode-hook
+                    mu4e-mode-hook
+                    nov-mode-hook
+                    telega-chat-mode-hook
+                    telega-root-mode-hook
+                    treemacs-mode-hook
+                    eshell-mode-hook))
+      (add-hook mode (lambda () (display-line-numbers-mode 0))))
 
-        ;; (defun eshell-mode-hook-func ()
-          ;; (setq eshell-path-env (concat "/usr/local/bin:" eshell-path-env))
-          (setenv "PATH" (concat (getenv "PATH") ":/home/ural/.local/bin"))
+  (setq display-line-numbers-type 'relative)
+  ;; (defun eshell-mode-hook-func ()
+  ;; (setq eshell-path-env (concat "/usr/local/bin:" eshell-path-env))
+  (setenv "PATH" (concat (getenv "PATH") ":/home/ural/.local/bin"))
 
-        ;; (add-hook 'eshell-mode-hook 'eshell-mode-hook-func)
+  ;; (add-hook 'eshell-mode-hook 'eshell-mode-hook-func)
 #+end_src
 
 ** Font Configuration
@@ -175,13 +176,13 @@ I am using the [[https://github.com/tonsky/FiraCode][Fira Code]] and [[https://f
 
 #+begin_src emacs-lisp
 
-(set-face-attribute 'default nil :font "Fira Code Retina" :height gunner/default-font-size)
+  (set-face-attribute 'default nil :font "Fira Code Retina" :height gunner/default-font-size)
 
-;; Set the fixed pitch face
-(set-face-attribute 'fixed-pitch nil :font "Fira Code Retina" :height gunner/default-font-size)
+  ;; Set the fixed pitch face
+  (set-face-attribute 'fixed-pitch nil :font "Fira Code Retina" :height gunner/default-font-size)
 
-;; Set the variable pitch face
-(set-face-attribute 'variable-pitch nil :font "Cantarell" :height gunner/default-variable-font-size :weight 'regular)
+  ;; Set the variable pitch face
+  (set-face-attribute 'variable-pitch nil :font "Cantarell" :height gunner/default-variable-font-size :weight 'regular)
 
 #+end_src
 
@@ -194,7 +195,7 @@ This configuration uses [[https://evil.readthedocs.io/en/latest/index.html][evil
   ;; Make ESC quit prompts
   (global-set-key (kbd "<escape>") 'keyboard-escape-quit)
   (global-set-key (kbd "C-e") 'move-end-of-line)
-  
+
   (use-package general
     :after evil
     :config
@@ -252,8 +253,8 @@ This configuration uses [[https://evil.readthedocs.io/en/latest/index.html][evil
 
 #+begin_src emacs-lisp
 
-(use-package doom-themes
-  :init (load-theme 'doom-dracula t))
+  (use-package doom-themes
+    :init (load-theme 'doom-dracula t))
 
 #+end_src
 
@@ -265,27 +266,27 @@ This configuration uses [[https://evil.readthedocs.io/en/latest/index.html][evil
 
 #+begin_src emacs-lisp
 
-(use-package all-the-icons)
-(use-package minions
-  :hook (doom-modeline-mode . minions-mode))
-(use-package diminish)
-(use-package doom-modeline
-  :init (doom-modeline-mode nil)
-  :hook (after-init . doom-modeline-init)
-  :custom-face
-  (mode-line ((t (:height 0.85))))
-  (mode-line-inactive ((t (:height 0.85))))
-  :custom 
-  (doom-modeline-height 15)
-  (doom-modeline-bar-width 6)
-  (doom-modeline-lsp t)
-  ;; (doom-modeline-github nil)
-  ;; (doom-modeline-mu4e nil)
-  ;; (doom-modeline-irc nil)
-  (doom-modeline-minor-modes t)
-  (doom-modeline-persp-name nil)
-  (doom-modeline-buffer-file-name-style 'truncate-except-project)
-  (doom-modeline-major-mode-icon nil))
+  (use-package all-the-icons)
+  (use-package minions
+    :hook (doom-modeline-mode . minions-mode))
+  (use-package diminish)
+  (use-package doom-modeline
+    :init (doom-modeline-mode nil)
+    :hook (after-init . doom-modeline-init)
+    :custom-face
+    (mode-line ((t (:height 0.85))))
+    (mode-line-inactive ((t (:height 0.85))))
+    :custom 
+    (doom-modeline-height 15)
+    (doom-modeline-bar-width 6)
+    (doom-modeline-lsp t)
+    ;; (doom-modeline-github nil)
+    ;; (doom-modeline-mu4e nil)
+    ;; (doom-modeline-irc nil)
+    (doom-modeline-minor-modes t)
+    (doom-modeline-persp-name nil)
+    (doom-modeline-buffer-file-name-style 'truncate-except-project)
+    (doom-modeline-major-mode-icon nil))
 #+end_src
 
 #+RESULTS:
@@ -363,7 +364,7 @@ This Prescient configuration is optimized for use in System Crafters videos and 
     (ivy-prescient-enable-filtering nil)
     :config
     ;; Uncomment the following line to have sorting remembered across sessions!
-    ;(prescient-persist-mode 1)
+                                          ;(prescient-persist-mode 1)
     (ivy-prescient-mode 1))
 
 #+end_src
@@ -435,7 +436,7 @@ This is an example of using [[https://github.com/abo-abo/hydra][Hydra]] to desig
     :commands emojify-mode
     :ensure t
     :config
-  )
+    )
 #+end_src
 
 #+RESULTS:
@@ -514,109 +515,109 @@ This section contains the basic configuration for =org-mode= plus the configurat
     (setq org-habit-graph-column 60)
 
     (setq org-todo-keywords
-      '((sequence "TODO(t)" "NEXT(n)" "|" "DONE(d!)")
-        (sequence "BACKLOG(b)" "PLAN(p)" "READY(r)" "ACTIVE(a)" "REVIEW(v)" "WAIT(w@/!)" "HOLD(h)" "|" "COMPLETED(c)" "CANC(k@)")))
+          '((sequence "TODO(t)" "NEXT(n)" "|" "DONE(d!)")
+            (sequence "BACKLOG(b)" "PLAN(p)" "READY(r)" "ACTIVE(a)" "REVIEW(v)" "WAIT(w@/!)" "HOLD(h)" "|" "COMPLETED(c)" "CANC(k@)")))
 
     (setq org-refile-targets
-      '(("Archive.org" :maxlevel . 1)
-        ("Tasks.org" :maxlevel . 1)))
+          '(("Archive.org" :maxlevel . 1)
+            ("Tasks.org" :maxlevel . 1)))
 
     ;; Save Org buffers after refiling!
     (advice-add 'org-refile :after 'org-save-all-org-buffers)
 
     (setq org-tag-alist
-      '((:startgroup)
-         ; Put mutually exclusive tags here
-         (:endgroup)
-         ("@errand" . ?E)
-         ("@home" . ?H)
-         ("@work" . ?W)
-         ("agenda" . ?a)
-         ("planning" . ?p)
-         ("publish" . ?P)
-         ("batch" . ?b)
-         ("note" . ?n)
-         ("idea" . ?i)))
+          '((:startgroup)
+                                          ; Put mutually exclusive tags here
+            (:endgroup)
+            ("@errand" . ?E)
+            ("@home" . ?H)
+            ("@work" . ?W)
+            ("agenda" . ?a)
+            ("planning" . ?p)
+            ("publish" . ?P)
+            ("batch" . ?b)
+            ("note" . ?n)
+            ("idea" . ?i)))
 
     ;; Configure custom agenda views
     (setq org-agenda-custom-commands
-     '(("d" "Dashboard"
-       ((agenda "" ((org-deadline-warning-days 7)))
-        (todo "NEXT"
-          ((org-agenda-overriding-header "Next Tasks")))
-        (tags-todo "agenda/ACTIVE" ((org-agenda-overriding-header "Active Projects")))))
+          '(("d" "Dashboard"
+             ((agenda "" ((org-deadline-warning-days 7)))
+              (todo "NEXT"
+                    ((org-agenda-overriding-header "Next Tasks")))
+              (tags-todo "agenda/ACTIVE" ((org-agenda-overriding-header "Active Projects")))))
 
-      ("n" "Next Tasks"
-       ((todo "NEXT"
-          ((org-agenda-overriding-header "Next Tasks")))))
+            ("n" "Next Tasks"
+             ((todo "NEXT"
+                    ((org-agenda-overriding-header "Next Tasks")))))
 
-      ("W" "Work Tasks" tags-todo "+work-email")
+            ("W" "Work Tasks" tags-todo "+work-email")
 
-      ;; Low-effort next actions
-      ("e" tags-todo "+TODO=\"NEXT\"+Effort<15&+Effort>0"
-       ((org-agenda-overriding-header "Low Effort Tasks")
-        (org-agenda-max-todos 20)
-        (org-agenda-files org-agenda-files)))
+            ;; Low-effort next actions
+            ("e" tags-todo "+TODO=\"NEXT\"+Effort<15&+Effort>0"
+             ((org-agenda-overriding-header "Low Effort Tasks")
+              (org-agenda-max-todos 20)
+              (org-agenda-files org-agenda-files)))
 
-      ("w" "Workflow Status"
-       ((todo "WAIT"
-              ((org-agenda-overriding-header "Waiting on External")
-               (org-agenda-files org-agenda-files)))
-        (todo "REVIEW"
-              ((org-agenda-overriding-header "In Review")
-               (org-agenda-files org-agenda-files)))
-        (todo "PLAN"
-              ((org-agenda-overriding-header "In Planning")
-               (org-agenda-todo-list-sublevels nil)
-               (org-agenda-files org-agenda-files)))
-        (todo "BACKLOG"
-              ((org-agenda-overriding-header "Project Backlog")
-               (org-agenda-todo-list-sublevels nil)
-               (org-agenda-files org-agenda-files)))
-        (todo "READY"
-              ((org-agenda-overriding-header "Ready for Work")
-               (org-agenda-files org-agenda-files)))
-        (todo "ACTIVE"
-              ((org-agenda-overriding-header "Active Projects")
-               (org-agenda-files org-agenda-files)))
-        (todo "COMPLETED"
-              ((org-agenda-overriding-header "Completed Projects")
-               (org-agenda-files org-agenda-files)))
-        (todo "CANC"
-              ((org-agenda-overriding-header "Cancelled Projects")
-               (org-agenda-files org-agenda-files)))))))
+            ("w" "Workflow Status"
+             ((todo "WAIT"
+                    ((org-agenda-overriding-header "Waiting on External")
+                     (org-agenda-files org-agenda-files)))
+              (todo "REVIEW"
+                    ((org-agenda-overriding-header "In Review")
+                     (org-agenda-files org-agenda-files)))
+              (todo "PLAN"
+                    ((org-agenda-overriding-header "In Planning")
+                     (org-agenda-todo-list-sublevels nil)
+                     (org-agenda-files org-agenda-files)))
+              (todo "BACKLOG"
+                    ((org-agenda-overriding-header "Project Backlog")
+                     (org-agenda-todo-list-sublevels nil)
+                     (org-agenda-files org-agenda-files)))
+              (todo "READY"
+                    ((org-agenda-overriding-header "Ready for Work")
+                     (org-agenda-files org-agenda-files)))
+              (todo "ACTIVE"
+                    ((org-agenda-overriding-header "Active Projects")
+                     (org-agenda-files org-agenda-files)))
+              (todo "COMPLETED"
+                    ((org-agenda-overriding-header "Completed Projects")
+                     (org-agenda-files org-agenda-files)))
+              (todo "CANC"
+                    ((org-agenda-overriding-header "Cancelled Projects")
+                     (org-agenda-files org-agenda-files)))))))
 
     (setq org-capture-templates
-      `(("t" "Tasks / Projects")
-        ("tt" "Task" entry (file+olp "~/.emacs.d/OrgFiles/Tasks.org" "Inbox")
+          `(("t" "Tasks / Projects")
+            ("tt" "Task" entry (file+olp "~/.emacs.d/OrgFiles/Tasks.org" "Inbox")
              "* TODO %?\n  %U\n  %a\n  %i" :empty-lines 1)
 
-        ("r" "Randmon Notes")
-        ("rn" "Notes" entry
+            ("r" "Randmon Notes")
+            ("rn" "Notes" entry
              (file+olp+datetree "~/.emacs.d/OrgFiles/Notes.org")
              "\n* %<%I:%M %p> - Notes :notes:\n\n%?\n\n"
              :clock-in :clock-resume
              :empty-lines 1)
-        ("j" "Journal Entries")
-        ("jj" "Journal" entry
+            ("j" "Journal Entries")
+            ("jj" "Journal" entry
              (file+olp+datetree "~/.emacs.d/OrgFiles/Journal.org")
              "\n* %<%I:%M %p> - Journal :journal:\n\n%?\n\n"
              ;; ,(dw/read-file-as-string "~/Notes/Templates/Daily.org")
              :clock-in :clock-resume
              :empty-lines 1)
-        ("jm" "Meeting" entry
+            ("jm" "Meeting" entry
              (file+olp+datetree "~/.emacs.d/OrgFiles/Journal.org")
              "* %<%I:%M %p> - %a :meetings:\n\n%?\n\n"
              :clock-in :clock-resume
              :empty-lines 1)
 
-        ("w" "Workflows")
-        ("we" "Checking Email" entry (file+olp+datetree "~/.emacs.d/OrgFiles/Journal.org")
+            ("w" "Workflows")
+            ("we" "Checking Email" entry (file+olp+datetree "~/.emacs.d/OrgFiles/Journal.org")
              "* Checking Email :email:\n\n%?" :clock-in :clock-resume :empty-lines 1)
 
-        ("m" "Metrics Capture")
-        ("mw" "Weight" table-line (file+headline "~/.emacs.d/OrgFiles/Metrics.org" "Weight")
-         "| %U | %^{Weight} | %^{Notes} |" :kill-buffer t)))
+            ("m" "Metrics Capture")
+            ("mw" "Weight" table-line (file+headline "~/.emacs.d/OrgFiles/Metrics.org" "Weight")
+             "| %U | %^{Weight} | %^{Notes} |" :kill-buffer t)))
 
     (define-key global-map (kbd "C-c j")
       (lambda () (interactive) (org-capture nil "jj")))
@@ -662,9 +663,9 @@ To execute or export code in =org-mode= code blocks, you'll need to set up =org-
 
   (with-eval-after-load 'org
     (org-babel-do-load-languages
-        'org-babel-load-languages
-        '((emacs-lisp . t)
-        (python . t)))
+     'org-babel-load-languages
+     '((emacs-lisp . t)
+       (python . t)))
 
     (push '("conf-unix" . conf-unix) org-src-lang-modes))
 
@@ -709,17 +710,17 @@ This snippet adds a hook to =org-mode= buffers so that =gunner/org-babel-tangle-
 
 ** lsp-mode
 #+begin_src emacs-lisp
-(defun gunner/lsp-mode-setup ()
-  (setq lsp-headerline-breadcrumb-segments '(path-up-to-project file symbols))
-  (lsp-headerline-breadcrumb-mode))
+  (defun gunner/lsp-mode-setup ()
+    (setq lsp-headerline-breadcrumb-segments '(path-up-to-project file symbols))
+    (lsp-headerline-breadcrumb-mode))
 
-(use-package lsp-mode
-  :commands (lsp lsp-deferred)
-  :hook (lsp-mode . gunner/lsp-mode-setup)
-  :init
-  (setq lsp-keymap-prefix "C-c l")  ;; Or 'C-l', 's-l'
-  :config
-  (lsp-enable-which-key-integration t))
+  (use-package lsp-mode
+    :commands (lsp lsp-deferred)
+    :hook (lsp-mode . gunner/lsp-mode-setup)
+    :init
+    (setq lsp-keymap-prefix "C-c l")  ;; Or 'C-l', 's-l'
+    :config
+    (lsp-enable-which-key-integration t))
 #+end_src
 
 #+RESULTS:
@@ -727,10 +728,10 @@ This snippet adds a hook to =org-mode= buffers so that =gunner/org-babel-tangle-
 
 ** lsp-ui
 #+begin_src emacs-lisp
-(use-package lsp-ui
-  :hook (lsp-mode . lsp-ui-mode)
-  :custom
-  (lsp-ui-doc-position 'bottom))
+  (use-package lsp-ui
+    :hook (lsp-mode . lsp-ui-mode)
+    :custom
+    (lsp-ui-doc-position 'bottom))
 #+end_src
 
 #+RESULTS:
@@ -738,8 +739,8 @@ This snippet adds a hook to =org-mode= buffers so that =gunner/org-babel-tangle-
 
 ** lsp-treemacs
 #+begin_src emacs-lisp
-(use-package lsp-treemacs
-  :after lsp)
+  (use-package lsp-treemacs
+    :after lsp)
 #+end_src
 
 #+RESULTS:
@@ -747,31 +748,31 @@ This snippet adds a hook to =org-mode= buffers so that =gunner/org-babel-tangle-
 ** isp-ivy
 #+begin_src emacs-lisp
 
-(use-package lsp-ivy
-  :after lsp)
+  (use-package lsp-ivy
+    :after lsp)
 
 #+end_src
 
 ** Debugging with dap-mode
 #+begin_src emacs-lisp
 
-(use-package dap-mode
-  ;; Uncomment the config below if you want all UI panes to be hidden by default!
-  ;; :custom
-  ;; (lsp-enable-dap-auto-configure nil)
-  ;; :config
-  ;; (dap-ui-mode 1)
-  :commands dap-debug
-  :config
-  ;; Set up Node debugging
-  (require 'dap-node)
-  (dap-node-setup) ;; Automatically installs Node debug adapter if needed
+  (use-package dap-mode
+    ;; Uncomment the config below if you want all UI panes to be hidden by default!
+    ;; :custom
+    ;; (lsp-enable-dap-auto-configure nil)
+    ;; :config
+    ;; (dap-ui-mode 1)
+    :commands dap-debug
+    :config
+    ;; Set up Node debugging
+    (require 'dap-node)
+    (dap-node-setup) ;; Automatically installs Node debug adapter if needed
 
-  ;; Bind `C-c l d` to `dap-hydra` for easy access
-  (general-define-key
-    :keymaps 'lsp-mode-map
-    :prefix lsp-keymap-prefix
-    "d" '(dap-hydra t :wk "debugger")))
+    ;; Bind `C-c l d` to `dap-hydra` for easy access
+    (general-define-key
+     :keymaps 'lsp-mode-map
+     :prefix lsp-keymap-prefix
+     "d" '(dap-hydra t :wk "debugger")))
 
 
 #+end_src
@@ -888,10 +889,10 @@ This snippet adds a hook to =org-mode= buffers so that =gunner/org-babel-tangle-
   ;; (setq evil-magit-use-y-for-yank nil)
   ;; (require 'evil-magit)
 
-    ;; NOTE: Make sure to configure a GitHub token before using this package!
-    ;; - https://magit.vc/manual/forge/Token-Creation.html#Token-Creation
-    ;; - https://magit.vc/manual/ghub/Getting-Started.html#Getting-Started
-    (use-package forge)
+  ;; NOTE: Make sure to configure a GitHub token before using this package!
+  ;; - https://magit.vc/manual/forge/Token-Creation.html#Token-Creation
+  ;; - https://magit.vc/manual/ghub/Getting-Started.html#Getting-Started
+  (use-package forge)
 #+end_src
 
 #+RESULTS:
@@ -924,9 +925,9 @@ This snippet adds a hook to =org-mode= buffers so that =gunner/org-babel-tangle-
 
 ** Setup
 #+begin_src emacs-lisp
-(require 'emms-setup)
-(emms-all)
-(emms-default-players)
+  (require 'emms-setup)
+  (emms-all)
+  (emms-default-players)
 #+end_src
 
 #+RESULTS:
@@ -934,7 +935,7 @@ This snippet adds a hook to =org-mode= buffers so that =gunner/org-babel-tangle-
 
 ** Root directory of my music
 #+begin_src emacs-lisp
-(setq emms-source-file-default-directory "~/Music/My Music")
+  (setq emms-source-file-default-directory "~/Music/My Music")
 #+end_src
 
 #+RESULTS:
@@ -942,8 +943,8 @@ This snippet adds a hook to =org-mode= buffers so that =gunner/org-babel-tangle-
 
 ** Emms Behaviour
 #+begin_src emacs-lisp
-(setq emms-info-asynchronously nil)
-(setq emms-playlist-buffer-name "*Music*")
+  (setq emms-info-asynchronously nil)
+  (setq emms-playlist-buffer-name "*Music*")
 #+end_src
 
 #+RESULTS:
@@ -954,74 +955,74 @@ This snippet adds a hook to =org-mode= buffers so that =gunner/org-babel-tangle-
 * Emacs Dashboard
 ** Setup
 #+begin_src emacs-lisp
-    ;; (require 'dashboard)
-    ;; (dashboard-setup-startup-hook)
-    ;; Or if you use use-package
-    (use-package dashboard
-      :ensure t
-      :config
-      (dashboard-setup-startup-hook)
+  ;; (require 'dashboard)
+  ;; (dashboard-setup-startup-hook)
+  ;; Or if you use use-package
+  (use-package dashboard
+    :ensure t
+    :config
+    (dashboard-setup-startup-hook)
 
-      (setq initial-buffer-choice (lambda () (get-buffer "*dashboard*")))
+    (setq initial-buffer-choice (lambda () (get-buffer "*dashboard*")))
 
-      ;; Set the title
-      (setq dashboard-banner-logo-title "Welcome to Emacs Dashboard")
-      ;; Set the banner
-      (setq dashboard-startup-banner ['logo])
-      ;; Value can be
-      ;; 'official which displays the official emacs logo
-      ;; 'logo which displays an alternative emacs logo
-      ;; 1, 2 or 3 which displays one of the text banners
-      ;; "path/to/your/image.gif", "path/to/your/image.png" or "path/to/your/text.txt" which displays whatever gif/image/text you would prefer
+    ;; Set the title
+    (setq dashboard-banner-logo-title "Welcome to Emacs Dashboard")
+    ;; Set the banner
+    (setq dashboard-startup-banner ['logo])
+    ;; Value can be
+    ;; 'official which displays the official emacs logo
+    ;; 'logo which displays an alternative emacs logo
+    ;; 1, 2 or 3 which displays one of the text banners
+    ;; "path/to/your/image.gif", "path/to/your/image.png" or "path/to/your/text.txt" which displays whatever gif/image/text you would prefer
 
-      ;; Content is not centered by default. To center, set
-      (setq dashboard-center-content t)
+    ;; Content is not centered by default. To center, set
+    (setq dashboard-center-content t)
 
-      ;; To disable shortcut "jump" indicators for each section, set
-      (setq dashboard-show-shortcuts nil)
-      (setq dashboard-items '((recents  . 5)
-                              ;; (bookmarks . 5)
-                              (projects . 5)
-                              ;; (agenda . 5)
-                              ;; (registers . 5)
-                              ))
-      (setq dashboard-set-heading-icons t)
-      (setq dashboard-set-file-icons t)
-      (dashboard-modify-heading-icons '((recents . "file-text")
-                                        ;; (bookmarks . "book")
-                                        ))
-      (setq dashboard-set-navigator t)
-      ;; Format: "(icon title help action face prefix suffix)"
-      ;; (setq dashboard-navigator-buttons
-      ;;   `(;; line1
-      ;;     ((,(all-the-icons-octicon "mark-github" :height 1.1 :v-adjust 0.0)
-      ;;      "Homepage"
-      ;;      "Browse homepage"
-      ;;      (lambda (&rest _) (browse-url "homepage")))
-      ;;     ("★" "Star" "Show stars" (lambda (&rest _) (show-stars)) warning)
-      ;;     ("?" "" "?/h" #'show-help nil "<" ">"))
-      ;;      ;; line 2
-      ;;     ((,(all-the-icons-faicon "linkedin" :height 1.1 :v-adjust 0.0)
-      ;;       "Linkedin"
-      ;;       ""
-      ;;       (lambda (&rest _) (browse-url "homepage")))
-      ;;      ("⚑" nil "Show flags" (lambda (&rest _) (message "flag")) error))))
+    ;; To disable shortcut "jump" indicators for each section, set
+    (setq dashboard-show-shortcuts nil)
+    (setq dashboard-items '((recents  . 5)
+                            ;; (bookmarks . 5)
+                            (projects . 5)
+                            ;; (agenda . 5)
+                            ;; (registers . 5)
+                            ))
+    (setq dashboard-set-heading-icons t)
+    (setq dashboard-set-file-icons t)
+    (dashboard-modify-heading-icons '((recents . "file-text")
+                                      ;; (bookmarks . "book")
+                                      ))
+    (setq dashboard-set-navigator t)
+    ;; Format: "(icon title help action face prefix suffix)"
+    ;; (setq dashboard-navigator-buttons
+    ;;   `(;; line1
+    ;;     ((,(all-the-icons-octicon "mark-github" :height 1.1 :v-adjust 0.0)
+    ;;      "Homepage"
+    ;;      "Browse homepage"
+    ;;      (lambda (&rest _) (browse-url "homepage")))
+    ;;     ("★" "Star" "Show stars" (lambda (&rest _) (show-stars)) warning)
+    ;;     ("?" "" "?/h" #'show-help nil "<" ">"))
+    ;;      ;; line 2
+    ;;     ((,(all-the-icons-faicon "linkedin" :height 1.1 :v-adjust 0.0)
+    ;;       "Linkedin"
+    ;;       ""
+    ;;       (lambda (&rest _) (browse-url "homepage")))
+    ;;      ("⚑" nil "Show flags" (lambda (&rest _) (message "flag")) error))))
 
-      ;; (setq dashboard-set-init-info t)
-      ;; (setq dashboard-init-info "This is an init message!")
-      (setq dashboard-set-footer nil)
-      ;; (setq dashboard-footer-messages '("Dashboard is pretty cool!"))
-      ;; (setq dashboard-footer-icon (all-the-icons-octicon "dashboard"
-                                               ;; :height 1.1
-                                               ;; :v-adjust -0.05
-                                               ;; :face 'font-lock-keyword-face))
-      (setq dashboard-projects-switch-function 'counsel-projectile-switch-project-by-name)
-  ;;     (add-to-list 'dashboard-items '(agenda) t)
-  ;;     (setq dashboard-week-agenda t)
-  ;;     (setq dashboard-filter-agenda-entry 'dashboard-no-filter-agenda)
+    ;; (setq dashboard-set-init-info t)
+    ;; (setq dashboard-init-info "This is an init message!")
+    (setq dashboard-set-footer nil)
+    ;; (setq dashboard-footer-messages '("Dashboard is pretty cool!"))
+    ;; (setq dashboard-footer-icon (all-the-icons-octicon "dashboard"
+    ;; :height 1.1
+    ;; :v-adjust -0.05
+    ;; :face 'font-lock-keyword-face))
+    (setq dashboard-projects-switch-function 'counsel-projectile-switch-project-by-name)
+    ;;     (add-to-list 'dashboard-items '(agenda) t)
+    ;;     (setq dashboard-week-agenda t)
+    ;;     (setq dashboard-filter-agenda-entry 'dashboard-no-filter-agenda)
 
 
-      )
+    )
 #+end_src
 
 #+RESULTS:
@@ -1030,7 +1031,7 @@ This snippet adds a hook to =org-mode= buffers so that =gunner/org-babel-tangle-
 * Nov.el Configuration 
 ** Setup
 #+begin_src emacs-lisp
-(add-to-list 'auto-mode-alist '("\\.epub\\'" . nov-mode))
+  (add-to-list 'auto-mode-alist '("\\.epub\\'" . nov-mode))
 
 #+end_src
 
@@ -1044,10 +1045,10 @@ To change the default font, use M-x customize-face RET variable-pitch, pick a di
 
 #+begin_src emacs-lisp
 
-(defun my-nov-font-setup ()
-  (face-remap-add-relative 'variable-pitch :family "Liberation Serif"
-                                           :height 1.0))
-(add-hook 'nov-mode-hook 'my-nov-font-setup)
+  (defun my-nov-font-setup ()
+    (face-remap-add-relative 'variable-pitch :family "Liberation Serif"
+                             :height 1.0))
+  (add-hook 'nov-mode-hook 'my-nov-font-setup)
 
 #+end_src
 
@@ -1061,7 +1062,7 @@ By default text is filled by the window width. You can customize nov-text-width 
 
 #+begin_src emacs-lisp
 
-(setq nov-text-width 80)
+  (setq nov-text-width 80)
 
 #+end_src
 
@@ -1072,10 +1073,10 @@ It's also possible to set it to t to inhibit text filling, this can be used in c
 
 #+begin_src emacs-lisp
 
-(setq nov-text-width t)
-(setq visual-fill-column-center-text t)
-(add-hook 'nov-mode-hook 'visual-line-mode)
-(add-hook 'nov-mode-hook 'visual-fill-column-mode)
+  (setq nov-text-width t)
+  (setq visual-fill-column-center-text t)
+  (add-hook 'nov-mode-hook 'visual-line-mode)
+  (add-hook 'nov-mode-hook 'visual-fill-column-mode)
 
 #+end_src
 
@@ -1084,11 +1085,11 @@ It's also possible to set it to t to inhibit text filling, this can be used in c
 
 * Open as Root
 #+begin_src emacs-lisp
-(defadvice ido-find-file (after find-file-sudo activate)
-  "Find file as root if necessary."
-  (unless (and buffer-file-name
-               (file-writable-p buffer-file-name))
-    (find-alternate-file (concat "/sudo:root@localhost:" buffer-file-name))))
+  (defadvice ido-find-file (after find-file-sudo activate)
+    "Find file as root if necessary."
+    (unless (and buffer-file-name
+                 (file-writable-p buffer-file-name))
+      (find-alternate-file (concat "/sudo:root@localhost:" buffer-file-name))))
 #+end_src
 
 #+RESULTS:
@@ -1114,8 +1115,8 @@ Emacs' built in commenting functionality =comment-dwim= (usually bound to =M-;=)
 
 #+begin_src emacs-lisp
 
-(use-package rainbow-delimiters
-  :hook (prog-mode . rainbow-delimiters-mode))
+  (use-package rainbow-delimiters
+    :hook (prog-mode . rainbow-delimiters-mode))
 
 #+end_src
 
@@ -1291,23 +1292,25 @@ For more thoughts on Eshell, check out these articles by Pierre Neidhardt:
     ;; (advice-add 'exwm-workspace-switch :before #'gunner/before-exwm-workspace-switch)
 
     (use-package telega
-    :init
-    (setq emojify-mode nil)
-    :load-path  "~/telega.el"
-    :commands (telega)
-    :config
-    (setq telega-filter-button-width 20)
-    )
-    ;; (setq telega-user-use-avatars nil
-    ;; telega-use-tracking-for '(any pin unread)
-    ;; telega-chat-use-markdown-formatting t
+      :init
+      (setq emojify-mode t)
+      :defer 5
+      :load-path  "~/telega.el"
+      :commands (telega)
+      :config
+      (setq telega-filter-button-width 20)
+      )
+  ;; (setq telega-user-use-avatars nil
+  ;; telega-use-tracking-for '(any pin unread)
+  ;; telega-chat-use-markdown-formatting t
     ;; telega-emoji-use-images t
-    ;; telega-completing-read-function #'ivy-completing-read
+  ;; telega-completing-read-function #'ivy-completing-read
     ;; telega-msg-rainbow-title nil
     ;; telega-chat-fill-column 75)
-    (add-hook 'telega-load-hook
-    (lambda ()
-    (define-key global-map (kbd "C-c t") telega-prefix-map)))
+  (add-hook 'after-init-hook #'global-emojify-mode)
+  (add-hook 'telega-load-hook
+              (lambda ()
+                (define-key global-map (kbd "C-c t") telega-prefix-map)))
 #+end_src
 
 #+RESULTS:
@@ -1316,13 +1319,13 @@ For more thoughts on Eshell, check out these articles by Pierre Neidhardt:
 * Tracking
 #+begin_src emacs-lisp
 
-(use-package tracking
-  :defer t
-  :config
-  (setq tracking-faces-priorities '(all-the-icons-pink
-                                    all-the-icons-lgreen
-                                    all-the-icons-lblue))
-  (setq tracking-frame-behavior nil))
+  (use-package tracking
+    :defer t
+    :config
+    (setq tracking-faces-priorities '(all-the-icons-pink
+                                      all-the-icons-lgreen
+                                      all-the-icons-lblue))
+    (setq tracking-frame-behavior nil))
 
 #+end_src
 
@@ -1330,13 +1333,13 @@ For more thoughts on Eshell, check out these articles by Pierre Neidhardt:
 
 * ERC Configuration
 #+begin_src emacs-lisp
-(setq erc-server "irc.libera.chat"
-erc-nick "uralgunners"
-erc-user-full-name "Ural Shrestha"
-erc-track-shorten-start 8
-erc-autojoin-channels-alist '(("irc-libera.chat" "#systemcrafters" "##soccers"))
-erc-kill-buffer-on-part t
-erc-auto-query 'bury)
+  (setq erc-server "irc.libera.chat"
+        erc-nick "uralgunners"
+        erc-user-full-name "Ural Shrestha"
+        erc-track-shorten-start 8
+        erc-autojoin-channels-alist '(("irc-libera.chat" "#systemcrafters" "##soccers"))
+        erc-kill-buffer-on-part t
+        erc-auto-query 'bury)
 #+end_src
 
 #+RESULTS:
