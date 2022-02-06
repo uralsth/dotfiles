@@ -111,7 +111,7 @@ local editor       = os.getenv("EDITOR") or "nvim"
 local browser      = "firefox"
 
 awful.util.terminal = terminal
-awful.util.tagnames = { "1", "2", "3", "4", "5", "6" }
+awful.util.tagnames = { "1", "2", "3", "4", "5", "6", "7", "8", "9" }
 awful.layout.layouts = {
     -- awful.layout.suit.floating,
     awful.layout.suit.tile,
@@ -727,9 +727,23 @@ awful.rules.rules = {
     },
 
     -- Set Firefox to always map on the tag named "2" on screen s.
-    { rule_any = { class = {"firefox", "qutebrowser"}},
+    -- { rule_any = { class = {"firefox", "qutebrowser"}},
+    --   properties = { screen = s,
+    -- 		     tag = "2",
+    --   }
+    -- },
+
+    -- Set Firefox to always map on the tag named "2" on screen s.
+    { rule = { class = "firefox"},
       properties = { screen = s,
 		     tag = "2",
+      }
+    },
+
+    -- Set Qutebrowser to always map on the tag named "4" on screen s.
+    { rule = { class = "qutebrowser"},
+      properties = { screen = s,
+		     tag = "4",
       }
     },
 
@@ -740,23 +754,45 @@ awful.rules.rules = {
       }
     },
 
+    -- Set mpv to always map on the tag named "9" on screen s
+    { rule = { class = "mpv"},
+      properties = { screen = s,
+		     switch_to_tags = true,
+		     tag = "9",
+      }
+    },
+
     -- Set Discord to always map on the tag named "6" on screen s
-    { rule_any = { class = {"discord", "Zathura"}},
+    -- { rule_any = { class = {"discord", "Zathura"}},
+    --   properties = { screen = s,
+    -- 		     tag = "6",
+    --   }
+    -- },
+
+    -- Set zathura to always map on the tag named "6" on screen s
+    { rule = { class = "Zathura"},
       properties = { screen = s,
 		     tag = "6",
+      }
+    },
+
+    -- Set discord to always map on the tag named "6" on screen s
+    { rule = { class = "discord"},
+      properties = { screen = s,
+		     tag = "8",
       }
     },
 
     -- Set Brave Browser to always map on the tag named "4" on screen s
     { rule = { class = "Brave-browser-nightly"},
       properties = { screen = s,
-		     tag = "4",
+		     tag = "7",
       }
     },
 
     -- Set spotify to always map on the tag named "5" on screen 1.
-    { rule = { class = "Spotify", instance = "spotify"},
-      properties = { screen = 1,
+    { rule = { class = "Spotify" },
+      properties = { screen = s,
 		     tag = "5",
       }
     },
