@@ -3,6 +3,8 @@ super + d
       dmenu_run -p 'Run:'
 super + q
       firefox
+super + control + q
+      qutebrowser
 super + e
       emacsclient -c -a '/usr/bin/emacs'
 super + s
@@ -15,8 +17,8 @@ super + alt +p
       maim -u --select | xclip -selection clipboard -t image/png
 alt + p
       maim -u ~/Pictures/ss/$(date +%s).png
-super + shift + alt + h
-      mhibernate
+super + shift + alt + c
+      ctoc
 super + period
       rofimoji
 super + z
