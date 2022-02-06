@@ -39,6 +39,8 @@ bindkey -M menuselect 'j' vi-down-line-or-history
 bindkey -v '^?' backward-delete-char
 bindkey '^g' vi-cmd-mode
 bindkey -M menuselect '^i' accept-line
+
+
 # Change cursor shape for different vi modes.
 function zle-keymap-select {
   if [[ ${KEYMAP} == vicmd ]] ||
