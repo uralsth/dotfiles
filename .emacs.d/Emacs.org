@@ -116,40 +116,40 @@ This section configures basic UI settings that remove unneeded elements to make 
 
 #+begin_src emacs-lisp
 
-    (setq inhibit-startup-message t)
+  (setq inhibit-startup-message t)
 
-    (scroll-bar-mode -1)        ; Disable visible scrollbar
-    (tool-bar-mode -1)          ; Disable the toolbar
-    (tooltip-mode -1)           ; Disable tooltips
-    (set-fringe-mode 10)        ; Give some breathing room
+  (scroll-bar-mode -1)        ; Disable visible scrollbar
+  (tool-bar-mode -1)          ; Disable the toolbar
+  (tooltip-mode -1)           ; Disable tooltips
+  (set-fringe-mode 10)        ; Give some breathing room
 
-    (menu-bar-mode -1)            ; Disable the menu bar
+  (menu-bar-mode -1)            ; Disable the menu bar
 
-    ;; Set up the visible bell
-    (setq visible-bell t)
+  ;; Set up the visible bell
+  (setq visible-bell t)
 
-    (column-number-mode)
-    (global-display-line-numbers-mode t)
+  (column-number-mode)
+  (global-display-line-numbers-mode t)
 
-    ;; Set frame transparency
-    (set-frame-parameter (selected-frame) 'alpha gunner/frame-transparency)
-    (add-to-list 'default-frame-alist `(alpha . ,gunner/frame-transparency))
-    (set-frame-parameter (selected-frame) 'fullscreen 'maximized)
-    (add-to-list 'default-frame-alist '(fullscreen . maximized))
+  ;; Set frame transparency
+  (set-frame-parameter (selected-frame) 'alpha gunner/frame-transparency)
+  (add-to-list 'default-frame-alist `(alpha . ,gunner/frame-transparency))
+  (set-frame-parameter (selected-frame) 'fullscreen 'maximized)
+  (add-to-list 'default-frame-alist '(fullscreen . maximized))
 
 
-    ;; Disable line numbers for some modes
-    (dolist (mode '(org-mode-hook
-                    term-mode-hook
-                    shell-mode-hook
-                    vterm-mode-hook
-                    mu4e-mode-hook
-                    nov-mode-hook
-                    telega-chat-mode-hook
-                    telega-root-mode-hook
-                    treemacs-mode-hook
-                    eshell-mode-hook))
-      (add-hook mode (lambda () (display-line-numbers-mode 0))))
+  ;; Disable line numbers for some modes
+  (dolist (mode '(org-mode-hook
+                  term-mode-hook
+                  shell-mode-hook
+                  vterm-mode-hook
+                  mu4e-mode-hook
+                  nov-mode-hook
+                  telega-chat-mode-hook
+                  telega-root-mode-hook
+                  treemacs-mode-hook
+                  eshell-mode-hook))
+    (add-hook mode (lambda () (display-line-numbers-mode 0))))
 
   (setq display-line-numbers-type 'relative)
   ;; (defun eshell-mode-hook-func ()
@@ -1259,52 +1259,56 @@ For more thoughts on Eshell, check out these articles by Pierre Neidhardt:
 
 #+begin_src emacs-lisp
 
-    ;; (defun gunner/around-tracking-add-buffer (original-func buffer &optional faces)
-    ;; (let* ((name (buffer-name buffer))
-    ;; (face (cond ((s-contains? "Himalaya" name) '(all-the-icons-pink))
-    ;; ((s-contains? "Prashant " name) '(all-the-icons-lgreen))
-    ;; ((s-contains? "Sakushal" name) '(all-the-icons-lblue))))
-    ;; (result (apply original-func buffer (list face))))
-    ;; ;; (gunner/update-polybar-telegram)
-    ;; result))
+  ;; (defun gunner/around-tracking-add-buffer (original-func buffer &optional faces)
+  ;; (let* ((name (buffer-name buffer))
+  ;; (face (cond ((s-contains? "Himalaya" name) '(all-the-icons-pink))
+  ;; ((s-contains? "Prashant " name) '(all-the-icons-lgreen))
+  ;; ((s-contains? "Sakushal" name) '(all-the-icons-lblue))))
+  ;; (result (apply original-func buffer (list face))))
+  ;; ;; (gunner/update-polybar-telegram)
+  ;; result))
 
-    ;; ;; (defun gunner/after-tracking-remove-buffer (buffer)
-    ;; ;; (gunner/update-polybar-telegram))
+  ;; ;; (defun gunner/after-tracking-remove-buffer (buffer)
+  ;; ;; (gunner/update-polybar-telegram))
 
-    ;; (advice-add 'tracking-add-buffer :around #'gunner/around-tracking-add-buffer)
-    ;; (advice-add 'tracking-remove-buffer :after #'gunner/after-tracking-remove-buffer)
-    ;; (advice-remove 'tracking-remove-buffer #'gunner/around-tracking-remove-buffer)
+  ;; (advice-add 'tracking-add-buffer :around #'gunner/around-tracking-add-buffer)
+  ;; (advice-add 'tracking-remove-buffer :after #'gunner/after-tracking-remove-buffer)
+  ;; (advice-remove 'tracking-remove-buffer #'gunner/around-tracking-remove-buffer)
 
-    ;; ;; Advise exwm-workspace-switch so that we can more reliably clear tracking buffers
-    ;; ;; NOTE: This is a hack and I hate it.  It'd be great to find a better solution.
-    ;; (defun gunner/before-exwm-workspace-switch (frame-or-index &optional force)
-    ;; (when (fboundp 'tracking-remove-visible-buffers)
-    ;; (when (eq exwm-workspace-current-index 0)
-    ;; (tracking-remove-visible-buffers))))
+  ;; ;; Advise exwm-workspace-switch so that we can more reliably clear tracking buffers
+  ;; ;; NOTE: This is a hack and I hate it.  It'd be great to find a better solution.
+  ;; (defun gunner/before-exwm-workspace-switch (frame-or-index &optional force)
+  ;; (when (fboundp 'tracking-remove-visible-buffers)
+  ;; (when (eq exwm-workspace-current-index 0)
+  ;; (tracking-remove-visible-buffers))))
 
-    ;; (advice-add 'exwm-workspace-switch :before #'gunner/before-exwm-workspace-switch)
+  ;; (advice-add 'exwm-workspace-switch :before #'gunner/before-exwm-workspace-switch)
 
+  (use-package telega
+    :init
+    (setq emojify-mode t)
+    :defer 6
+    :load-path  "~/telega.el"
+    :commands (telega)
+    :config
+    (setq telega-filter-button-width 20)
+    ;; ("\\.pdf\\'" . default) is already member in `org-file-apps'
+    ;; Use "xdg-open" to open files by default
+    (setcdr (assq t org-file-apps-gnu) 'browse-url-xdg-open)
+    (setq telega-open-file-function 'org-open-file)
     (setq telega-emoji-use-images t)
     (setq telega-use-images 't)
-    (use-package telega
-      :init
-      (setq emojify-mode t)
-      :defer 6
-      :load-path  "~/telega.el"
-      :commands (telega)
-      :config
-      (setq telega-filter-button-width 20)
-      )
+    )
   ;; (setq telega-user-use-avatars nil
   ;; telega-use-tracking-for '(any pin unread)
   ;; telega-chat-use-markdown-formatting t
   ;; telega-completing-read-function #'ivy-completing-read
-    ;; telega-msg-rainbow-title nil
-    ;; telega-chat-fill-column 75)
+  ;; telega-msg-rainbow-title nil
+  ;; telega-chat-fill-column 75)
   (add-hook 'after-init-hook #'global-emojify-mode)
   (add-hook 'telega-load-hook
-              (lambda ()
-                (define-key global-map (kbd "C-c t") telega-prefix-map)))
+            (lambda ()
+              (define-key global-map (kbd "C-c t") telega-prefix-map)))
 #+end_src
 
 #+RESULTS:
