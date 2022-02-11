@@ -66,7 +66,7 @@ preexec() { echo -ne '\e[5 q' ;} # Use beam shape cursor for each new prompt.
 # Use lf to switch directories and bind it to ctrl-o
 lfcd () {
     tmp="$(mktemp)"
-    lf -last-dir-path="$tmp" "$@"
+    lfrun -last-dir-path="$tmp" "$@"
     if [ -f "$tmp" ]; then
         dir="$(cat "$tmp")"
         rm -f "$tmp"
@@ -74,6 +74,7 @@ lfcd () {
     fi
 }
 bindkey -s '^o' 'lfcd\n'
+bindkey -s '^]' 'lf\n'
 bindkey -s '^f' 'cd "$(dirname "$(fzf)")"\n'
 bindkey '^[[P' delete-char
 
@@ -81,6 +82,10 @@ bindkey '^[[P' delete-char
 # Edit line in vim with ctrl-e:
 autoload edit-command-line; zle -N edit-command-line
 bindkey '^e' edit-command-line
+
+
+# clear with colorscript
+alias clear="clear && colorscript -r"
 # vim and emacs
 alias v="nvim"
 alias svim="sudo nvim"
@@ -120,6 +125,14 @@ alias l.='exa -a | egrep "^\."'
 alias df='df -h'                          # human-readable sizes
 alias free='free -m'                      # show sizes in MB
 alias ytv-best="youtube-dl -f bestvideo+bestaudio "
+
+
+# autorandr reset
+alias randreset='autorandr --load mobile && autorandr --load docked'
+
+
+# Changing lf to lfrun
+alias lf='lfrun'
 
 
 ### Function extract for common file formats ###
