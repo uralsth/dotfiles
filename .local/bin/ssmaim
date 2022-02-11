@@ -1,0 +1,38 @@
+#!/bin/sh
+
+menu(){
+    printf "1. Laptop Full Screen\n"
+    printf "2. Laptop Clipboard\n"
+    printf "3. Monitor Full Screen\n"
+    printf "4. Monitor Clipboard\n"
+}
+
+failed(){
+    notify-send "Failed to complete task!"
+}
+
+choice=$(menu | dmenu -p "Pick One:" -i -l 20 | cut -d. -f1)
+file=$(date +"%Y_%m_%d_%I_%M_%p")
+
+case $choice in
+    1)
+    maim -u -d 3 --quiet -g "1366x768+1024+0" ~/Pictures/ss/$(date +%s).png ||
+       failed
+	break
+	;;
+    2)
+    maim -u -d 3 --quiet -g "1366x768+1024+0" | xclip -selection clipboard ||
+        failed
+	break
+	;;
+    3)
+    maim -u -d 3 --quiet -g "1024x768+0+0" ~/Pictures/ss/$(date +%s).png ||
+        failed
+	break
+	;;
+    4)
+    maim -u -d 3 --quiet -g "1024x768+0+0" | xclip -selection clipboard ||
+        failed
+	break
+	;;
+esac
