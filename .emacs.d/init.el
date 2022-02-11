@@ -1,7 +1,4 @@
-;; NOTE: init.el is now generated from Emacs.org.  Please edit that file
-;;       in Emacs and init.el will be generated automatically!
-
-;; You will most likely need to adjust this font size for your system!
+;; Font size of system
 (defvar gunner/default-font-size 110)
 (defvar gunner/default-variable-font-size 110)
 
@@ -140,6 +137,10 @@
   :config
   (evil-mode 1)
   (define-key evil-insert-state-map (kbd "C-g") 'evil-normal-state)
+  (define-key evil-insert-state-map (kbd "C-f") 'evil-forward-char)
+  (define-key evil-insert-state-map (kbd "C-b") 'evil-backward-char)
+  (define-key evil-insert-state-map (kbd "C-a") 'evil-beginning-of-line)
+  (define-key evil-insert-state-map (kbd "C-e") 'evil-end-of-line)
   (define-key evil-insert-state-map (kbd "C-h") 'evil-delete-backward-char-and-join)
 
   ;; Use visual line motions even outside of visual-line-mode buffers
@@ -799,10 +800,12 @@
 
   ;; (advice-add 'exwm-workspace-switch :before #'gunner/before-exwm-workspace-switch)
 
+  (setq telega-emoji-use-images t)
+  (setq telega-use-images 't)
   (use-package telega
     :init
     (setq emojify-mode t)
-    :defer 5
+    :defer 6
     :load-path  "~/telega.el"
     :commands (telega)
     :config
@@ -811,7 +814,6 @@
 ;; (setq telega-user-use-avatars nil
 ;; telega-use-tracking-for '(any pin unread)
 ;; telega-chat-use-markdown-formatting t
-  ;; telega-emoji-use-images t
 ;; telega-completing-read-function #'ivy-completing-read
   ;; telega-msg-rainbow-title nil
   ;; telega-chat-fill-column 75)

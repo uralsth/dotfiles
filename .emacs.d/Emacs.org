@@ -3,14 +3,9 @@
 
 * Welcome!
 
-The following variables are used to tweak some of the configuration pieces for use in the live streams so you might need to adjust them for your local machine if you try to use this configuration directly.
-
 #+begin_src emacs-lisp
 
-  ;; NOTE: init.el is now generated from Emacs.org.  Please edit that file
-  ;;       in Emacs and init.el will be generated automatically!
-
-  ;; You will most likely need to adjust this font size for your system!
+  ;; Font size of system
   (defvar gunner/default-font-size 110)
   (defvar gunner/default-variable-font-size 110)
 
@@ -47,8 +42,6 @@ The following variables are used to tweak some of the configuration pieces for u
 
 * Package System Setup
 
-Emacs has a built in package manager but it doesn't make it easy to automatically install packages on a new system the first time you pull down your configuration.  [[https://github.com/jwiegley/use-package][use-package]] is a really helpful package used in this configuration to make it a lot easier to automate the installation and configuration of everything else we use.
-
 #+begin_src emacs-lisp
 
   ;; Initialize package sources
@@ -77,9 +70,7 @@ Emacs has a built in package manager but it doesn't make it easy to automaticall
 
 ** Automatic Package Updates
 
-The auto-package-update package helps us keep our Emacs packages up to date!  It will prompt you after a certain number of days either at startup or at a specific time of day to remind you to update your packages.
-
-You can also use =M-x auto-package-update-now= to update right now!
+Use =M-x auto-package-update-now= to update right now!
 
 #+begin_src emacs-lisp
 
@@ -98,8 +89,6 @@ You can also use =M-x auto-package-update-now= to update right now!
 : t
 
 * Keep Folders Clean
-
-We use the [[https://github.com/emacscollective/no-littering/blob/master/no-littering.el][no-littering]] package to keep folders where we edit files and the Emacs configuration folder clean!  It knows about a wide variety of variables for built in Emacs features as well as those from community packages so it can be much easier than finding and setting these variables yourself.
 
 #+begin_src emacs-lisp
 
@@ -172,7 +161,7 @@ This section configures basic UI settings that remove unneeded elements to make 
 
 ** Font Configuration
 
-I am using the [[https://github.com/tonsky/FiraCode][Fira Code]] and [[https://fonts.google.com/specimen/Cantarell][Cantarell]] fonts for this configuration which will more than likely need to be installed on your machine.  Both can usually be found in the various Linux distro package managers or downloaded from the links above.
+[[https://github.com/tonsky/FiraCode][Fira Code]] and [[https://fonts.google.com/specimen/Cantarell][Cantarell]] fonts needs to be installed for this configuration.
 
 #+begin_src emacs-lisp
 
@@ -218,6 +207,10 @@ This configuration uses [[https://evil.readthedocs.io/en/latest/index.html][evil
     :config
     (evil-mode 1)
     (define-key evil-insert-state-map (kbd "C-g") 'evil-normal-state)
+    (define-key evil-insert-state-map (kbd "C-f") 'evil-forward-char)
+    (define-key evil-insert-state-map (kbd "C-b") 'evil-backward-char)
+    (define-key evil-insert-state-map (kbd "C-a") 'evil-beginning-of-line)
+    (define-key evil-insert-state-map (kbd "C-e") 'evil-end-of-line)
     (define-key evil-insert-state-map (kbd "C-h") 'evil-delete-backward-char-and-join)
 
     ;; Use visual line motions even outside of visual-line-mode buffers
@@ -1291,10 +1284,12 @@ For more thoughts on Eshell, check out these articles by Pierre Neidhardt:
 
     ;; (advice-add 'exwm-workspace-switch :before #'gunner/before-exwm-workspace-switch)
 
+    (setq telega-emoji-use-images t)
+    (setq telega-use-images 't)
     (use-package telega
       :init
       (setq emojify-mode t)
-      :defer 5
+      :defer 6
       :load-path  "~/telega.el"
       :commands (telega)
       :config
@@ -1303,7 +1298,6 @@ For more thoughts on Eshell, check out these articles by Pierre Neidhardt:
   ;; (setq telega-user-use-avatars nil
   ;; telega-use-tracking-for '(any pin unread)
   ;; telega-chat-use-markdown-formatting t
-    ;; telega-emoji-use-images t
   ;; telega-completing-read-function #'ivy-completing-read
     ;; telega-msg-rainbow-title nil
     ;; telega-chat-fill-column 75)
