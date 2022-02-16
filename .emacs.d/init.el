@@ -137,10 +137,10 @@
   :config
   (evil-mode 1)
   (define-key evil-insert-state-map (kbd "C-g") 'evil-normal-state)
-  (define-key evil-insert-state-map (kbd "C-f") 'evil-forward-char)
-  (define-key evil-insert-state-map (kbd "C-b") 'evil-backward-char)
+  ;; (define-key evil-insert-state-map (kbd "C-f") 'evil-forward-char)
+  ;; (define-key evil-insert-state-map (kbd "C-b") 'evil-backward-char)
   (define-key evil-insert-state-map (kbd "C-a") 'evil-beginning-of-line)
-  (define-key evil-insert-state-map (kbd "C-e") 'evil-end-of-line)
+  ;; (define-key evil-insert-state-map (kbd "C-e") 'evil-end-of-line)
   (define-key evil-insert-state-map (kbd "C-h") 'evil-delete-backward-char-and-join)
 
   ;; Use visual line motions even outside of visual-line-mode buffers
@@ -189,6 +189,18 @@
   :config
   (which-key-mode)
   (setq which-key-idle-delay 1))
+
+(use-package hydra
+  :defer t)
+
+(defhydra hydra-text-scale (:timeout 4)
+  "scale text"
+  ("j" text-scale-increase "in")
+  ("k" text-scale-decrease "out")
+  ("f" nil "finished" :exit t))
+
+(gunner/leader-keys
+  "ts" '(hydra-text-scale/body :which-key "scale text"))
 
 (use-package ivy
   :diminish
@@ -242,18 +254,6 @@
   ([remap describe-command] . helpful-command)
   ([remap describe-variable] . counsel-describe-variable)
   ([remap describe-key] . helpful-key))
-
-(use-package hydra
-  :defer t)
-
-(defhydra hydra-text-scale (:timeout 4)
-  "scale text"
-  ("j" text-scale-increase "in")
-  ("k" text-scale-decrease "out")
-  ("f" nil "finished" :exit t))
-
-(gunner/leader-keys
-  "ts" '(hydra-text-scale/body :which-key "scale text"))
 
 (use-package hydra
   :defer t)
@@ -480,6 +480,48 @@
 
 (add-hook 'org-mode-hook (lambda () (add-hook 'after-save-hook #'gunner/org-babel-tangle-config)))
 
+(use-package org-tree-slide
+:custom (org-image-actual-width nil))
+
+(use-package hide-mode-line)
+
+(defun gunner/presentation-setup ()
+  ;; Hide the mode line
+  (hide-mode-line-mode 1)
+
+  ;; Display images inline
+  (org-display-inline-images) ;; Can also use org-startup-with-inline-images
+
+  ;; Scale the text.  The next line is for basic scaling:
+  (setq text-scale-mode-amount 3)
+  (text-scale-mode 1))
+
+  ;; This option is more advanced, allows you to scale other faces too
+  ;; (setq-local face-remapping-alist '((default (:height 2.0) variable-pitch)
+  ;;                                    (org-verbatim (:height 1.75) org-verbatim)
+  ;;                                    (org-block (:height 1.25) org-block))))
+
+(defun gunner/presentation-end ()
+  ;; Show the mode line again
+  (hide-mode-line-mode 0)
+
+  ;; Turn off text scale mode (or use the next line if you didn't use text-scale-mode)
+  ;; (text-scale-mode 0))
+
+  ;; If you use face-remapping-alist, this clears the scaling:
+  (setq-local face-remapping-alist '((default variable-pitch default))))
+
+(use-package org-tree-slide
+  :hook ((org-tree-slide-play . efs/presentation-setup)
+         (org-tree-slide-stop . efs/presentation-end))
+  :custom
+  (org-tree-slide-slide-in-effect t)
+  (org-tree-slide-activate-message "Presentation started!")
+  (org-tree-slide-deactivate-message "Presentation finished!")
+  (org-tree-slide-header t)
+  (org-tree-slide-breadcrumbs " > ")
+  (org-image-actual-width nil))
+
 (defun gunner/lsp-mode-setup ()
   (setq lsp-headerline-breadcrumb-segments '(path-up-to-project file symbols))
   (lsp-headerline-breadcrumb-mode))
@@ -611,10 +653,14 @@
 (show-paren-mode 1)
 
 (add-hook 'html-mode-hook 'lsp)
+(add-hook 'html-mode-hook 'skewer-html-mode)
 
 (add-hook 'sgml-mode-hook 'emmet-mode) 
 (add-hook 'html-mode-hook 'emmet-mode)
 (add-hook 'css-mode-hook  'emmet-mode) ;; enable Emmet's css abbreviation.
+
+(add-to-list 'load-path (expand-file-name "~/.emacs.d/emacs-livedown"))
+(require 'livedown)
 
 (require 'emms-setup)
 (emms-all)
@@ -638,7 +684,7 @@
   ;; Set the title
   (setq dashboard-banner-logo-title "Welcome to Emacs Dashboard")
   ;; Set the banner
-  (setq dashboard-startup-banner ['logo])
+  (setq dashboard-startup-banner 'logo)
   ;; Value can be
   ;; 'official which displays the official emacs logo
   ;; 'logo which displays an alternative emacs logo
@@ -775,30 +821,8 @@
 
   (eshell-git-prompt-use-theme 'powerline))
 
-;; (defun gunner/around-tracking-add-buffer (original-func buffer &optional faces)
-;; (let* ((name (buffer-name buffer))
-;; (face (cond ((s-contains? "Himalaya" name) '(all-the-icons-pink))
-;; ((s-contains? "Prashant " name) '(all-the-icons-lgreen))
-;; ((s-contains? "Sakushal" name) '(all-the-icons-lblue))))
-;; (result (apply original-func buffer (list face))))
-;; ;; (gunner/update-polybar-telegram)
-;; result))
-
-;; ;; (defun gunner/after-tracking-remove-buffer (buffer)
-;; ;; (gunner/update-polybar-telegram))
-
-;; (advice-add 'tracking-add-buffer :around #'gunner/around-tracking-add-buffer)
-;; (advice-add 'tracking-remove-buffer :after #'gunner/after-tracking-remove-buffer)
-;; (advice-remove 'tracking-remove-buffer #'gunner/around-tracking-remove-buffer)
-
-;; ;; Advise exwm-workspace-switch so that we can more reliably clear tracking buffers
-;; ;; NOTE: This is a hack and I hate it.  It'd be great to find a better solution.
-;; (defun gunner/before-exwm-workspace-switch (frame-or-index &optional force)
-;; (when (fboundp 'tracking-remove-visible-buffers)
-;; (when (eq exwm-workspace-current-index 0)
-;; (tracking-remove-visible-buffers))))
-
-;; (advice-add 'exwm-workspace-switch :before #'gunner/before-exwm-workspace-switch)
+(setq telega-emoji-use-images t)
+(setq telega-use-images 't)
 
 (use-package telega
   :init
@@ -812,8 +836,6 @@
   ;; Use "xdg-open" to open files by default
   (setcdr (assq t org-file-apps-gnu) 'browse-url-xdg-open)
   (setq telega-open-file-function 'org-open-file)
-  (setq telega-emoji-use-images t)
-  (setq telega-use-images 't)
   )
 ;; (setq telega-user-use-avatars nil
 ;; telega-use-tracking-for '(any pin unread)
