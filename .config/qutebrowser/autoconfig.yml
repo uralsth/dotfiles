@@ -6,9 +6,5 @@
 
 config_version: 2
 settings:
-  content.notifications.enabled:
-    https://www.juniordentist.com: false
   statusbar.show:
-    global: always
-  tabs.show:
     global: always
