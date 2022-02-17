@@ -114,3 +114,20 @@ CLOCK: [2022-01-24 Mon 07:38]--[2022-01-24 Mon 07:38] =>  0:00
 
 mount -o gid=users,fmask=113,dmask=002 /dev/sda1 /mnt/usbstick
 
+** 2022-02 February
+
+*** 2022-02-17 Thursday
+
+**** 02:30 PM - Notes                                              :notes:
+:LOGBOOK:
+CLOCK: [2022-02-17 Thu 14:30]--[2022-02-17 Thu 14:31] =>  0:01
+:END:
+
+hockeyantney@gmail.com:Fzr4ugmy 
+
+**** 04:26 PM - Notes                                              :notes:
+:LOGBOOK:
+CLOCK: [2022-02-17 Thu 16:26]--[2022-02-17 Thu 16:26] =>  0:00
+:END:
+
+jjguy9439@gmail.com:Wjdwhdrb1!
