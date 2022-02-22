@@ -173,7 +173,7 @@ c.tabs.show = 'multiple'
 # the search engine name to the search term, e.g. `:open google
 # qutebrowser`.
 # Type: Dict
-c.url.searchengines = {'DEFAULT': 'https://duckduckgo.com/?q={}', 'aw': 'https://wiki.archlinux.org/?search={}', 'goog': 'https://www.google.com/search?q={}', 're': 'https://www.reddit.com/r/{}', 'ub': 'https://www.urbandictionary.com/define.php?term={}', 'yt': 'https://www.youtube.com/results?search_query={}'}
+c.url.searchengines = {'DEFAULT': 'https://duckduckgo.com/?q={}', 'aw': 'https://wiki.archlinux.org/?search={}', 'goog': 'https://www.google.com/search?q={}', 're': 'https://www.reddit.com/r/{}', 'ub': 'https://www.urbandictionary.com/define.php?term={}', 'yt': 'https://www.youtube.com/results?search_query={}', 'in': 'https://invidious.flokinet.to/search?q={}', 'ins': 'https://invidious.flokinet.to/watch?v={}'}
 
 
 # base16-qutebrowser (https://github.com/theova/base16-qutebrowser)
@@ -522,7 +522,7 @@ config.bind (',M', 'hint links spawn umpv {hint-url}')
 config.bind (';M', 'hint --rapid links spawn umpv {hint-url}')
 config.bind(',f', 'hint links spawn firefox {hint-url}')
 config.bind(',z', 'hint links spawn st -e yt-dlp -f bestvideo+bestaudio "{hint-url}" -P ~/Videos/youtube')
-config.bind('t', 'set-cmd-text -s :open -t')
+# config.bind('t', 'set-cmd-text -s :open -t')
 config.bind('xb', 'config-cycle statusbar.show always never')
 config.bind('xt', 'config-cycle tabs.show always never')
 config.bind('xx', 'config-cycle statusbar.show always never;; config-cycle tabs.show always never')
