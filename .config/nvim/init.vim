@@ -32,4 +32,4 @@ set smarttab                    " Be smart using tabs ;)
 set shiftwidth=4                " One tab == four spaces.
 set tabstop=4                   " One tab == four spaces.
 
-
+source $HOME/.config/nvim/themes/airline.vim
