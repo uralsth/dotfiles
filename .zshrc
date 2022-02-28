@@ -17,6 +17,8 @@ export EDITOR="nvim"              # $EDITOR use Emacs in terminal
 export VISUAL="nvim"           # $VISUAL use Emacs in GUI mode
 export EXA_ICON_SPACING=2
 export sudoedit="nvim"
+export NEXTCLOUD_PHP_CONFIG=/etc/webapps/nextcloud/php.ini
+
 
 # Basic auto/tab complete:
 autoload -U compinit
@@ -209,3 +211,12 @@ eval "$(starship init zsh)"
 
 # Bitwarden Zsh Completion
 eval "$(bw completion --shell zsh); compdef _bw bw;"
+
+# Pretty-print man(1) pages.
+export LESS_TERMCAP_mb=$'\E[1;31m'
+export LESS_TERMCAP_md=$'\E[1;31m'
+export LESS_TERMCAP_me=$'\E[0m'
+export LESS_TERMCAP_ue=$'\E[0m'
+export LESS_TERMCAP_so=$'\E[1;33m'
+export LESS_TERMCAP_se=$'\E[0m'
+export LESS_TERMCAP_us=$'\E[1;32m'
