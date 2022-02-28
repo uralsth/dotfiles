@@ -16,19 +16,20 @@ local my_table = awful.util.table or gears.table -- 4.{0,1} compatibility
 
 local theme                                     = {}
 theme.dir                                       = os.getenv("HOME") .. "/.config/awesome/themes/powerarrow-dark"
-theme.wallpaper                                 = theme.dir .. "/lone.png"
+theme.wallpaper                                 = theme.dir .. "/wallhaven-4.png"
 theme.font                                      = "Roboto 8"
 theme.fg_normal                                 = "#DDDDFF"
-theme.fg_focus                                  = "#EA6F81"
+theme.fg_focus                                  = "#d79921"
 theme.fg_urgent                                 = "#CC9393"
 theme.bg_normal                                 = "#1c1c1c"
-theme.bg_focus                                  = "#373737"
+theme.bg_focus                                  = "#253940"
 theme.bg_urgent                                 = "#1c1c1c"
 theme.border_width                              = dpi(1)
 theme.border_normal                             = "#3F3F3F"
 theme.border_focus                              = "#7F7F7F"
 theme.border_marked                             = "#CC9393"
 theme.tasklist_bg_focus                         = "#1c1c1c"
+theme.titlebar_bg_focus                         = theme.bg_focus
 theme.titlebar_bg_focus                         = theme.bg_focus
 theme.titlebar_bg_normal                        = theme.bg_normal
 theme.titlebar_fg_focus                         = theme.fg_focus
@@ -259,9 +260,9 @@ local neticon = wibox.widget.imagebox(theme.widget_net)
 local net = lain.widget.net({
     settings = function()
         widget:set_markup(markup.font(theme.font,
-                          markup("#7AC82E", " " .. string.format("%06.1f", net_now.received))
+                          markup("#0f9481", " " .. string.format("%06.1f", net_now.received))
                           .. " " ..
-                          markup("#46A8C3", " " .. string.format("%06.1f", net_now.sent) .. " ")))
+                          markup("#246061", " " .. string.format("%06.1f", net_now.sent) .. " ")))
     end
 })
 
