@@ -1,6 +1,6 @@
 ;; Font size of system
-(defvar gunner/default-font-size 110)
-(defvar gunner/default-variable-font-size 110)
+(defvar gunner/default-font-size 125)
+(defvar gunner/default-variable-font-size 125)
 
 ;; Make frame transparency overridable
 (defvar gunner/frame-transparency '(92 . 92))
@@ -21,45 +21,75 @@
 (add-hook 'html-mode-hook #'(lambda nil (setq sgml-xml-mode t)))
 
 ;; Initialize package sources
-(require 'package)
-;; (require 'cl-lib)
-;;(setq byte-complile-warnings '(not cl-functions))
-(setq package-archives '(("melpa" . "https://melpa.org/packages/")
-                         ("org" . "https://orgmode.org/elpa/")
-                         ("elpa" . "https://elpa.gnu.org/packages/")))
+(defvar bootstrap-version)
+(let ((bootstrap-file
+       (expand-file-name "straight/repos/straight.el/bootstrap.el" user-emacs-directory))
+      (bootstrap-version 5))
+  (unless (file-exists-p bootstrap-file)
+    (with-current-buffer
+        (url-retrieve-synchronously
+         "https://raw.githubusercontent.com/raxod502/straight.el/develop/install.el"
+         'silent 'inhibit-cookies)
+      (goto-char (point-max))
+      (eval-print-last-sexp)))
+  (load bootstrap-file nil 'nomessage))
 
-(package-initialize)
-(unless package-archive-contents
-  (package-refresh-contents))
+(setq straight-use-package-by-default t)
 
-;; Initialize use-package on non-Linux platforms
-(unless (package-installed-p 'use-package)
-  (package-install 'use-package))
-
-(require 'use-package)
-(setq use-package-always-ensure t)
-
-(use-package auto-package-update
-  :custom
-  (auto-package-update-interval 7)
-  (auto-package-update-prompt-before-update t)
-  (auto-package-update-hide-results t)
-  :config
-  (auto-package-update-maybe)
-  (auto-package-update-at-time "09:00"))
+(straight-use-package 'use-package)
+(straight-use-package 'vertico)
+(straight-use-package 'consult)
+(straight-use-package 'marginalia)
+(straight-use-package 'evil)
+(straight-use-package 'orderless)
+(straight-use-package 'savehist)
+(straight-use-package 'all-the-icons)
+(straight-use-package 'all-the-icons-completion)
+(straight-use-package 'doom-modeline)
+(straight-use-package 'doom-themes)
+(straight-use-package 'embark)
+(straight-use-package 'embark-consult)
+(straight-use-package 'undo-tree)
+(straight-use-package 'helpful)
+(straight-use-package 'hydra)
+(straight-use-package 'lsp-mode)
+(straight-use-package 'lsp-treemacs)
+(straight-use-package 'dap-mode)
+(straight-use-package 'pyvenv)
+(straight-use-package 'lsp-pyright)
+(straight-use-package 'company)
+(straight-use-package 'company-box)
+(straight-use-package 'projectile)
+(straight-use-package 'consult-projectile)
+(straight-use-package 'magit)
+(straight-use-package 'forge)
+(straight-use-package 'emmet-mode)
+(straight-use-package 'skewer-mode)
+(straight-use-package 'minions)
+(straight-use-package 'diminish)
 
 ;; NOTE: If you want to move everything out of the ~/.emacs.d folder
 ;; reliably, set `user-emacs-directory` before loading no-littering!
                                         ;(setq user-emacs-directory "~/.cache/emacs")
 
-(use-package no-littering)
+;; keep customization in temporary folder
+(setq user-emacs-directory (expand-file-name "~/.cache/emacs/")
+      url-history-file (expand-file-name "url/history" user-emacs-directory))
+
+(setq custom-file
+      (if (boundp 'server-socket-dir)
+          (expand-file-name "custom.el" server-socket-dir)
+        (expand-file-name (format "emacs-custom-%s.el" (user-uid)) temporary-file-directory)))
+(load custom-file t)
+(use-package no-littering
+  :straight t)
 
 ;; no-littering doesn't set this by default so we must place
 ;; auto save files in the same path as it uses for sessions
 (setq auto-save-file-name-transforms
       `((".*" ,(no-littering-expand-var-file-name "auto-save/") t)))
 
-;; (server-start)
+(server-start)
 
 (setq inhibit-startup-message t)
 
@@ -69,6 +99,8 @@
 (set-fringe-mode 10)        ; Give some breathing room
 
 (menu-bar-mode -1)            ; Disable the menu bar
+
+(global-undo-tree-mode)      ; Enable undo tree mode
 
 ;; Set up the visible bell
 (setq visible-bell t)
@@ -103,10 +135,10 @@
 
 ;; (add-hook 'eshell-mode-hook 'eshell-mode-hook-func)
 
-(set-face-attribute 'default nil :font "Fira Code Retina" :height gunner/default-font-size)
+(set-face-attribute 'default nil :font "Iosevka" :height gunner/default-font-size)
 
 ;; Set the fixed pitch face
-(set-face-attribute 'fixed-pitch nil :font "Fira Code Retina" :height gunner/default-font-size)
+(set-face-attribute 'fixed-pitch nil :font "Iosevka" :height gunner/default-font-size)
 
 ;; Set the variable pitch face
 (set-face-attribute 'variable-pitch nil :font "Cantarell" :height gunner/default-variable-font-size :weight 'regular)
@@ -134,6 +166,7 @@
   (setq evil-want-keybinding nil)
   (setq evil-want-C-u-scroll t)
   (setq evil-want-C-i-jump nil)
+  ;;(evil-set-undo-system 'undo-tree)
   :config
   (evil-mode 1)
   (define-key evil-insert-state-map (kbd "C-g") 'evil-normal-state)
@@ -156,34 +189,31 @@
   (evil-collection-init))
 
 (defun vi-open-line-above ()
-    "Insert a newline above the current line and put point at beginning."
-    (interactive)
-    (unless (bolp)
-      (beginning-of-line))
-    (newline)
-    (forward-line -1)
-    (indent-according-to-mode))
+  "Insert a newline above the current line and put point at beginning."
+  (interactive)
+  (unless (bolp)
+    (beginning-of-line))
+  (newline)
+  (forward-line -1)
+  (indent-according-to-mode))
 
-  (defun vi-open-line-below ()
-    "Insert a newline below the current line and put point at beginning."
-    (interactive)
-    (unless (eolp)
-      (end-of-line))
-    (newline-and-indent))
+(defun vi-open-line-below ()
+  "Insert a newline below the current line and put point at beginning."
+  (interactive)
+  (unless (eolp)
+    (end-of-line))
+  (newline-and-indent))
 
-  (defun vi-open-line (&optional abovep)
-    "Insert a newline below the current line and put point at beginning.
+(defun vi-open-line (&optional abovep)
+  "Insert a newline below the current line and put point at beginning.
   With a prefix argument, insert a newline above the current line."
-    (interactive "P")
-    (if abovep
-        (vi-open-line-above)
-      (vi-open-line-below)))
+  (interactive "P")
+  (if abovep
+      (vi-open-line-above)
+    (vi-open-line-below)))
 
 (define-key global-map (kbd "C-c o") 'vi-open-line-below)
 (define-key global-map (kbd "C-c O") 'vi-open-line-above)
-
-(use-package command-log-mode
-  :commands command-log-mode)
 
 (use-package doom-themes
   :init (load-theme 'doom-dracula t))
@@ -210,13 +240,6 @@
   (doom-modeline-buffer-file-name-style 'truncate-except-project)
   (doom-modeline-major-mode-icon nil))
 
-(use-package which-key
-  :defer 0
-  :diminish which-key-mode
-  :config
-  (which-key-mode)
-  (setq which-key-idle-delay 1))
-
 (use-package hydra
   :defer t)
 
@@ -229,58 +252,76 @@
 (gunner/leader-keys
   "ts" '(hydra-text-scale/body :which-key "scale text"))
 
-(use-package ivy
-  :diminish
-  :bind (("C-s" . swiper)
-         :map ivy-minibuffer-map
-         ("TAB" . ivy-alt-done)
-         ("C-l" . ivy-alt-done)
-         ("C-j" . ivy-next-line)
-         ("C-k" . ivy-previous-line)
-         :map ivy-switch-buffer-map
-         ("C-k" . ivy-previous-line)
-         ("C-l" . ivy-done)
-         ("C-d" . ivy-switch-buffer-kill)
-         :map ivy-reverse-i-search-map
-         ("C-k" . ivy-previous-line)
-         ("C-d" . ivy-reverse-i-search-kill))
-  :config
-  (ivy-mode 1))
-
-(use-package ivy-rich
-  :after counsel
+(use-package vertico
   :init
-  (ivy-rich-mode 1))
-
-(use-package counsel
-  :bind (("C-M-j" . 'counsel-switch-buffer)
-         :map minibuffer-local-map
-         ("C-r" . 'counsel-minibuffer-history))
+  (vertico-mode)
   :custom
-  (counsel-linux-app-format-function #'counsel-linux-app-format-function-name-only)
+  (vertico-cycle t)
+  (vertico-resize t)
   :config
-  (counsel-mode 1)
-  (setq ivy-initial-inputs-alist nil))
+  (with-eval-after-load 'evil
+    (define-key vertico-map (kbd "M-TAB") 'vertico-exit-input)
+    (define-key vertico-map (kbd "C-j") 'vertico-next)
+    (define-key vertico-map (kbd "C-k") 'vertico-previous)
+    (define-key vertico-map (kbd "M-h") 'vertico-directory-up))
+  )
 
-(use-package ivy-prescient
-  :after counsel
+;;; Orderless
+(use-package orderless
   :custom
-  (ivy-prescient-enable-filtering nil)
+  (orderless-smart-case t)
+  :init
+  (setq completion-styles '(orderless)
+        completion-category-defaults nil
+        completion-category-overrides '((file (styles partial-completion)))))
+
+
+;;; Savehist
+(use-package savehist
+  :init
+  (savehist-mode))
+
+(use-package marginalia
+  :init
+  (marginalia-mode)
+  :custom
+  (marginalia-align 'right)
   :config
-  ;; Uncomment the following line to have sorting remembered across sessions!
-                                        ;(prescient-persist-mode 1)
-  (ivy-prescient-mode 1))
+  (setq marginalia-annotators '(marginalia-annotators-heavy marginalia-annotators-light nil))
+  )
 
-(use-package helpful
-  :commands (helpful-callable helpful-variable helpful-command helpful-key)
-  :custom
-  (counsel-describe-function-function #'helpful-callable)
-  (counsel-describe-variable-function #'helpful-variable)
+
+;; All-the-icon-completion
+(use-package all-the-icons-completion
+  :after (marginalia all-the-icons)
+  :hook (marginalia-mode . all-the-icons-completion-marginalia-setup)
+  :init
+  (all-the-icons-completion-mode))
+
+(use-package consult
   :bind
-  ([remap describe-function] . counsel-describe-function)
-  ([remap describe-command] . helpful-command)
-  ([remap describe-variable] . counsel-describe-variable)
-  ([remap describe-key] . helpful-key))
+  ("C-M-j" . consult-buffer)
+  ("C-M-k" . consult-imenu)
+  ("C-s" . consult-line)
+  :hook (completion-list-mode . consult-preview-at-point-mode)
+  )
+
+(use-package embark
+  :straight t
+  :bind
+  (("C-." . embark-act)         ;; pick some comfortable binding
+   ("C-;" . embark-dwim)        ;; good alternative: M-.
+   ("C-h B" . embark-bindings)) ;; alternative for `describe-bindings'
+  :init
+  ;; Optionally replace the key help with a completing-read interface
+  (setq prefix-help-command #'embark-prefix-help-command))
+
+(global-set-key (kbd "C-h f") #'helpful-callable)
+(global-set-key (kbd "C-h v") #'helpful-variable)
+(global-set-key (kbd "C-h k") #'helpful-key)
+(global-set-key (kbd "C-h F") #'helpful-function)
+(global-set-key (kbd "C-c C-d") #'helpful-at-point)
+(global-set-key (kbd "C-h C") #'helpful-command)
 
 (use-package hydra
   :defer t)
@@ -299,7 +340,7 @@
 (use-package emojify
   :hook (erc-mode . emojify-mode)
   :commands emojify-mode
-  :ensure t
+  :straight t
   :config
   )
 
@@ -339,7 +380,7 @@
   (visual-line-mode 1))
 
 (use-package org
-  :pin org
+                                        ;:pin org
   :commands (org-capture org-agenda)
   :hook (org-mode . gunner/org-mode-setup)
   :config
@@ -508,7 +549,7 @@
 (add-hook 'org-mode-hook (lambda () (add-hook 'after-save-hook #'gunner/org-babel-tangle-config)))
 
 (use-package org-tree-slide
-:custom (org-image-actual-width nil))
+  :custom (org-image-actual-width nil))
 
 (use-package hide-mode-line)
 
@@ -523,10 +564,10 @@
   (setq text-scale-mode-amount 3)
   (text-scale-mode 1))
 
-  ;; This option is more advanced, allows you to scale other faces too
-  ;; (setq-local face-remapping-alist '((default (:height 2.0) variable-pitch)
-  ;;                                    (org-verbatim (:height 1.75) org-verbatim)
-  ;;                                    (org-block (:height 1.25) org-block))))
+;; This option is more advanced, allows you to scale other faces too
+;; (setq-local face-remapping-alist '((default (:height 2.0) variable-pitch)
+;;                                    (org-verbatim (:height 1.75) org-verbatim)
+;;                                    (org-block (:height 1.25) org-block))))
 
 (defun gunner/presentation-end ()
   ;; Show the mode line again
@@ -558,8 +599,7 @@
   :hook (lsp-mode . gunner/lsp-mode-setup)
   :init
   (setq lsp-keymap-prefix "C-c l")  ;; Or 'C-l', 's-l'
-  :config
-  (lsp-enable-which-key-integration t))
+  )
 
 (use-package lsp-ui
   :hook (lsp-mode . lsp-ui-mode)
@@ -591,7 +631,7 @@
    "d" '(dap-hydra t :wk "debugger")))
 
 (use-package python-mode
-  :ensure t
+  :straight t
   ;; :hook (python-mode . lsp-deferred)
   :custom
   ;; NOTE: Set these if Python 3 is called "python3" on your system!
@@ -614,7 +654,7 @@
 ;;     (add-to-list 'lsp-enabled-clients 'jedi)))
 
 (use-package lsp-pyright
-  :ensure t
+  :straight t
   :after python-mode
   :hook (python-mode . (lambda ()
                          (require 'lsp-pyright)
@@ -673,10 +713,13 @@
 (use-package forge)
 
 ;; Electric pair mode enable by default
-(require 'smartparens-config)
-;; (smartparens-strict-mode 1)
-;; Always start smartparens mode in lsp-mode.
-(add-hook 'lsp-mode-hook #'smartparens-mode)
+(use-package smartparens-config
+  :straight smartparens
+  :hook
+  (emacs-lisp-mode . smartparens-mode)
+  (lsp-mode . smartparens-mode)
+  :config
+  (sp-local-pair 'emacs-lisp-mode "'" nil :actions nil))
 (show-paren-mode 1)
 
 (add-hook 'html-mode-hook 'lsp)
@@ -689,6 +732,7 @@
 (add-to-list 'load-path (expand-file-name "~/.emacs.d/emacs-livedown"))
 (require 'livedown)
 
+(straight-use-package 'emms)
 (require 'emms-setup)
 (emms-all)
 (emms-default-players)
@@ -702,7 +746,7 @@
 ;; (dashboard-setup-startup-hook)
 ;; Or if you use use-package
 (use-package dashboard
-  :ensure t
+  :straight t
   :config
   (dashboard-setup-startup-hook)
 
@@ -848,8 +892,8 @@
 
   (eshell-git-prompt-use-theme 'powerline))
 
-(setq telega-emoji-use-images t)
 (setq telega-use-images 't)
+(setq telega-emoji-use-images t)
 
 (use-package telega
   :init
@@ -870,7 +914,7 @@
 ;; telega-completing-read-function #'ivy-completing-read
 ;; telega-msg-rainbow-title nil
 ;; telega-chat-fill-column 75)
-(add-hook 'after-init-hook #'global-emojify-mode)
+;; (add-hook 'after-init-hook #'global-emojify-mode)
 (add-hook 'telega-load-hook
           (lambda ()
             (define-key global-map (kbd "C-c t") telega-prefix-map)))
@@ -892,7 +936,7 @@
       erc-auto-query 'bury)
 
 (use-package mu4e
-  :ensure nil
+  :straight nil
   ;; :load-path "/usr/share/emacs/site-lisp/mu4e/"
   :defer 120 ; Wait until 20 seconds after startup
   :config
@@ -921,7 +965,7 @@
   (mu4e t))
 
 (use-package dired
-  :ensure nil
+  :straight nil
   :commands (dired dired-jump)
   :bind (("C-x C-j" . dired-jump))
   :custom ((dired-listing-switches "-agho --group-directories-first"))
