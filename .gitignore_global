@@ -1,4 +1,6 @@
 var/
+watch_later/
+straight/
 etc/
 elpa/
 packages/
