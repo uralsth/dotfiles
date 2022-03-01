@@ -1,9 +1,9 @@
 ;; Font size of system
-(defvar gunner/default-font-size 125)
-(defvar gunner/default-variable-font-size 125)
+(defvar gunner/default-font-size 120)
+(defvar gunner/default-variable-font-size 120)
 
 ;; Make frame transparency overridable
-(defvar gunner/frame-transparency '(92 . 92))
+(defvar gunner/frame-transparency '(88 . 88))
 
 ;; The default is 800 kilobytes.  Measured in bytes.
 (setq gc-cons-threshold (* 50 1000 1000))
@@ -35,6 +35,7 @@
   (load bootstrap-file nil 'nomessage))
 
 (setq straight-use-package-by-default t)
+(setq package-enable-at-startup nil)
 
 (straight-use-package 'use-package)
 (straight-use-package 'vertico)
@@ -43,6 +44,7 @@
 (straight-use-package 'evil)
 (straight-use-package 'orderless)
 (straight-use-package 'savehist)
+(straight-use-package 'which-key)
 (straight-use-package 'all-the-icons)
 (straight-use-package 'all-the-icons-completion)
 (straight-use-package 'doom-modeline)
@@ -135,10 +137,10 @@
 
 ;; (add-hook 'eshell-mode-hook 'eshell-mode-hook-func)
 
-(set-face-attribute 'default nil :font "Iosevka" :height gunner/default-font-size)
+(set-face-attribute 'default nil :font "Hack" :height gunner/default-font-size)
 
 ;; Set the fixed pitch face
-(set-face-attribute 'fixed-pitch nil :font "Iosevka" :height gunner/default-font-size)
+(set-face-attribute 'fixed-pitch nil :font "Hack" :height gunner/default-font-size)
 
 ;; Set the variable pitch face
 (set-face-attribute 'variable-pitch nil :font "Cantarell" :height gunner/default-variable-font-size :weight 'regular)
@@ -147,18 +149,6 @@
 (global-set-key (kbd "<escape>") 'keyboard-escape-quit)
 (global-set-key (kbd "C-e") 'move-end-of-line)
 
-(use-package general
-  :after evil
-  :config
-  (general-create-definer gunner/leader-keys
-    :keymaps '(normal insert visual emacs)
-    :prefix "SPC"
-    :global-prefix "C-SPC")
-
-  (gunner/leader-keys
-    "t"  '(:ignore t :which-key "toggles")
-    "tt" '(counsel-load-theme :which-key "choose theme")
-    "fde" '(lambda () (interactive) (find-file (expand-file-name "~/.emacs.d/Emacs.org")))))
 
 (use-package evil
   :init
@@ -215,8 +205,37 @@
 (define-key global-map (kbd "C-c o") 'vi-open-line-below)
 (define-key global-map (kbd "C-c O") 'vi-open-line-above)
 
+(use-package general
+  :after evil
+  :config
+  (general-create-definer gunner/leader-keys
+    :keymaps '(normal insert visual emacs)
+    :prefix "SPC"
+    :global-prefix "C-SPC")
+
+  (gunner/leader-keys
+    "t"  '(:ignore t :which-key "toggles")
+    "tl" '(consult-theme :which-key "choose theme")
+    "td" '(disable-theme :which-key "disable existing theme")
+    "fde" '(lambda () (interactive) (find-file (expand-file-name "~/.emacs.d/Emacs.org")))))
+
 (use-package doom-themes
-  :init (load-theme 'doom-dracula t))
+  :ensure t
+  :config
+  ;; Global settings (defaults)
+  (setq doom-themes-enable-bold t    ; if nil, bold is universally disabled
+        doom-themes-enable-italic t) ; if nil, italics is universally disabled
+  (load-theme 'doom-tomorrow-night t)
+
+  ;; Enable flashing mode-line on errors
+  (doom-themes-visual-bell-config)
+  ;; Enable custom neotree theme (all-the-icons must be installed!)
+  (doom-themes-neotree-config)
+  ;; or for treemacs users
+  (setq doom-themes-treemacs-theme "doom-atom") ; use "doom-colors" for less minimal icon theme
+  (doom-themes-treemacs-config)
+  ;; Corrects (and improves) org-mode's native fontification.
+  (doom-themes-org-config))
 
 (use-package all-the-icons)
 (use-package minions
@@ -268,10 +287,9 @@
 
 ;;; Orderless
 (use-package orderless
-  :custom
-  (orderless-smart-case t)
   :init
   (setq completion-styles '(orderless)
+        orderless-smart-case t
         completion-category-defaults nil
         completion-category-overrides '((file (styles partial-completion)))))
 
@@ -310,11 +328,60 @@
   :straight t
   :bind
   (("C-." . embark-act)         ;; pick some comfortable binding
+   ("C->" . embark-act)
    ("C-;" . embark-dwim)        ;; good alternative: M-.
    ("C-h B" . embark-bindings)) ;; alternative for `describe-bindings'
   :init
   ;; Optionally replace the key help with a completing-read interface
   (setq prefix-help-command #'embark-prefix-help-command))
+
+;;Embark Which Key indicator
+
+(defun embark-which-key-indicator ()
+  "An embark indicator that displays keymaps using which-key.
+The which-key help message will show the type and value of the
+current target followed by an ellipsis if there are further
+targets."
+  (lambda (&optional keymap targets prefix)
+    (if (null keymap)
+        (which-key--hide-popup-ignore-command)
+      (which-key--show-keymap
+       (if (eq (plist-get (car targets) :type) 'embark-become)
+           "Become"
+         (format "Act on %s '%s'%s"
+                 (plist-get (car targets) :type)
+                 (embark--truncate-target (plist-get (car targets) :target))
+                 (if (cdr targets) "…" "")))
+       (if prefix
+           (pcase (lookup-key keymap prefix 'accept-default)
+             ((and (pred keymapp) km) km)
+             (_ (key-binding prefix 'accept-default)))
+         keymap)
+       nil nil t (lambda (binding)
+                   (not (string-suffix-p "-argument" (cdr binding))))))))
+
+(setq embark-indicators
+      '(embark-which-key-indicator
+        embark-highlight-indicator
+        embark-isearch-highlight-indicator))
+
+(defun embark-hide-which-key-indicator (fn &rest args)
+  "Hide the which-key indicator immediately when using the completing-read prompter."
+  (which-key--hide-popup-ignore-command)
+  (let ((embark-indicators
+         (remq #'embark-which-key-indicator embark-indicators)))
+    (apply fn args)))
+
+(advice-add #'embark-completing-read-prompter
+            :around #'embark-hide-which-key-indicator)
+
+(use-package which-key
+  :defer 0
+  :config
+  (which-key-mode)
+  (setq which-key-use-C-h-commands nil) ;; disable C-h which key help
+  (define-key which-key-mode-map (kbd "C-x <f5>") 'which-key-C-h-dispatch) ;;  remaped C-h to f5
+  (setq which-key-idle-delay 1))
 
 (global-set-key (kbd "C-h f") #'helpful-callable)
 (global-set-key (kbd "C-h v") #'helpful-variable)
@@ -694,8 +761,7 @@
     (setq projectile-project-search-path '("~/Projects/Code")))
   (setq projectile-switch-project-action #'projectile-dired))
 
-(use-package counsel-projectile
-  :config (counsel-projectile-mode))
+(use-package consult-projectile)
 
 (use-package magit
   :custom
@@ -905,6 +971,7 @@
   (setq telega-filter-button-width 20)
   ;; ("\\.pdf\\'" . default) is already member in `org-file-apps'
   ;; Use "xdg-open" to open files by default
+  (setq telega-completing-read-function 'completing-read)
   (setcdr (assq t org-file-apps-gnu) 'browse-url-xdg-open)
   (setq telega-open-file-function 'org-open-file)
   )
