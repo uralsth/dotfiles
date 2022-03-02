@@ -271,9 +271,22 @@
 (gunner/leader-keys
   "ts" '(hydra-text-scale/body :which-key "scale text"))
 
+(defun gunner/minibuffer-backward-kill (arg)
+  "When minibuffer is completing a file name delete up to parent
+folder, otherwise delete a character backward"
+  (interactive "p")
+  (if minibuffer-completing-file-name
+      ;; Borrowed from https://github.com/raxod502/selectrum/issues/498#issuecomment-803283608
+      (if (string-match-p "/." (minibuffer-contents))
+          (zap-up-to-char (- arg) ?/)
+        (delete-minibuffer-contents))
+    (delete-backward-char arg)))
+
 (use-package vertico
   :init
   (vertico-mode)
+  :bind (:map minibuffer-local-map
+              ("<backspace>" . gunner/minibuffer-backward-kill))
   :custom
   (vertico-cycle t)
   (vertico-resize t)
@@ -316,12 +329,21 @@
   :init
   (all-the-icons-completion-mode))
 
+(defun gunner/get-project-root()
+  (when (fboundp 'projectile-project-root)
+    (projectile-projecct-root)))
+
 (use-package consult
   :bind
-  ("C-M-j" . consult-buffer)
-  ("C-M-k" . consult-imenu)
-  ("C-s" . consult-line)
+  (("C-M-j" . consult-buffer)
+   ("C-M-k" . consult-imenu)
+   ("C-s" . consult-line)
+   :map minibuffer-local-map
+   ("C-r" . consult-history))
   :hook (completion-list-mode . consult-preview-at-point-mode)
+  :custom
+  (consult-project-root-function #'gunner/get-project-root)
+  (completion-in-region-function #'consult-completion-in-region)
   )
 
 (use-package embark
