@@ -298,6 +298,7 @@ This configuration uses [[https://evil.readthedocs.io/en/latest/index.html][evil
 * UI Configuration
 
 ** Color Theme
+*** Doom Themes
 #+begin_src emacs-lisp
 
   (use-package doom-themes
@@ -306,7 +307,7 @@ This configuration uses [[https://evil.readthedocs.io/en/latest/index.html][evil
     ;; Global settings (defaults)
     (setq doom-themes-enable-bold t    ; if nil, bold is universally disabled
           doom-themes-enable-italic t) ; if nil, italics is universally disabled
-    (load-theme 'doom-tomorrow-night t)
+    (load-theme 'doom-gruvbox t)
 
     ;; Enable flashing mode-line on errors
     (doom-themes-visual-bell-config)
@@ -319,7 +320,6 @@ This configuration uses [[https://evil.readthedocs.io/en/latest/index.html][evil
     (doom-themes-org-config))
 
 #+end_src
-
 ** Better Modeline
 
 #+begin_src emacs-lisp
@@ -521,11 +521,12 @@ This is an example of using [[https://github.com/abo-abo/hydra][Hydra]] to desig
 ** which-key
 #+begin_src emacs-lisp
   (use-package which-key
+    :init
+    (setq which-key-use-C-h-commands nil) ;; disable C-h which key help
+    (define-key which-key-mode-map (kbd "C-x <f5>") 'which-key-C-h-dispatch) ;;  remaped C-h to f5
     :defer 0
     :config
     (which-key-mode)
-    (setq which-key-use-C-h-commands nil) ;; disable C-h which key help
-    (define-key which-key-mode-map (kbd "C-x <f5>") 'which-key-C-h-dispatch) ;;  remaped C-h to f5
     (setq which-key-idle-delay 1))
 #+end_src
 ** Helpful Help Commands
@@ -551,7 +552,7 @@ This is an example of using [[https://github.com/abo-abo/hydra][Hydra]] to desig
     "scale window size"
     ("j" evil-window-increase-height "in-height")
     ("k" evil-window-decrease-height "out-height")
-    ("h" evil-window-increase-widht "in-width")
+    ("h" evil-window-increase-width "in-width")
     ("l" evil-window-decrease-width "out-width")
     ("f" nil "finished" :exit t))
 
@@ -561,6 +562,20 @@ This is an example of using [[https://github.com/abo-abo/hydra][Hydra]] to desig
 #+end_src
 
 #+RESULTS:
+
+** Transpose Frame
+#+begin_src emacs-lisp
+    (use-package transpose-frame
+      :defer t)
+    (gunner/leader-keys
+      "b"  '(:ignore t :which-key "transpose-frame-toggle")
+      "bb" '(transpose-frame :which-key "transpose-frame")
+      "bv" '(flip-frame :which-key "Flip verticaly")
+      "bh" '(flop-frame :which-key "Flip horizontally")
+      "brf" '(rotate-frame :which-key "Rotate 180 degrees")
+      "brc" '(rotate-frame-clockwise :which-key "Rotate 90 degrees clockwise")
+      "bra" '(rotate-frame-anti-clockwise :which-key "Rotate 90 degrees clockwise"))
+#+end_src
 
 * Emojis in bufffers 
 #+begin_src emacs-lisp
@@ -817,6 +832,7 @@ Org Mode's [[https://orgmode.org/manual/Structure-Templates.html][structure temp
 
     (add-to-list 'org-structure-template-alist '("sh" . "src shell"))
     (add-to-list 'org-structure-template-alist '("el" . "src emacs-lisp"))
+    (add-to-list 'org-structure-template-alist '("cl" . "src c"))
     (add-to-list 'org-structure-template-alist '("py" . "src python")))
 
 #+end_src
@@ -837,6 +853,52 @@ This snippet adds a hook to =org-mode= buffers so that =gunner/org-babel-tangle-
 
   (add-hook 'org-mode-hook (lambda () (add-hook 'after-save-hook #'gunner/org-babel-tangle-config)))
 
+#+end_src
+
+**  Org Mode hacks
+*** Org Screenshots
+#+begin_src emacs-lisp
+  (defun my-org-screenshot ()
+    "Take a screenshot into a time stamped unique-named file in the
+  same directory as the org-buffer and insert a link to this file."
+    (interactive)
+    (setq filename
+          (concat
+           (make-temp-name
+            (concat (buffer-file-name)
+                    "_"
+                    (format-time-string "%Y%m%d_%H%M%S_")) ) ".png"))
+    (call-process "import" nil nil nil filename)
+    (insert (concat "[[" filename "]]"))
+    (org-display-inline-images))
+#+end_src
+*** Org download
+#+begin_src emacs-lisp
+  (use-package org-download
+    :hook (dired-mode-hook . org-download-enable))
+#+end_src
+
+* Org Roam
+#+begin_src emacs-lisp
+(use-package org-roam
+  :straight t
+  :init
+  (setq org-roam-v2-ack t)
+  :custom
+  (org-roam-directory "~/Documents/RoamNotes")
+  (org-roam-completion-everywhere t)
+  (org-roam-capture-templates
+   '(("d" "default" plain
+      "%?"
+      :if-new (file+head "%<%Y%m%d%H%M%S>-${slug}.org" "#+title: ${title}\n")
+      :unnarrowed t)))
+  :bind (("C-c n l" . org-roam-buffer-toggle)
+         ("C-c n f" . org-roam-node-find)
+         ("C-c n i" . org-roam-node-insert)
+         :map org-mode-map
+         ("C-M-i" . completion-at-point))
+  :config
+  (org-roam-setup))
 #+end_src
 
 * Org Tree Slide
@@ -907,6 +969,8 @@ This snippet adds a hook to =org-mode= buffers so that =gunner/org-babel-tangle-
     :hook (lsp-mode . gunner/lsp-mode-setup)
     :init
     (setq lsp-keymap-prefix "C-c l")  ;; Or 'C-l', 's-l'
+    :config
+    (lsp-enable-which-key-integration t)
     )
 #+end_src
 
@@ -932,12 +996,9 @@ This snippet adds a hook to =org-mode= buffers so that =gunner/org-babel-tangle-
 
 #+RESULTS:
 
-** isp-ivy
+** consult-lsp 
 #+begin_src emacs-lisp
-
-  (use-package lsp-ivy
-    :after lsp)
-
+(use-package consult-lsp)
 #+end_src
 
 ** Debugging with dap-mode
@@ -1043,12 +1104,23 @@ This snippet adds a hook to =org-mode= buffers so that =gunner/org-babel-tangle-
 #+RESULTS:
 | company-box-mode | company-mode-set-explicitly |
 
+** yasnippet
+#+begin_src emacs-lisp
+  (use-package yasnippet
+    :config
+    (setq yas-snippet-dirs '("~/.emacs.d/snippet/snippets"))
+    (yas-global-mode 1))
+#+end_src
+
+#+RESULTS:
+: t
+
 ** Projectile
 #+begin_src emacs-lisp
   (use-package projectile
     :diminish projectile-mode
     :config (projectile-mode)
-    :custom ((projectile-completion-system 'ivy))
+    :custom ((projectile-completion-system 'default))
     :bind-keymap
     ("C-c p" . projectile-command-map)
     :init
@@ -1097,6 +1169,39 @@ This snippet adds a hook to =org-mode= buffers so that =gunner/org-babel-tangle-
   (show-paren-mode 1)
 #+end_src
 
+** Flyspell
+
+*** Basic Configuration
+#+begin_src emacs-lisp
+    (use-package flyspell-correct
+      :bind ("C-M-," . flyspell-correct-at-point))
+    (dolist (hook '(text-mode-hook))
+      (add-hook hook (lambda () (flyspell-mode 1))))
+    (dolist (hook '(change-log-mode-hook log-edit-mode-hook))
+      (add-hook hook (lambda () (flyspell-mode -1))))
+    ;; find aspell and hunspell automatically
+    (cond
+     ((executable-find "aspell")
+      (setq ispell-program-name "aspell")
+      (setq ispell-extra-args '("--sug-mode=ultra" "--lang=en_US")))
+     ((executable-find "hunspell")
+      (setq ispell-program-name "hunspell")
+      (setq ispell-extra-args '("-d en_US")))
+     )
+#+end_src
+
+*** Consult-flyspell
+#+begin_src emacs-lisp
+  (use-package consult-flyspell
+    :straight (consult-flyspell :type git :host gitlab :repo "OlMon/consult-flyspell" :branch "master")
+    :config
+    ;; default settings
+    (setq consult-flyspell-select-function nil
+          consult-flyspell-set-point-after-word t
+          consult-flyspell-correct-function 'flyspell-correct-at-point
+          consult-flyspell-always-check-buffer nil))
+#+end_src
+
 ** Html Mode
 #+begin_src emacs-lisp
   (add-hook 'html-mode-hook 'lsp)
@@ -1132,7 +1237,7 @@ This snippet adds a hook to =org-mode= buffers so that =gunner/org-babel-tangle-
 
 ** Root directory of my music
 #+begin_src emacs-lisp
-  (setq emms-source-file-default-directory "~/Music/My Music")
+  (setq emms-source-file-default-directory "~/Music")
 #+end_src
 
 #+RESULTS:
@@ -1146,8 +1251,6 @@ This snippet adds a hook to =org-mode= buffers so that =gunner/org-babel-tangle-
 
 #+RESULTS:
 : *Music*
-
-** 
 
 * Emacs Dashboard
 ** Setup

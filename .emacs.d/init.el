@@ -225,7 +225,7 @@
   ;; Global settings (defaults)
   (setq doom-themes-enable-bold t    ; if nil, bold is universally disabled
         doom-themes-enable-italic t) ; if nil, italics is universally disabled
-  (load-theme 'doom-tomorrow-night t)
+  (load-theme 'doom-gruvbox t)
 
   ;; Enable flashing mode-line on errors
   (doom-themes-visual-bell-config)
@@ -398,11 +398,12 @@ targets."
             :around #'embark-hide-which-key-indicator)
 
 (use-package which-key
+  :init
+  (setq which-key-use-C-h-commands nil) ;; disable C-h which key help
+  (define-key which-key-mode-map (kbd "C-x <f5>") 'which-key-C-h-dispatch) ;;  remaped C-h to f5
   :defer 0
   :config
   (which-key-mode)
-  (setq which-key-use-C-h-commands nil) ;; disable C-h which key help
-  (define-key which-key-mode-map (kbd "C-x <f5>") 'which-key-C-h-dispatch) ;;  remaped C-h to f5
   (setq which-key-idle-delay 1))
 
 (global-set-key (kbd "C-h f") #'helpful-callable)
@@ -419,12 +420,23 @@ targets."
   "scale window size"
   ("j" evil-window-increase-height "in-height")
   ("k" evil-window-decrease-height "out-height")
-  ("h" evil-window-increase-widht "in-width")
+  ("h" evil-window-increase-width "in-width")
   ("l" evil-window-decrease-width "out-width")
   ("f" nil "finished" :exit t))
 
 (gunner/leader-keys
   "tw" '(hydra-window-size-scale/body :which-key "scale window size"))
+
+(use-package transpose-frame
+  :defer t)
+(gunner/leader-keys
+  "b"  '(:ignore t :which-key "transpose-frame-toggle")
+  "bb" '(transpose-frame :which-key "transpose-frame")
+  "bv" '(flip-frame :which-key "Flip verticaly")
+  "bh" '(flop-frame :which-key "Flip horizontally")
+  "brf" '(rotate-frame :which-key "Rotate 180 degrees")
+  "brc" '(rotate-frame-clockwise :which-key "Rotate 90 degrees clockwise")
+  "bra" '(rotate-frame-anti-clockwise :which-key "Rotate 90 degrees clockwise"))
 
 (use-package emojify
   :hook (erc-mode . emojify-mode)
@@ -625,6 +637,7 @@ targets."
 
   (add-to-list 'org-structure-template-alist '("sh" . "src shell"))
   (add-to-list 'org-structure-template-alist '("el" . "src emacs-lisp"))
+  (add-to-list 'org-structure-template-alist '("cl" . "src c"))
   (add-to-list 'org-structure-template-alist '("py" . "src python")))
 
 ;; Automatically tangle our Emacs.org config file when we save it
@@ -636,6 +649,43 @@ targets."
       (org-babel-tangle))))
 
 (add-hook 'org-mode-hook (lambda () (add-hook 'after-save-hook #'gunner/org-babel-tangle-config)))
+
+(defun my-org-screenshot ()
+  "Take a screenshot into a time stamped unique-named file in the
+same directory as the org-buffer and insert a link to this file."
+  (interactive)
+  (setq filename
+        (concat
+         (make-temp-name
+          (concat (buffer-file-name)
+                  "_"
+                  (format-time-string "%Y%m%d_%H%M%S_")) ) ".png"))
+  (call-process "import" nil nil nil filename)
+  (insert (concat "[[" filename "]]"))
+  (org-display-inline-images))
+
+(use-package org-download
+  :hook (dired-mode-hook . org-download-enable))
+
+(use-package org-roam
+  :straight t
+  :init
+  (setq org-roam-v2-ack t)
+  :custom
+  (org-roam-directory "~/Documents/RoamNotes")
+  (org-roam-completion-everywhere t)
+  (org-roam-capture-templates
+   '(("d" "default" plain
+      "%?"
+      :if-new (file+head "%<%Y%m%d%H%M%S>-${slug}.org" "#+title: ${title}\n")
+      :unnarrowed t)))
+  :bind (("C-c n l" . org-roam-buffer-toggle)
+         ("C-c n f" . org-roam-node-find)
+         ("C-c n i" . org-roam-node-insert)
+         :map org-mode-map
+         ("C-M-i" . completion-at-point))
+  :config
+  (org-roam-setup))
 
 (use-package org-tree-slide
   :custom (org-image-actual-width nil))
@@ -688,6 +738,8 @@ targets."
   :hook (lsp-mode . gunner/lsp-mode-setup)
   :init
   (setq lsp-keymap-prefix "C-c l")  ;; Or 'C-l', 's-l'
+  :config
+  (lsp-enable-which-key-integration t)
   )
 
 (use-package lsp-ui
@@ -698,8 +750,7 @@ targets."
 (use-package lsp-treemacs
   :after lsp)
 
-(use-package lsp-ivy
-  :after lsp)
+(use-package consult-lsp)
 
 (use-package dap-mode
   ;; Uncomment the config below if you want all UI panes to be hidden by default!
@@ -771,10 +822,15 @@ targets."
 (use-package company-box
   :hook (company-mode . company-box-mode))
 
+(use-package yasnippet
+  :config
+  (setq yas-snippet-dirs '("~/.emacs.d/snippet/snippets"))
+  (yas-global-mode 1))
+
 (use-package projectile
   :diminish projectile-mode
   :config (projectile-mode)
-  :custom ((projectile-completion-system 'ivy))
+  :custom ((projectile-completion-system 'default))
   :bind-keymap
   ("C-c p" . projectile-command-map)
   :init
@@ -810,6 +866,31 @@ targets."
   (sp-local-pair 'emacs-lisp-mode "'" nil :actions nil))
 (show-paren-mode 1)
 
+(use-package flyspell-correct
+  :bind ("C-M-," . flyspell-correct-at-point))
+(dolist (hook '(text-mode-hook))
+  (add-hook hook (lambda () (flyspell-mode 1))))
+(dolist (hook '(change-log-mode-hook log-edit-mode-hook))
+  (add-hook hook (lambda () (flyspell-mode -1))))
+;; find aspell and hunspell automatically
+(cond
+ ((executable-find "aspell")
+  (setq ispell-program-name "aspell")
+  (setq ispell-extra-args '("--sug-mode=ultra" "--lang=en_US")))
+ ((executable-find "hunspell")
+  (setq ispell-program-name "hunspell")
+  (setq ispell-extra-args '("-d en_US")))
+ )
+
+(use-package consult-flyspell
+  :straight (consult-flyspell :type git :host gitlab :repo "OlMon/consult-flyspell" :branch "master")
+  :config
+  ;; default settings
+  (setq consult-flyspell-select-function nil
+        consult-flyspell-set-point-after-word t
+        consult-flyspell-correct-function 'flyspell-correct-at-point
+        consult-flyspell-always-check-buffer nil))
+
 (add-hook 'html-mode-hook 'lsp)
 (add-hook 'html-mode-hook 'skewer-html-mode)
 
@@ -825,7 +906,7 @@ targets."
 (emms-all)
 (emms-default-players)
 
-(setq emms-source-file-default-directory "~/Music/My Music")
+(setq emms-source-file-default-directory "~/Music")
 
 (setq emms-info-asynchronously nil)
 (setq emms-playlist-buffer-name "*Music*")
