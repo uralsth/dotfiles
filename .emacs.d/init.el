@@ -37,6 +37,7 @@
 (setq straight-use-package-by-default t)
 (setq package-enable-at-startup nil)
 
+(straight-use-package 'beacon)
 (straight-use-package 'use-package)
 (straight-use-package 'vertico)
 (straight-use-package 'consult)
@@ -69,6 +70,7 @@
 (straight-use-package 'skewer-mode)
 (straight-use-package 'minions)
 (straight-use-package 'diminish)
+(straight-use-package 'yasnippet-snippets)
 
 ;; NOTE: If you want to move everything out of the ~/.emacs.d folder
 ;; reliably, set `user-emacs-directory` before loading no-littering!
@@ -99,7 +101,7 @@
 (tool-bar-mode -1)          ; Disable the toolbar
 (tooltip-mode -1)           ; Disable tooltips
 (set-fringe-mode 10)        ; Give some breathing room
-
+(beacon-mode 1)
 (menu-bar-mode -1)            ; Disable the menu bar
 
 (global-undo-tree-mode)      ; Enable undo tree mode
@@ -124,6 +126,8 @@
                 vterm-mode-hook
                 mu4e-mode-hook
                 nov-mode-hook
+                elfeed-show-mode-hook
+                elfeed-search-mode-hook
                 telega-chat-mode-hook
                 telega-root-mode-hook
                 treemacs-mode-hook
@@ -156,6 +160,7 @@
   (setq evil-want-keybinding nil)
   (setq evil-want-C-u-scroll t)
   (setq evil-want-C-i-jump nil)
+  (setq forge-add-default-bindings nil)
   ;;(evil-set-undo-system 'undo-tree)
   :config
   (evil-mode 1)
@@ -205,6 +210,17 @@
 (define-key global-map (kbd "C-c o") 'vi-open-line-below)
 (define-key global-map (kbd "C-c O") 'vi-open-line-above)
 
+(use-package evil-surround
+  :straight t
+  :config
+  (global-evil-surround-mode 1))
+
+(use-package evil-replace-with-register
+  :config
+  (setq evil-replace-with-register-key (kbd "gr"))
+  (evil-replace-with-register-install)
+  )
+
 (use-package general
   :after evil
   :config
@@ -220,7 +236,7 @@
     "fde" '(lambda () (interactive) (find-file (expand-file-name "~/.emacs.d/Emacs.org")))))
 
 (use-package doom-themes
-  :ensure t
+  :straight t
   :config
   ;; Global settings (defaults)
   (setq doom-themes-enable-bold t    ; if nil, bold is universally disabled
@@ -400,9 +416,9 @@ targets."
 (use-package which-key
   :init
   (setq which-key-use-C-h-commands nil) ;; disable C-h which key help
-  (define-key which-key-mode-map (kbd "C-x <f5>") 'which-key-C-h-dispatch) ;;  remaped C-h to f5
   :defer 0
   :config
+  (define-key which-key-mode-map (kbd "C-x <f5>") 'which-key-C-h-dispatch) ;;  remaped C-h to f5
   (which-key-mode)
   (setq which-key-idle-delay 1))
 
@@ -713,7 +729,7 @@ same directory as the org-buffer and insert a link to this file."
   (hide-mode-line-mode 0)
 
   ;; Turn off text scale mode (or use the next line if you didn't use text-scale-mode)
-  ;; (text-scale-mode 0))
+  ;; (text-scale-mode 0)
 
   ;; If you use face-remapping-alist, this clears the scaling:
   (setq-local face-remapping-alist '((default variable-pitch default))))
@@ -728,6 +744,34 @@ same directory as the org-buffer and insert a link to this file."
   (org-tree-slide-header t)
   (org-tree-slide-breadcrumbs " > ")
   (org-image-actual-width nil))
+
+;; Add extensions
+(use-package cape
+  ;; Bind dedicated completion commands
+  :bind (("C-c c p" . completion-at-point) ;; capf
+         ("C-c c t" . complete-tag)        ;; etags
+         ("C-c c d" . cape-dabbrev)        ;; or dabbrev-completion
+         ("C-c c f" . cape-file)
+         ("C-c c k" . cape-keyword)
+         ("C-c c s" . cape-symbol)
+         ("C-c c a" . cape-abbrev)
+         ("C-c c i" . cape-ispell)
+         ("C-c c l" . cape-line)
+         ("C-c c w" . cape-dict)
+         ("C-c c &" . cape-sgml)
+         ("C-c c r" . cape-rfc1345))
+  :init
+  (add-to-list 'completion-at-point-functions #'cape-file)
+  ;; (add-to-list 'completion-at-point-functions #'cape-dabbrev)
+  ;; (add-to-list 'completion-at-point-functions #'cape-keyword)
+  ;;(add-to-list 'completion-at-point-functions #'cape-sgml)
+  ;;(add-to-list 'completion-at-point-functions #'cape-rfc1345)
+  ;; (add-to-list 'completion-at-point-functions #'cape-abbrev)
+  ;;(add-to-list 'completion-at-point-functions #'cape-ispell)
+  ;;(add-to-list 'completion-at-point-functions #'cape-dict)
+  ;;(add-to-list 'completion-at-point-functions #'cape-symbol)
+  ;;(add-to-list 'completion-at-point-functions #'cape-line)
+  )
 
 (defun gunner/lsp-mode-setup ()
   (setq lsp-headerline-breadcrumb-segments '(path-up-to-project file symbols))
@@ -824,22 +868,35 @@ same directory as the org-buffer and insert a link to this file."
 
 (use-package yasnippet
   :config
-  (setq yas-snippet-dirs '("~/.emacs.d/snippet/snippets"))
+  (setq yas-snippet-dirs '("~/.emacs.d/straight/repos/yasnippet-snippets/snippets/"))
   (yas-global-mode 1))
 
 (use-package projectile
   :diminish projectile-mode
-  :config (projectile-mode)
-  :custom ((projectile-completion-system 'default))
+  ;; :custom ((projectile-completion-system 'default))
   :bind-keymap
   ("C-c p" . projectile-command-map)
   :init
   ;; NOTE: Set this to the folder where you keep your Git repos!
   (when (file-directory-p "~/Projects/Code")
     (setq projectile-project-search-path '("~/Projects/Code")))
-  (setq projectile-switch-project-action #'projectile-dired))
+  (setq projectile-switch-project-action #'projectile-dired)
+  :config (projectile-mode)
+  (gunner/leader-keys
+    "pf" 'consult-projectile-find-file
+    "ps" 'consult-projectile-switch-project
+    "pF" 'consult-ripgrep 
+    "pl" 'consult-lsp-symbols 
+    "pb" 'consult-projectile-switch-to-buffer
+    "pc" 'projectile-compile-project
+    "pd" 'projectile-dired
+    "pd" 'consult-projectile-dired
+    "pr" 'projectile-run-project
+    "pv" 'projectile-run-vterm))
 
-(use-package consult-projectile)
+(use-package consult-projectile
+  :hook
+  (marginalia-mode . consult-projectile))
 
 (use-package magit
   :custom
@@ -854,7 +911,10 @@ same directory as the org-buffer and insert a link to this file."
 ;; NOTE: Make sure to configure a GitHub token before using this package!
 ;; - https://magit.vc/manual/forge/Token-Creation.html#Token-Creation
 ;; - https://magit.vc/manual/ghub/Getting-Started.html#Getting-Started
-(use-package forge)
+(use-package forge
+  :straight t
+  :init
+  (setq forge-add-default-bindings nil))
 
 ;; Electric pair mode enable by default
 (use-package smartparens-config
@@ -863,24 +923,26 @@ same directory as the org-buffer and insert a link to this file."
   (emacs-lisp-mode . smartparens-mode)
   (lsp-mode . smartparens-mode)
   :config
-  (sp-local-pair 'emacs-lisp-mode "'" nil :actions nil))
-(show-paren-mode 1)
+  (sp-local-pair 'emacs-lisp-mode "'" nil :actions nil)
+  (show-paren-mode 1))
 
 (use-package flyspell-correct
-  :bind ("C-M-," . flyspell-correct-at-point))
-(dolist (hook '(text-mode-hook))
-  (add-hook hook (lambda () (flyspell-mode 1))))
-(dolist (hook '(change-log-mode-hook log-edit-mode-hook))
-  (add-hook hook (lambda () (flyspell-mode -1))))
-;; find aspell and hunspell automatically
-(cond
- ((executable-find "aspell")
-  (setq ispell-program-name "aspell")
-  (setq ispell-extra-args '("--sug-mode=ultra" "--lang=en_US")))
- ((executable-find "hunspell")
-  (setq ispell-program-name "hunspell")
-  (setq ispell-extra-args '("-d en_US")))
- )
+  :bind ("C-M-," . flyspell-correct-at-point)
+  ("C-M-q" . flyspell-auto-correct-word )
+  :config
+  (dolist (hook '(text-mode-hook))
+    (add-hook hook (lambda () (flyspell-mode 1))))
+  (dolist (hook '(change-log-mode-hook log-edit-mode-hook))
+    (add-hook hook (lambda () (flyspell-mode -1))))
+  ;; find aspell and hunspell automatically
+  (cond
+   ((executable-find "aspell")
+    (setq ispell-program-name "aspell")
+    (setq ispell-extra-args '("--sug-mode=ultra" "--lang=en_US")))
+   ((executable-find "hunspell")
+    (setq ispell-program-name "hunspell")
+    (setq ispell-extra-args '("-d en_US")))
+   ))
 
 (use-package consult-flyspell
   :straight (consult-flyspell :type git :host gitlab :repo "OlMon/consult-flyspell" :branch "master")
@@ -902,14 +964,31 @@ same directory as the org-buffer and insert a link to this file."
 (require 'livedown)
 
 (straight-use-package 'emms)
-(require 'emms-setup)
-(emms-all)
-(emms-default-players)
+(use-package emms
+  :config
+  (require 'emms-setup)
+  (require 'emms-player-mpd)
+  (setq emms-player-list '(emms-player-mpd))
+  (add-to-list 'emms-info-functions 'emms-info-mpd)
+  (add-to-list 'emms-player-list 'emms-player-mpd)
+
+  ;; Socket is not supported
+  (setq emms-player-mpd-server-name "localhost")
+  (setq emms-player-mpd-server-port "6600")
+  (setq emms-player-mpd-music-directory "/data/music")
+  (emms-all)
+  (emms-default-players))
 
 (setq emms-source-file-default-directory "~/Music")
 
 (setq emms-info-asynchronously nil)
 (setq emms-playlist-buffer-name "*Music*")
+
+(use-package lyrics-fetcher
+  :straight t
+  :after (emms)
+  :config
+  (setq lyrics-fetcher-genius-access-token "23O2v8mDgs8O7bbKTmYXV-RUbmxXkCkxuDKD-W7CSkqIXreOXedNk3yaZ_LSpj74"))
 
 ;; (require 'dashboard)
 ;; (dashboard-setup-startup-hook)
@@ -1134,34 +1213,82 @@ same directory as the org-buffer and insert a link to this file."
 
   (mu4e t))
 
-(use-package dired
-  :straight nil
-  :commands (dired dired-jump)
-  :bind (("C-x C-j" . dired-jump))
-  :custom ((dired-listing-switches "-agho --group-directories-first"))
+(setq elfeed-db-directory "~/Dropbox/elfeeddb")
+(use-package elfeed
+  :straight t
+  :bind (:map elfeed-search-mode-map
+              ("q" . bjm/elfeed-save-db-and-bury)
+              ("Q" . bjm/elfeed-save-db-and-bury))
   :config
-  (evil-collection-define-key 'normal 'dired-mode-map
+  (setq elfeed-search-feed-face ":foreground #fff :weight bold")
+  (global-set-key (kbd "C-x w") 'elfeed))
+
+(use-package elfeed-org
+  :init
+  (elfeed-org)
+  :straight t
+  :config
+  (setq rmh-elfeed-org-files (list "~/Dropbox/elfeed.org")))
+
+(use-package elfeed-goodies
+  :straight t
+  :init
+  (elfeed-goodies/setup)
+  :hook (elfeed-show-mode-hook . visual-line-mode)
+  :config
+  (setq elfeed-goodies/entry-pane-size 0.5)
+  (evil-define-key 'normal elfeed-show-mode-map
+    (kbd "J") 'elfeed-goodies/split-show-next
+    (kbd "K") 'elfeed-goodies/split-show-prev)
+  (evil-define-key 'normal elfeed-search-mode-map
+    (kbd "J") 'elfeed-goodies/split-show-next
+    (kbd "K") 'elfeed-goodies/split-show-prev)
+  )
+
+;;functions to support syncing .elfeed between machines
+;;makes sure elfeed reads index from disk before launching
+(defun bjm/elfeed-load-db-and-open ()
+  "Wrapper to load the elfeed db from disk before opening"
+  (interactive)
+  (elfeed-db-load)
+  (elfeed)
+  (elfeed-search-update--force))
+
+;;write to disk when quiting
+(defun bjm/elfeed-save-db-and-bury ()
+  "Wrapper to save the elfeed db to disk before burying buffer"
+  (interactive)
+  (elfeed-db-save)
+  (quit-window))
+
+(use-package dired
+:straight nil
+:commands (dired dired-jump)
+:bind (("C-x C-j" . dired-jump))
+:custom ((dired-listing-switches "-agho --group-directories-first"))
+:config
+(evil-collection-define-key 'normal 'dired-mode-map
     "h" 'dired-single-up-directory
     "l" 'dired-single-buffer))
 
 (use-package dired-single
-  :commands (dired dired-jump))
+:commands (dired dired-jump))
 
 (use-package all-the-icons-dired
-  :hook (dired-mode . all-the-icons-dired-mode))
+:hook (dired-mode . all-the-icons-dired-mode))
 
 (use-package dired-open
-  :commands (dired dired-jump)
-  :config
-  ;; Doesn't work as expected!
-  ;;(add-to-list 'dired-open-functions #'dired-open-xdg t)
-  (setq dired-open-extensions '(("png" . "feh")
+:commands (dired dired-jump)
+:config
+;; Doesn't work as expected!
+;;(add-to-list 'dired-open-functions #'dired-open-xdg t)
+(setq dired-open-extensions '(("png" . "nsxiv")
                                 ("mkv" . "mpv"))))
 
 (use-package dired-hide-dotfiles
-  :hook (dired-mode . dired-hide-dotfiles-mode)
-  :config
-  (evil-collection-define-key 'normal 'dired-mode-map
+:hook (dired-mode . dired-hide-dotfiles-mode)
+:config
+(evil-collection-define-key 'normal 'dired-mode-map
     "H" 'dired-hide-dotfiles-mode))
 
 ;; Make gc pauses faster by decreasing the threshold.

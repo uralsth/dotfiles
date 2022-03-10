@@ -1,5 +1,6 @@
 #+title: My Emacs Configuration
 #+PROPERTY: header-args:emacs-lisp :tangle ./init.el :mkdirp yes
+#+STARTUP: overview
 
 * Welcome!
 
@@ -69,6 +70,7 @@
 * Straight.el packages
 #+begin_src emacs-lisp
 
+  (straight-use-package 'beacon)
   (straight-use-package 'use-package)
   (straight-use-package 'vertico)
   (straight-use-package 'consult)
@@ -101,6 +103,7 @@
   (straight-use-package 'skewer-mode)
   (straight-use-package 'minions)
   (straight-use-package 'diminish)
+  (straight-use-package 'yasnippet-snippets)
 
 #+end_src
 
@@ -148,7 +151,7 @@ This section configures basic UI settings that remove unneeded elements to make 
   (tool-bar-mode -1)          ; Disable the toolbar
   (tooltip-mode -1)           ; Disable tooltips
   (set-fringe-mode 10)        ; Give some breathing room
-
+  (beacon-mode 1)
   (menu-bar-mode -1)            ; Disable the menu bar
 
   (global-undo-tree-mode)      ; Enable undo tree mode
@@ -173,6 +176,8 @@ This section configures basic UI settings that remove unneeded elements to make 
                   vterm-mode-hook
                   mu4e-mode-hook
                   nov-mode-hook
+                  elfeed-show-mode-hook
+                  elfeed-search-mode-hook
                   telega-chat-mode-hook
                   telega-root-mode-hook
                   treemacs-mode-hook
@@ -185,7 +190,7 @@ This section configures basic UI settings that remove unneeded elements to make 
   (setenv "PATH" (concat (getenv "PATH") ":/home/ural/.local/bin"))
 
   ;; (add-hook 'eshell-mode-hook 'eshell-mode-hook-func)
-#+end_src
+                  #+end_src
 
 ** Font Configuration
 
@@ -220,6 +225,7 @@ This configuration uses [[https://evil.readthedocs.io/en/latest/index.html][evil
     (setq evil-want-keybinding nil)
     (setq evil-want-C-u-scroll t)
     (setq evil-want-C-i-jump nil)
+    (setq forge-add-default-bindings nil)
     ;;(evil-set-undo-system 'undo-tree)
     :config
     (evil-mode 1)
@@ -276,6 +282,25 @@ This configuration uses [[https://evil.readthedocs.io/en/latest/index.html][evil
 
 #+end_src
 
+*** Evil Surrond
+This package emulates surround.vim by Tim Pope. The functionality is wrapped into a minor mode.
+
+#+begin_src emacs-lisp
+  (use-package evil-surround
+    :straight t
+    :config
+    (global-evil-surround-mode 1))
+#+end_src
+
+*** Evil replace with register
+#+begin_src emacs-lisp
+  (use-package evil-replace-with-register
+    :config
+    (setq evil-replace-with-register-key (kbd "gr"))
+    (evil-replace-with-register-install)
+    )
+#+end_src
+
 ** General
 #+begin_src emacs-lisp
 
@@ -302,7 +327,7 @@ This configuration uses [[https://evil.readthedocs.io/en/latest/index.html][evil
 #+begin_src emacs-lisp
 
   (use-package doom-themes
-    :ensure t
+    :straight t
     :config
     ;; Global settings (defaults)
     (setq doom-themes-enable-bold t    ; if nil, bold is universally disabled
@@ -523,9 +548,9 @@ This is an example of using [[https://github.com/abo-abo/hydra][Hydra]] to desig
   (use-package which-key
     :init
     (setq which-key-use-C-h-commands nil) ;; disable C-h which key help
-    (define-key which-key-mode-map (kbd "C-x <f5>") 'which-key-C-h-dispatch) ;;  remaped C-h to f5
     :defer 0
     :config
+    (define-key which-key-mode-map (kbd "C-x <f5>") 'which-key-C-h-dispatch) ;;  remaped C-h to f5
     (which-key-mode)
     (setq which-key-idle-delay 1))
 #+end_src
@@ -533,12 +558,12 @@ This is an example of using [[https://github.com/abo-abo/hydra][Hydra]] to desig
 
 #+begin_src emacs-lisp
 
-(global-set-key (kbd "C-h f") #'helpful-callable)
-(global-set-key (kbd "C-h v") #'helpful-variable)
-(global-set-key (kbd "C-h k") #'helpful-key)
-(global-set-key (kbd "C-h F") #'helpful-function)
-(global-set-key (kbd "C-c C-d") #'helpful-at-point)
-(global-set-key (kbd "C-h C") #'helpful-command)
+  (global-set-key (kbd "C-h f") #'helpful-callable)
+  (global-set-key (kbd "C-h v") #'helpful-variable)
+  (global-set-key (kbd "C-h k") #'helpful-key)
+  (global-set-key (kbd "C-h F") #'helpful-function)
+  (global-set-key (kbd "C-c C-d") #'helpful-at-point)
+  (global-set-key (kbd "C-h C") #'helpful-command)
 
 #+end_src
 
@@ -565,16 +590,16 @@ This is an example of using [[https://github.com/abo-abo/hydra][Hydra]] to desig
 
 ** Transpose Frame
 #+begin_src emacs-lisp
-    (use-package transpose-frame
-      :defer t)
-    (gunner/leader-keys
-      "b"  '(:ignore t :which-key "transpose-frame-toggle")
-      "bb" '(transpose-frame :which-key "transpose-frame")
-      "bv" '(flip-frame :which-key "Flip verticaly")
-      "bh" '(flop-frame :which-key "Flip horizontally")
-      "brf" '(rotate-frame :which-key "Rotate 180 degrees")
-      "brc" '(rotate-frame-clockwise :which-key "Rotate 90 degrees clockwise")
-      "bra" '(rotate-frame-anti-clockwise :which-key "Rotate 90 degrees clockwise"))
+  (use-package transpose-frame
+    :defer t)
+  (gunner/leader-keys
+    "b"  '(:ignore t :which-key "transpose-frame-toggle")
+    "bb" '(transpose-frame :which-key "transpose-frame")
+    "bv" '(flip-frame :which-key "Flip verticaly")
+    "bh" '(flop-frame :which-key "Flip horizontally")
+    "brf" '(rotate-frame :which-key "Rotate 180 degrees")
+    "brc" '(rotate-frame-clockwise :which-key "Rotate 90 degrees clockwise")
+    "bra" '(rotate-frame-anti-clockwise :which-key "Rotate 90 degrees clockwise"))
 #+end_src
 
 * Emojis in bufffers 
@@ -880,25 +905,25 @@ This snippet adds a hook to =org-mode= buffers so that =gunner/org-babel-tangle-
 
 * Org Roam
 #+begin_src emacs-lisp
-(use-package org-roam
-  :straight t
-  :init
-  (setq org-roam-v2-ack t)
-  :custom
-  (org-roam-directory "~/Documents/RoamNotes")
-  (org-roam-completion-everywhere t)
-  (org-roam-capture-templates
-   '(("d" "default" plain
-      "%?"
-      :if-new (file+head "%<%Y%m%d%H%M%S>-${slug}.org" "#+title: ${title}\n")
-      :unnarrowed t)))
-  :bind (("C-c n l" . org-roam-buffer-toggle)
-         ("C-c n f" . org-roam-node-find)
-         ("C-c n i" . org-roam-node-insert)
-         :map org-mode-map
-         ("C-M-i" . completion-at-point))
-  :config
-  (org-roam-setup))
+  (use-package org-roam
+    :straight t
+    :init
+    (setq org-roam-v2-ack t)
+    :custom
+    (org-roam-directory "~/Documents/RoamNotes")
+    (org-roam-completion-everywhere t)
+    (org-roam-capture-templates
+     '(("d" "default" plain
+        "%?"
+        :if-new (file+head "%<%Y%m%d%H%M%S>-${slug}.org" "#+title: ${title}\n")
+        :unnarrowed t)))
+    :bind (("C-c n l" . org-roam-buffer-toggle)
+           ("C-c n f" . org-roam-node-find)
+           ("C-c n i" . org-roam-node-insert)
+           :map org-mode-map
+           ("C-M-i" . completion-at-point))
+    :config
+    (org-roam-setup))
 #+end_src
 
 * Org Tree Slide
@@ -937,7 +962,7 @@ This snippet adds a hook to =org-mode= buffers so that =gunner/org-babel-tangle-
     (hide-mode-line-mode 0)
 
     ;; Turn off text scale mode (or use the next line if you didn't use text-scale-mode)
-    ;; (text-scale-mode 0))
+    ;; (text-scale-mode 0)
 
     ;; If you use face-remapping-alist, this clears the scaling:
     (setq-local face-remapping-alist '((default variable-pitch default))))
@@ -955,6 +980,37 @@ This snippet adds a hook to =org-mode= buffers so that =gunner/org-babel-tangle-
 #+end_src
 #+RESULTS:
 | efs/presentation-end |
+
+* Cape
+#+begin_src emacs-lisp
+  ;; Add extensions
+  (use-package cape
+    ;; Bind dedicated completion commands
+    :bind (("C-c c p" . completion-at-point) ;; capf
+           ("C-c c t" . complete-tag)        ;; etags
+           ("C-c c d" . cape-dabbrev)        ;; or dabbrev-completion
+           ("C-c c f" . cape-file)
+           ("C-c c k" . cape-keyword)
+           ("C-c c s" . cape-symbol)
+           ("C-c c a" . cape-abbrev)
+           ("C-c c i" . cape-ispell)
+           ("C-c c l" . cape-line)
+           ("C-c c w" . cape-dict)
+           ("C-c c &" . cape-sgml)
+           ("C-c c r" . cape-rfc1345))
+    :init
+    (add-to-list 'completion-at-point-functions #'cape-file)
+    ;; (add-to-list 'completion-at-point-functions #'cape-dabbrev)
+    ;; (add-to-list 'completion-at-point-functions #'cape-keyword)
+    ;;(add-to-list 'completion-at-point-functions #'cape-sgml)
+    ;;(add-to-list 'completion-at-point-functions #'cape-rfc1345)
+    ;; (add-to-list 'completion-at-point-functions #'cape-abbrev)
+    ;;(add-to-list 'completion-at-point-functions #'cape-ispell)
+    ;;(add-to-list 'completion-at-point-functions #'cape-dict)
+    ;;(add-to-list 'completion-at-point-functions #'cape-symbol)
+    ;;(add-to-list 'completion-at-point-functions #'cape-line)
+    )
+#+end_src
 
 * Development 
 
@@ -998,7 +1054,7 @@ This snippet adds a hook to =org-mode= buffers so that =gunner/org-babel-tangle-
 
 ** consult-lsp 
 #+begin_src emacs-lisp
-(use-package consult-lsp)
+  (use-package consult-lsp)
 #+end_src
 
 ** Debugging with dap-mode
@@ -1108,7 +1164,7 @@ This snippet adds a hook to =org-mode= buffers so that =gunner/org-babel-tangle-
 #+begin_src emacs-lisp
   (use-package yasnippet
     :config
-    (setq yas-snippet-dirs '("~/.emacs.d/snippet/snippets"))
+    (setq yas-snippet-dirs '("~/.emacs.d/straight/repos/yasnippet-snippets/snippets/"))
     (yas-global-mode 1))
 #+end_src
 
@@ -1119,17 +1175,30 @@ This snippet adds a hook to =org-mode= buffers so that =gunner/org-babel-tangle-
 #+begin_src emacs-lisp
   (use-package projectile
     :diminish projectile-mode
-    :config (projectile-mode)
-    :custom ((projectile-completion-system 'default))
+    ;; :custom ((projectile-completion-system 'default))
     :bind-keymap
     ("C-c p" . projectile-command-map)
     :init
     ;; NOTE: Set this to the folder where you keep your Git repos!
     (when (file-directory-p "~/Projects/Code")
       (setq projectile-project-search-path '("~/Projects/Code")))
-    (setq projectile-switch-project-action #'projectile-dired))
+    (setq projectile-switch-project-action #'projectile-dired)
+    :config (projectile-mode)
+    (gunner/leader-keys
+      "pf" 'consult-projectile-find-file
+      "ps" 'consult-projectile-switch-project
+      "pF" 'consult-ripgrep 
+      "pl" 'consult-lsp-symbols 
+      "pb" 'consult-projectile-switch-to-buffer
+      "pc" 'projectile-compile-project
+      "pd" 'projectile-dired
+      "pd" 'consult-projectile-dired
+      "pr" 'projectile-run-project
+      "pv" 'projectile-run-vterm))
 
-  (use-package consult-projectile)
+  (use-package consult-projectile
+    :hook
+    (marginalia-mode . consult-projectile))
 #+end_src
 
 #+RESULTS:
@@ -1150,7 +1219,10 @@ This snippet adds a hook to =org-mode= buffers so that =gunner/org-babel-tangle-
   ;; NOTE: Make sure to configure a GitHub token before using this package!
   ;; - https://magit.vc/manual/forge/Token-Creation.html#Token-Creation
   ;; - https://magit.vc/manual/ghub/Getting-Started.html#Getting-Started
-  (use-package forge)
+  (use-package forge
+    :straight t
+    :init
+    (setq forge-add-default-bindings nil))
 #+end_src
 
 #+RESULTS:
@@ -1165,16 +1237,18 @@ This snippet adds a hook to =org-mode= buffers so that =gunner/org-babel-tangle-
     (emacs-lisp-mode . smartparens-mode)
     (lsp-mode . smartparens-mode)
     :config
-    (sp-local-pair 'emacs-lisp-mode "'" nil :actions nil))
-  (show-paren-mode 1)
+    (sp-local-pair 'emacs-lisp-mode "'" nil :actions nil)
+    (show-paren-mode 1))
 #+end_src
 
 ** Flyspell
 
 *** Basic Configuration
 #+begin_src emacs-lisp
-    (use-package flyspell-correct
-      :bind ("C-M-," . flyspell-correct-at-point))
+  (use-package flyspell-correct
+    :bind ("C-M-," . flyspell-correct-at-point)
+    ("C-M-q" . flyspell-auto-correct-word )
+    :config
     (dolist (hook '(text-mode-hook))
       (add-hook hook (lambda () (flyspell-mode 1))))
     (dolist (hook '(change-log-mode-hook log-edit-mode-hook))
@@ -1187,7 +1261,7 @@ This snippet adds a hook to =org-mode= buffers so that =gunner/org-babel-tangle-
      ((executable-find "hunspell")
       (setq ispell-program-name "hunspell")
       (setq ispell-extra-args '("-d en_US")))
-     )
+     ))
 #+end_src
 
 *** Consult-flyspell
@@ -1227,9 +1301,20 @@ This snippet adds a hook to =org-mode= buffers so that =gunner/org-babel-tangle-
 ** Setup
 #+begin_src emacs-lisp
   (straight-use-package 'emms)
-  (require 'emms-setup)
-  (emms-all)
-  (emms-default-players)
+  (use-package emms
+    :config
+    (require 'emms-setup)
+    (require 'emms-player-mpd)
+    (setq emms-player-list '(emms-player-mpd))
+    (add-to-list 'emms-info-functions 'emms-info-mpd)
+    (add-to-list 'emms-player-list 'emms-player-mpd)
+
+    ;; Socket is not supported
+    (setq emms-player-mpd-server-name "localhost")
+    (setq emms-player-mpd-server-port "6600")
+    (setq emms-player-mpd-music-directory "/data/music")
+    (emms-all)
+    (emms-default-players))
 #+end_src
 
 #+RESULTS:
@@ -1251,6 +1336,15 @@ This snippet adds a hook to =org-mode= buffers so that =gunner/org-babel-tangle-
 
 #+RESULTS:
 : *Music*
+
+** lyrics fetcher
+#+begin_src emacs-lisp
+  (use-package lyrics-fetcher
+    :straight t
+    :after (emms)
+    :config
+    (setq lyrics-fetcher-genius-access-token "23O2v8mDgs8O7bbKTmYXV-RUbmxXkCkxuDKD-W7CSkqIXreOXedNk3yaZ_LSpj74"))
+#+end_src
 
 * Emacs Dashboard
 ** Setup
@@ -1677,11 +1771,69 @@ For more thoughts on Eshell, check out these articles by Pierre Neidhardt:
 # #+RESULTS:
 # : telega
 
+* Elfeed
+** Elfeed Initialization
+#+begin_src emacs-lisp
+  (setq elfeed-db-directory "~/Dropbox/elfeeddb")
+  (use-package elfeed
+    :straight t
+    :bind (:map elfeed-search-mode-map
+                ("q" . bjm/elfeed-save-db-and-bury)
+                ("Q" . bjm/elfeed-save-db-and-bury))
+    :config
+    (setq elfeed-search-feed-face ":foreground #fff :weight bold")
+    (global-set-key (kbd "C-x w") 'elfeed))
+#+end_src
+
+** Elfeed Org
+#+begin_src emacs-lisp
+  (use-package elfeed-org
+    :init
+    (elfeed-org)
+    :straight t
+    :config
+    (setq rmh-elfeed-org-files (list "~/Dropbox/elfeed.org")))
+#+end_src
+
+** Elfeed Goodies
+#+begin_src emacs-lisp
+  (use-package elfeed-goodies
+    :straight t
+    :init
+    (elfeed-goodies/setup)
+    :hook (elfeed-show-mode-hook . visual-line-mode)
+    :config
+    (setq elfeed-goodies/entry-pane-size 0.5)
+    (evil-define-key 'normal elfeed-show-mode-map
+      (kbd "J") 'elfeed-goodies/split-show-next
+      (kbd "K") 'elfeed-goodies/split-show-prev)
+    (evil-define-key 'normal elfeed-search-mode-map
+      (kbd "J") 'elfeed-goodies/split-show-next
+      (kbd "K") 'elfeed-goodies/split-show-prev)
+    )
+#+end_src
+
+** Elfeed Syncing and Writing
+#+begin_src emacs-lisp
+  ;;functions to support syncing .elfeed between machines
+  ;;makes sure elfeed reads index from disk before launching
+  (defun bjm/elfeed-load-db-and-open ()
+    "Wrapper to load the elfeed db from disk before opening"
+    (interactive)
+    (elfeed-db-load)
+    (elfeed)
+    (elfeed-search-update--force))
+
+  ;;write to disk when quiting
+  (defun bjm/elfeed-save-db-and-bury ()
+    "Wrapper to save the elfeed db to disk before burying buffer"
+    (interactive)
+    (elfeed-db-save)
+    (quit-window))
+#+end_src
 * File Management
 
 ** Dired
-
-Dired is a built-in file manager for Emacs that does some pretty amazing things!  Here are some key bindings you should try out:
 
 *** Key Bindings
 
@@ -1745,35 +1897,35 @@ Dired is a built-in file manager for Emacs that does some pretty amazing things!
 
 #+begin_src emacs-lisp
 
-  (use-package dired
-    :straight nil
-    :commands (dired dired-jump)
-    :bind (("C-x C-j" . dired-jump))
-    :custom ((dired-listing-switches "-agho --group-directories-first"))
-    :config
-    (evil-collection-define-key 'normal 'dired-mode-map
-      "h" 'dired-single-up-directory
-      "l" 'dired-single-buffer))
+(use-package dired
+:straight nil
+:commands (dired dired-jump)
+:bind (("C-x C-j" . dired-jump))
+:custom ((dired-listing-switches "-agho --group-directories-first"))
+:config
+(evil-collection-define-key 'normal 'dired-mode-map
+    "h" 'dired-single-up-directory
+    "l" 'dired-single-buffer))
 
-  (use-package dired-single
-    :commands (dired dired-jump))
+(use-package dired-single
+:commands (dired dired-jump))
 
-  (use-package all-the-icons-dired
-    :hook (dired-mode . all-the-icons-dired-mode))
+(use-package all-the-icons-dired
+:hook (dired-mode . all-the-icons-dired-mode))
 
-  (use-package dired-open
-    :commands (dired dired-jump)
-    :config
-    ;; Doesn't work as expected!
-    ;;(add-to-list 'dired-open-functions #'dired-open-xdg t)
-    (setq dired-open-extensions '(("png" . "feh")
-                                  ("mkv" . "mpv"))))
+(use-package dired-open
+:commands (dired dired-jump)
+:config
+;; Doesn't work as expected!
+;;(add-to-list 'dired-open-functions #'dired-open-xdg t)
+(setq dired-open-extensions '(("png" . "nsxiv")
+                                ("mkv" . "mpv"))))
 
-  (use-package dired-hide-dotfiles
-    :hook (dired-mode . dired-hide-dotfiles-mode)
-    :config
-    (evil-collection-define-key 'normal 'dired-mode-map
-      "H" 'dired-hide-dotfiles-mode))
+(use-package dired-hide-dotfiles
+:hook (dired-mode . dired-hide-dotfiles-mode)
+:config
+(evil-collection-define-key 'normal 'dired-mode-map
+    "H" 'dired-hide-dotfiles-mode))
 
 #+end_src
 
