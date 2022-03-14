@@ -134,7 +134,7 @@ alias randreset='autorandr --load mobile && autorandr --load docked'
 
 
 # Changing lf to lfrun
-alias lf='lfrun'
+alias lf='lfub'
 
 
 ### Function extract for common file formats ###
