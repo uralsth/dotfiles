@@ -131,3 +131,17 @@ CLOCK: [2022-02-17 Thu 16:26]--[2022-02-17 Thu 16:26] =>  0:00
 :END:
 
 jjguy9439@gmail.com:Wjdwhdrb1!
+
+** 2022-03 March
+
+*** 2022-03-13 Sunday
+
+**** 06:00 AM - Notes                                              :notes:
+:LOGBOOK:
+CLOCK: [2022-03-13 Sun 06:00]--[2022-03-13 Sun 06:00] =>  0:00
+:END:
+
+* Mount usb
+
+** mount -o gid=users,fmask=113,dmask=002 /dev/sda1 /mnt/usbstick
+
