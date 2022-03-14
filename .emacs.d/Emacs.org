@@ -103,7 +103,9 @@
   (straight-use-package 'skewer-mode)
   (straight-use-package 'minions)
   (straight-use-package 'diminish)
+  (straight-use-package 'winum)
   (straight-use-package 'yasnippet-snippets)
+  (straight-use-package 'dabbrev)
 
 #+end_src
 
@@ -190,7 +192,7 @@ This section configures basic UI settings that remove unneeded elements to make 
   (setenv "PATH" (concat (getenv "PATH") ":/home/ural/.local/bin"))
 
   ;; (add-hook 'eshell-mode-hook 'eshell-mode-hook-func)
-                  #+end_src
+#+end_src
 
 ** Font Configuration
 
@@ -310,7 +312,7 @@ This package emulates surround.vim by Tim Pope. The functionality is wrapped int
     (general-create-definer gunner/leader-keys
       :keymaps '(normal insert visual emacs)
       :prefix "SPC"
-      :global-prefix "C-SPC")
+      :global-prefix "M-SPC")
 
     (gunner/leader-keys
       "t"  '(:ignore t :which-key "toggles")
@@ -375,26 +377,6 @@ This package emulates surround.vim by Tim Pope. The functionality is wrapped int
 #+RESULTS:
 | doom-modeline-init | x-wm-set-size-hint | tramp-register-archive-file-name-handler | magit-maybe-define-global-key-bindings | table--make-cell-map |
 
-** Text Scaling
-
-This is an example of using [[https://github.com/abo-abo/hydra][Hydra]] to design a transient key binding for quickly adjusting the scale of the text on screen.  We define a hydra that is bound to =C-s t s= and, once activated, =j= and =k= increase and decrease the text scale.  You can press any other key (or =f= specifically) to exit the transient key map.
-
-#+begin_src emacs-lisp
-
-  (use-package hydra
-    :defer t)
-
-  (defhydra hydra-text-scale (:timeout 4)
-    "scale text"
-    ("j" text-scale-increase "in")
-    ("k" text-scale-decrease "out")
-    ("f" nil "finished" :exit t))
-
-  (gunner/leader-keys
-    "ts" '(hydra-text-scale/body :which-key "scale text"))
-
-#+end_src
-
 ** Vertico
 #+begin_src emacs-lisp
   (defun gunner/minibuffer-backward-kill (arg)
@@ -429,16 +411,17 @@ This is an example of using [[https://github.com/abo-abo/hydra][Hydra]] to desig
 ** Savehist and Orderles
 #+begin_src emacs-lisp
 
-  ;;; Orderless
+    ;;; Orderless
   (use-package orderless
     :init
-    (setq completion-styles '(orderless)
+    (setq completion-styles '(orderless partial-completion)
           orderless-smart-case t
+          completion-category-overrides nil
           completion-category-defaults nil
           completion-category-overrides '((file (styles partial-completion)))))
 
 
-  ;;; Savehist
+    ;;; Savehist
   (use-package savehist
     :init
     (savehist-mode))
@@ -567,39 +550,10 @@ This is an example of using [[https://github.com/abo-abo/hydra][Hydra]] to desig
 
 #+end_src
 
-** Window Size Scale
-#+begin_src emacs-lisp
-
-  (use-package hydra
-    :defer t)
-
-  (defhydra hydra-window-size-scale (:timeout 4)
-    "scale window size"
-    ("j" evil-window-increase-height "in-height")
-    ("k" evil-window-decrease-height "out-height")
-    ("h" evil-window-increase-width "in-width")
-    ("l" evil-window-decrease-width "out-width")
-    ("f" nil "finished" :exit t))
-
-  (gunner/leader-keys
-    "tw" '(hydra-window-size-scale/body :which-key "scale window size"))
-
-#+end_src
-
-#+RESULTS:
-
 ** Transpose Frame
 #+begin_src emacs-lisp
   (use-package transpose-frame
     :defer t)
-  (gunner/leader-keys
-    "b"  '(:ignore t :which-key "transpose-frame-toggle")
-    "bb" '(transpose-frame :which-key "transpose-frame")
-    "bv" '(flip-frame :which-key "Flip verticaly")
-    "bh" '(flop-frame :which-key "Flip horizontally")
-    "brf" '(rotate-frame :which-key "Rotate 180 degrees")
-    "brc" '(rotate-frame-clockwise :which-key "Rotate 90 degrees clockwise")
-    "bra" '(rotate-frame-anti-clockwise :which-key "Rotate 90 degrees clockwise"))
 #+end_src
 
 * Emojis in bufffers 
@@ -614,6 +568,61 @@ This is an example of using [[https://github.com/abo-abo/hydra][Hydra]] to desig
 
 #+RESULTS:
 | emojify-mode | doom-modeline-set-special-modeline |
+
+* Hydra
+** Initialization
+#+begin_src emacs-lisp
+  (use-package hydra
+    :defer t)
+#+end_src
+
+#+RESULTS:
+** Hydra Windows Navigation
+#+begin_src emacs-lisp
+  (defhydra hydra-windows-nav (:color red)
+    ("s" shrink-window-horizontally "shrink horizontally" :column "Sizing")
+    ("d" evil-window-decrease-height "shrink vertically")
+    ("e" enlarge-window-horizontally "enlarge horizontally")
+    ("a" evil-window-increase-height "enlarge vertically")
+    ("b" balance-windows "balance window height")
+    ("m" maximize-window "maximize current window")
+    ("M" minimize-window "minimize current window")
+
+    ("H" split-window-below "split horizontally" :column "Split management")
+    ("v" split-window-right "split vertically")
+    ("c" delete-window "delete current window")
+    ("o" delete-other-windows "delete-other-windows")
+
+    ("z" ace-window "ace window" :color blue :column "Navigation")
+    ("h" windmove-left "← window")
+    ("j" windmove-down "↓ window")
+    ("k" windmove-up "↑ window")
+    ("l" windmove-right "→ window")
+
+    ("B" transpose-frame "transpose-frame" :column "Transpose")
+    ("V" flip-frame "Flip verticaly")
+    ("F" flop-frame "Flip horizontally")
+    ("S" rotate-frame "Rotate 180 degrees")
+    ("U" rotate-frame-clockwise "Rotate 90 degrees clockwise")
+    ("P" rotate-frame-anticlockwise "Rotate 90 degrees ant-clockwise")
+
+    ("u" winner-undo "Winner undo" :column "Windmove")
+    ("r" winner-redo "Winner redo")
+    ("q" nil "quit menu" :color blue :column nil))
+
+  (gunner/leader-keys
+    "w" '(hydra-windows-nav/body :which-key "Windows Navigation"))
+#+end_src
+** Text Scaling
+#+begin_src emacs-lisp
+  (defhydra hydra-scale-text (:color red)
+    ("j" text-scale-increase "increase" :column "Text Scale")
+    ("k" text-scale-decrease "decrease")
+    ("q" nil "quit menu" :color blue :column nil))
+
+  (gunner/leader-keys
+    "s" '(hydra-scale-text/body :which-key "Text Scaling"))
+#+end_src
 
 * Org Mode
 
@@ -760,6 +769,7 @@ This section contains the basic configuration for =org-mode= plus the configurat
                     ((org-agenda-overriding-header "Cancelled Projects")
                      (org-agenda-files org-agenda-files)))))))
 
+    (define-key global-map "\C-cc" 'org-capture)
     (setq org-capture-templates
           `(("t" "Tasks / Projects")
             ("tt" "Task" entry (file+olp "~/.emacs.d/OrgFiles/Tasks.org" "Inbox")
@@ -986,30 +996,103 @@ This snippet adds a hook to =org-mode= buffers so that =gunner/org-babel-tangle-
   ;; Add extensions
   (use-package cape
     ;; Bind dedicated completion commands
-    :bind (("C-c c p" . completion-at-point) ;; capf
-           ("C-c c t" . complete-tag)        ;; etags
-           ("C-c c d" . cape-dabbrev)        ;; or dabbrev-completion
-           ("C-c c f" . cape-file)
-           ("C-c c k" . cape-keyword)
-           ("C-c c s" . cape-symbol)
-           ("C-c c a" . cape-abbrev)
-           ("C-c c i" . cape-ispell)
-           ("C-c c l" . cape-line)
-           ("C-c c w" . cape-dict)
-           ("C-c c &" . cape-sgml)
-           ("C-c c r" . cape-rfc1345))
+    :bind (("C-c x p" . completion-at-point) ;; capf
+           ("C-c x t" . complete-tag)        ;; etags
+           ("C-c x d" . cape-dabbrev)        ;; or dabbrev-completion
+           ("C-c x f" . cape-file)
+           ("C-c x k" . cape-keyword)
+           ("C-c x s" . cape-symbol)
+           ("C-c x a" . cape-abbrev)
+           ("C-c x i" . cape-ispell)
+           ("C-c x l" . cape-line)
+           ("C-c x w" . cape-dict)
+           ("C-c x &" . cape-sgml)
+           ("C-c x r" . cape-rfc1345))
     :init
     (add-to-list 'completion-at-point-functions #'cape-file)
-    ;; (add-to-list 'completion-at-point-functions #'cape-dabbrev)
-    ;; (add-to-list 'completion-at-point-functions #'cape-keyword)
+    (add-to-list 'completion-at-point-functions #'cape-dabbrev)
+    (add-to-list 'completion-at-point-functions #'cape-keyword)
     ;;(add-to-list 'completion-at-point-functions #'cape-sgml)
     ;;(add-to-list 'completion-at-point-functions #'cape-rfc1345)
-    ;; (add-to-list 'completion-at-point-functions #'cape-abbrev)
-    ;;(add-to-list 'completion-at-point-functions #'cape-ispell)
-    ;;(add-to-list 'completion-at-point-functions #'cape-dict)
-    ;;(add-to-list 'completion-at-point-functions #'cape-symbol)
-    ;;(add-to-list 'completion-at-point-functions #'cape-line)
+    (add-to-list 'completion-at-point-functions #'cape-abbrev)
+    (add-to-list 'completion-at-point-functions #'cape-ispell)
+    (add-to-list 'completion-at-point-functions #'cape-dict)
+    (add-to-list 'completion-at-point-functions #'cape-symbol)
+    ;; (add-to-list 'completion-at-point-functions #'cape-line)
     )
+#+end_src
+
+* Corfu
+#+begin_src emacs-lisp
+  (use-package corfu
+    ;; Optional customizations
+    :custom
+    (corfu-cycle t)                ;; Enable cycling for `corfu-next/previous'
+    (corfu-auto t)                 ;; Enable auto completion
+    (corfu-quit-at-boundary nil)   ;; Never quit at completion boundary
+    (corfu-quit-no-match nil)      ;; Never quit, even if there is no match
+    (corfu-preview-current nil)    ;; Disable current candidate preview
+    (corfu-preselect-first nil)    ;; Disable candidate preselection
+    ;; (corfu-on-exact-match nil)     ;; Configure handling of exact matches
+    ;; (corfu-echo-documentation nil) ;; Disable documentation in the echo area
+    ;; (corfu-scroll-margin 5)        ;; Use scroll margin
+
+    ;; You may want to enable Corfu only for certain modes.
+    ;; :hook ((prog-mode . corfu-mode)
+    ;;        (shell-mode . corfu-mode)
+    ;;        (eshell-mode . corfu-mode))
+
+    ;; Recommended: Enable Corfu globally.
+    ;; This is recommended since dabbrev can be used globally (M-/).
+    :init
+    (corfu-global-mode)
+
+    :bind
+    (:map corfu-map
+          ("S-SPC" . corfu-insert-separator)
+          ([backtab]. corfu-previous)
+          ("TAB" . corfu-complete)
+          ("RET" . corfu-insert)
+          ("keyboard-escape-quit" . corfu-quit))
+
+    :config
+    ;; Enable corfu in minibuffer
+    (defun corfu-enable-in-minibuffer ()
+      "Enable Corfu in the minibuffer if `completion-at-point' is bound."
+      (when (where-is-internal #'completion-at-point (list (current-local-map)))
+        ;; (setq-local corfu-auto nil) Enable/disable auto completion
+        (corfu-mode 1)))
+    (add-hook 'minibuffer-setup-hook #'corfu-enable-in-minibuffer)
+
+    ;; Corfu Insert and Send
+
+    (defun corfu-insert-and-send ()
+      (interactive)
+      ;; 1. First insert the completed candidate
+      (corfu-insert)
+      ;; 2. Send the entire prompt input to the shell
+      (cond
+       ((and (derived-mode-p 'eshell-mode) (fboundp 'eshell-send-input))
+        (eshell-send-input))
+       ((derived-mode-p 'comint-mode)
+        (comint-send-input))))
+
+    (define-key corfu-map "\r" #'+corfu-insert-and-send)
+    )
+
+  (use-package emacs
+    :init
+    ;; TAB cycle if there are only few candidates
+    (setq completion-cycle-threshold 3)
+
+    ;; Emacs 28: Hide commands in M-x which do not apply to the current mode.
+    ;; Corfu commands are hidden, since they are not supposed to be used via M-x.
+    ;; (setq read-extended-command-predicate
+    ;;       #'command-completion-default-include-p)
+
+    ;; Enable indentation+completion using the TAB key.
+    ;; `completion-at-point' is often bound to M-TAB.
+    (setq tab-always-indent 'complete))
 #+end_src
 
 * Development 
@@ -1021,10 +1104,31 @@ This snippet adds a hook to =org-mode= buffers so that =gunner/org-babel-tangle-
     (lsp-headerline-breadcrumb-mode))
 
   (use-package lsp-mode
+    :custom
+    (lsp-completion-provider :none) ;; we use Corfu!
+
     :commands (lsp lsp-deferred)
-    :hook (lsp-mode . gunner/lsp-mode-setup)
+
+    :hook
+    (lsp-completion-mode . my/lsp-mode-setup-completion)
+    (lsp-mode . gunner/lsp-mode-setup)
+
     :init
+    (defun my/orderless-dispatch-flex-first (_pattern index _total)
+      (and (eq index 0) 'orderless-flex))
+
     (setq lsp-keymap-prefix "C-c l")  ;; Or 'C-l', 's-l'
+
+    (defun my/lsp-mode-setup-completion ()
+      (setf (alist-get 'styles (alist-get 'lsp-capf completion-category-defaults))
+            '(orderless))) ;; Configure orderless
+
+    ;; Optionally configure the first word as flex filtered.
+    (add-hook 'orderless-style-dispatchers #'my/orderless-dispatch-flex-first nil 'local)
+
+    ;; Optionally configure the cape-capf-buster.
+    (setq-local completion-at-point-functions (list (cape-capf-buster #'lsp-completion-at-point)))
+
     :config
     (lsp-enable-which-key-integration t)
     )
@@ -1096,8 +1200,15 @@ This snippet adds a hook to =org-mode= buffers so that =gunner/org-babel-tangle-
     ;; (dap-python-executable "python3")
     (dap-python-debugger 'debugpy)
     :config
-    (require 'dap-python))
+    (require 'dap-python)
+    )
 
+  (gunner/leader-keys
+    "l"  '(:ignore t :which-key "Python Shell Send")
+    "lf" '(python-shell-send-file :which-key "Python Shell Send File")
+    "ld" '(python-shell-send-defun :which-key "Python Shell Send Defun")
+    "lb" '(python-shell-send-buffer :which-key "Python Shell Send Buffer")
+    "lr" '(python-shell-send-region :which-key "python shell Send Region"))
 
   (use-package pyvenv
     :after python-mode
@@ -1140,25 +1251,6 @@ This snippet adds a hook to =org-mode= buffers so that =gunner/org-babel-tangle-
 
 #+RESULTS:
 | (lambda nil (require 'lsp-pyright) (lsp)) | evil-collection-python-set-evil-shift-width | doom-modeline-env-setup-python |
-
-** Company Mode
-#+begin_src emacs-lisp
-  (use-package company
-    :after lsp-mode
-    :hook (lsp-mode . company-mode)
-    :bind (:map company-active-map
-                ("<tab>" . company-complete-selection))
-    (:map lsp-mode-map
-          ("<tab>" . company-indent-or-complete-common))
-    :custom
-    (company-minimum-prefix-length 1)
-    (company-idle-delay 0.0))
-  (use-package company-box
-    :hook (company-mode . company-box-mode))
-#+end_src
-
-#+RESULTS:
-| company-box-mode | company-mode-set-explicitly |
 
 ** yasnippet
 #+begin_src emacs-lisp
@@ -1229,16 +1321,23 @@ This snippet adds a hook to =org-mode= buffers so that =gunner/org-babel-tangle-
 
 ** Smart and Show Paren Mode
 #+begin_src emacs-lisp
-
-  ;; Electric pair mode enable by default
+  (show-paren-mode 1)
   (use-package smartparens-config
     :straight smartparens
     :hook
     (emacs-lisp-mode . smartparens-mode)
     (lsp-mode . smartparens-mode)
+    (org-mode . smartparens-mode)
     :config
-    (sp-local-pair 'emacs-lisp-mode "'" nil :actions nil)
-    (show-paren-mode 1))
+    (sp-with-modes 'org-mode
+      (sp-local-pair "=" "=" :wrap "C-=")))
+
+  (use-package evil-smartparens
+    :straight t
+    :after smartparens
+    :hook
+    (smartparens-enabled-hook . evil-smartparens-mode)
+    )
 #+end_src
 
 ** Flyspell
@@ -1296,6 +1395,48 @@ This snippet adds a hook to =org-mode= buffers so that =gunner/org-babel-tangle-
   (require 'livedown)
 #+end_src
 
+** Lua Mode
+#+begin_src emacs-lisp
+  (use-package lua-mode
+    :straight t
+    :hook (lsp . lua-mode)
+    :mode ("\\.lua\\'" . lua-mode)
+    :interpreter ("lua" . lua-mode)
+    )
+#+end_src
+
+** C/C++ Mode
+#+begin_src emacs-lisp
+(add-hook 'c-mode-hook 'lsp)
+(add-hook 'c++-mode-hook 'lsp)
+#+end_src
+
+* Window and Buffer Management
+
+** Winum
+#+begin_src emacs-lisp
+  (use-package winum
+    :bind (:map winum-keymap
+                ("C-`" . winum-select-window-by-number)
+                ("C-²" . winum-select-window-by-number)
+                ("M-9" . winum-select-window-0-or-10)
+                ("M-1" . winum-select-window-1)
+                ("M-2" . winum-select-window-2)
+                ("M-3" . winum-select-window-3)
+                ("M-4" . winum-select-window-4)
+                ("M-5" . winum-select-window-5)
+                ("M-6" . winum-select-window-6)
+                ("M-7" . winum-select-window-7)
+                ("M-8" . winum-select-window-8))
+    :init
+    (winum-mode))
+
+#+end_src
+
+** Winner Mode
+#+begin_src emacs-lisp
+(winner-mode)
+#+end_src
 * Emms Configuration 
 
 ** Setup
