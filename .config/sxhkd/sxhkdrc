@@ -1,6 +1,10 @@
 # Basic binds
 super + d
       dmenu_run -p 'Run:'
+super + p
+      mytools
+super + r
+      dm-websearch
 super + q
       firefox
 super + control + q
