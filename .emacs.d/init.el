@@ -814,12 +814,20 @@ same directory as the org-buffer and insert a link to this file."
   :bind
   (:map corfu-map
         ("S-SPC" . corfu-insert-separator)
+        ("C-j" . corfu-next)
+        ("C-k" . corfu-previous)
         ([backtab]. corfu-previous)
         ("TAB" . corfu-complete)
+        ("C-l" . corfu-complete)
+        ("<escape>" . corfu-quit)
         ("RET" . corfu-insert)
-        ("keyboard-escape-quit" . corfu-quit))
+        ("C-M-g" . corfu-quit))
 
   :config
+  (advice-add 'corfu--setup :after 'evil-normalize-keymaps)
+  (advice-add 'corfu--teardown :after 'evil-normalize-keymaps)
+  (evil-make-overriding-map corfu-map)
+
   ;; Enable corfu in minibuffer
   (defun corfu-enable-in-minibuffer ()
     "Enable Corfu in the minibuffer if `completion-at-point' is bound."
