@@ -1360,41 +1360,6 @@ This snippet adds a hook to =org-mode= buffers so that =gunner/org-babel-tangle-
     )
 #+end_src
 
-** Flyspell
-
-*** Basic Configuration
-#+begin_src emacs-lisp
-  (use-package flyspell-correct
-    :bind ("C-M-," . flyspell-correct-at-point)
-    ("C-M-q" . flyspell-auto-correct-word )
-    :config
-    (dolist (hook '(text-mode-hook))
-      (add-hook hook (lambda () (flyspell-mode 1))))
-    (dolist (hook '(change-log-mode-hook log-edit-mode-hook))
-      (add-hook hook (lambda () (flyspell-mode -1))))
-    ;; find aspell and hunspell automatically
-    (cond
-     ((executable-find "aspell")
-      (setq ispell-program-name "aspell")
-      (setq ispell-extra-args '("--sug-mode=ultra" "--lang=en_US")))
-     ((executable-find "hunspell")
-      (setq ispell-program-name "hunspell")
-      (setq ispell-extra-args '("-d en_US")))
-     ))
-#+end_src
-
-*** Consult-flyspell
-#+begin_src emacs-lisp
-  (use-package consult-flyspell
-    :straight (consult-flyspell :type git :host gitlab :repo "OlMon/consult-flyspell" :branch "master")
-    :config
-    ;; default settings
-    (setq consult-flyspell-select-function nil
-          consult-flyspell-set-point-after-word t
-          consult-flyspell-correct-function 'flyspell-correct-at-point
-          consult-flyspell-always-check-buffer nil))
-#+end_src
-
 ** Html Mode
 #+begin_src emacs-lisp
   (add-hook 'html-mode-hook 'lsp)
@@ -1429,6 +1394,55 @@ This snippet adds a hook to =org-mode= buffers so that =gunner/org-babel-tangle-
 #+begin_src emacs-lisp
 (add-hook 'c-mode-hook 'lsp)
 (add-hook 'c++-mode-hook 'lsp)
+#+end_src
+
+* Word Stuff
+** Flyspell
+
+*** Basic Configuration
+#+begin_src emacs-lisp
+  (use-package flyspell-correct
+    :bind ("C-M-," . flyspell-correct-at-point)
+    ("C-M-q" . flyspell-auto-correct-word )
+    :config
+    (dolist (hook '(text-mode-hook))
+      (add-hook hook (lambda () (flyspell-mode 1))))
+    (dolist (hook '(change-log-mode-hook log-edit-mode-hook))
+      (add-hook hook (lambda () (flyspell-mode -1))))
+    ;; find aspell and hunspell automatically
+    (cond
+     ((executable-find "aspell")
+      (setq ispell-program-name "aspell")
+      (setq ispell-extra-args '("--sug-mode=ultra" "--lang=en_US")))
+     ((executable-find "hunspell")
+      (setq ispell-program-name "hunspell")
+      (setq ispell-extra-args '("-d en_US")))
+     ))
+#+end_src
+
+*** Consult-flyspell
+#+begin_src emacs-lisp
+  (use-package consult-flyspell
+    :straight (consult-flyspell :type git :host gitlab :repo "OlMon/consult-flyspell" :branch "master")
+    :config
+    ;; default settings
+    (setq consult-flyspell-select-function nil
+          consult-flyspell-set-point-after-word t
+          consult-flyspell-correct-function 'flyspell-correct-at-point
+          consult-flyspell-always-check-buffer nil))
+#+end_sr
+**
+
+** Dictionary
+#+begin_src emacs-lisp
+  (use-package dictionary
+    :straight t)
+#+end_src
+
+** Powerthesaurus
+#+begin_src emacs-lisp
+  (use-package powerthesaurus
+    :straight t)
 #+end_src
 
 * Window and Buffer Management
