@@ -106,6 +106,9 @@
   (straight-use-package 'winum)
   (straight-use-package 'yasnippet-snippets)
   (straight-use-package 'dabbrev)
+  (straight-use-package 'ripgrep)
+  (straight-use-package 'rg)
+  (straight-use-package 'projectile-ripgrep)
 
 #+end_src
 
@@ -1014,10 +1017,7 @@ This snippet adds a hook to =org-mode= buffers so that =gunner/org-babel-tangle-
     (add-to-list 'completion-at-point-functions #'cape-keyword)
     ;;(add-to-list 'completion-at-point-functions #'cape-sgml)
     ;;(add-to-list 'completion-at-point-functions #'cape-rfc1345)
-    (add-to-list 'completion-at-point-functions #'cape-abbrev)
-    (add-to-list 'completion-at-point-functions #'cape-ispell)
-    (add-to-list 'completion-at-point-functions #'cape-dict)
-    (add-to-list 'completion-at-point-functions #'cape-symbol)
+    ;; (add-to-list 'completion-at-point-functions #'cape-symbol)
     ;; (add-to-list 'completion-at-point-functions #'cape-line)
     )
 #+end_src
@@ -1030,11 +1030,11 @@ This snippet adds a hook to =org-mode= buffers so that =gunner/org-babel-tangle-
     (corfu-cycle t)                ;; Enable cycling for `corfu-next/previous'
     (corfu-auto t)                 ;; Enable auto completion
     (corfu-quit-at-boundary nil)   ;; Never quit at completion boundary
-    (corfu-quit-no-match nil)      ;; Never quit, even if there is no match
+    ;; (corfu-quit-no-match nil)      ;; Never quit, even if there is no match
     (corfu-preview-current nil)    ;; Disable current candidate preview
     (corfu-preselect-first nil)    ;; Disable candidate preselection
     ;; (corfu-on-exact-match nil)     ;; Configure handling of exact matches
-    ;; (corfu-echo-documentation nil) ;; Disable documentation in the echo area
+    (corfu-echo-documentation t) ;; Disable documentation in the echo area
     ;; (corfu-scroll-margin 5)        ;; Use scroll margin
 
     ;; You may want to enable Corfu only for certain modes.
@@ -1101,6 +1101,18 @@ This snippet adds a hook to =org-mode= buffers so that =gunner/org-babel-tangle-
     ;; Enable indentation+completion using the TAB key.
     ;; `completion-at-point' is often bound to M-TAB.
     (setq tab-always-indent 'complete))
+#+end_src
+
+#+RESULTS:
+
+* Kind icon
+#+begin_src emacs-lisp
+(use-package kind-icon
+  :after corfu
+  :custom
+  (kind-icon-default-face 'corfu-default) ; to compute blended backgrounds correctly
+  :config
+  (add-to-list 'corfu-margin-formatters #'kind-icon-margin-formatter))
 #+end_src
 
 * Development 
@@ -1471,11 +1483,21 @@ This snippet adds a hook to =org-mode= buffers so that =gunner/org-babel-tangle-
 
 ** Root directory of my music
 #+begin_src emacs-lisp
-  (setq emms-source-file-default-directory "~/Music")
+  (setq emms-source-file-default-directory (expand-file-name "~/Music/"))
 #+end_src
 
 #+RESULTS:
 : ~/Music/My Music
+
+** Emms-Mpd configuration
+#+begin_src emacs-lisp
+  (setq emms-player-mpd-server-name "localhost")
+  (setq emms-player-mpd-server-port "6600")
+  (setq emms-player-mpd-music-directory "~/Music")
+  (add-to-list 'emms-info-functions 'emms-info-mpd)
+  (add-to-list 'emms-player-list 'emms-player-mpd)
+  (emms-player-mpd-connect)
+#+end_src
 
 ** Emms Behaviour
 #+begin_src emacs-lisp
@@ -1926,21 +1948,22 @@ For more thoughts on Eshell, check out these articles by Pierre Neidhardt:
   (setq elfeed-db-directory "~/Dropbox/elfeeddb")
   (use-package elfeed
     :straight t
+    :commands (elfeed)
     :bind (:map elfeed-search-mode-map
                 ("q" . bjm/elfeed-save-db-and-bury)
                 ("Q" . bjm/elfeed-save-db-and-bury))
     :config
     (setq elfeed-search-feed-face ":foreground #fff :weight bold")
-    (global-set-key (kbd "C-x w") 'elfeed))
+    )
 #+end_src
 
 ** Elfeed Org
 #+begin_src emacs-lisp
   (use-package elfeed-org
-    :init
-    (elfeed-org)
+    :after (elfeed)
     :straight t
     :config
+    (elfeed-org)
     (setq rmh-elfeed-org-files (list "~/Dropbox/elfeed.org")))
 #+end_src
 
@@ -1948,10 +1971,9 @@ For more thoughts on Eshell, check out these articles by Pierre Neidhardt:
 #+begin_src emacs-lisp
   (use-package elfeed-goodies
     :straight t
-    :init
-    (elfeed-goodies/setup)
     :hook (elfeed-show-mode-hook . visual-line-mode)
     :config
+    (elfeed-goodies/setup)
     (setq elfeed-goodies/entry-pane-size 0.5)
     (evil-define-key 'normal elfeed-show-mode-map
       (kbd "J") 'elfeed-goodies/split-show-next

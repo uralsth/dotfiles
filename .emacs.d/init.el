@@ -73,6 +73,9 @@
 (straight-use-package 'winum)
 (straight-use-package 'yasnippet-snippets)
 (straight-use-package 'dabbrev)
+(straight-use-package 'ripgrep)
+(straight-use-package 'rg)
+(straight-use-package 'projectile-ripgrep)
 
 ;; NOTE: If you want to move everything out of the ~/.emacs.d folder
 ;; reliably, set `user-emacs-directory` before loading no-littering!
@@ -781,10 +784,7 @@ same directory as the org-buffer and insert a link to this file."
   (add-to-list 'completion-at-point-functions #'cape-keyword)
   ;;(add-to-list 'completion-at-point-functions #'cape-sgml)
   ;;(add-to-list 'completion-at-point-functions #'cape-rfc1345)
-  (add-to-list 'completion-at-point-functions #'cape-abbrev)
-  (add-to-list 'completion-at-point-functions #'cape-ispell)
-  (add-to-list 'completion-at-point-functions #'cape-dict)
-  (add-to-list 'completion-at-point-functions #'cape-symbol)
+  ;; (add-to-list 'completion-at-point-functions #'cape-symbol)
   ;; (add-to-list 'completion-at-point-functions #'cape-line)
   )
 
@@ -794,11 +794,11 @@ same directory as the org-buffer and insert a link to this file."
   (corfu-cycle t)                ;; Enable cycling for `corfu-next/previous'
   (corfu-auto t)                 ;; Enable auto completion
   (corfu-quit-at-boundary nil)   ;; Never quit at completion boundary
-  (corfu-quit-no-match nil)      ;; Never quit, even if there is no match
+  ;; (corfu-quit-no-match nil)      ;; Never quit, even if there is no match
   (corfu-preview-current nil)    ;; Disable current candidate preview
   (corfu-preselect-first nil)    ;; Disable candidate preselection
   ;; (corfu-on-exact-match nil)     ;; Configure handling of exact matches
-  ;; (corfu-echo-documentation nil) ;; Disable documentation in the echo area
+  (corfu-echo-documentation t) ;; Disable documentation in the echo area
   ;; (corfu-scroll-margin 5)        ;; Use scroll margin
 
   ;; You may want to enable Corfu only for certain modes.
@@ -865,6 +865,13 @@ same directory as the org-buffer and insert a link to this file."
   ;; Enable indentation+completion using the TAB key.
   ;; `completion-at-point' is often bound to M-TAB.
   (setq tab-always-indent 'complete))
+
+(use-package kind-icon
+  :after corfu
+  :custom
+  (kind-icon-default-face 'corfu-default) ; to compute blended backgrounds correctly
+  :config
+  (add-to-list 'corfu-margin-formatters #'kind-icon-margin-formatter))
 
 (defun gunner/lsp-mode-setup ()
   (setq lsp-headerline-breadcrumb-segments '(path-up-to-project file symbols))
@@ -1367,26 +1374,26 @@ same directory as the org-buffer and insert a link to this file."
 (setq elfeed-db-directory "~/Dropbox/elfeeddb")
 (use-package elfeed
   :straight t
+  :commands (elfeed)
   :bind (:map elfeed-search-mode-map
               ("q" . bjm/elfeed-save-db-and-bury)
               ("Q" . bjm/elfeed-save-db-and-bury))
   :config
   (setq elfeed-search-feed-face ":foreground #fff :weight bold")
-  (global-set-key (kbd "C-x w") 'elfeed))
+  )
 
 (use-package elfeed-org
-  :init
-  (elfeed-org)
+  :after (elfeed)
   :straight t
   :config
+  (elfeed-org)
   (setq rmh-elfeed-org-files (list "~/Dropbox/elfeed.org")))
 
 (use-package elfeed-goodies
   :straight t
-  :init
-  (elfeed-goodies/setup)
   :hook (elfeed-show-mode-hook . visual-line-mode)
   :config
+  (elfeed-goodies/setup)
   (setq elfeed-goodies/entry-pane-size 0.5)
   (evil-define-key 'normal elfeed-show-mode-map
     (kbd "J") 'elfeed-goodies/split-show-next
