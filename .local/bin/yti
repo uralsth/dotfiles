@@ -1,0 +1,7 @@
+
+#!/bin/sh
+
+cbtext=$(xclip -o -selection clipboard)
+
+output=$(youtube-dl --get-id "$cbtext" )
+echo "$output" | xclip -selection clipboard
