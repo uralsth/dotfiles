@@ -1123,7 +1123,14 @@ same directory as the org-buffer and insert a link to this file."
   (emms-all)
   (emms-default-players))
 
-(setq emms-source-file-default-directory "~/Music")
+(setq emms-source-file-default-directory (expand-file-name "~/Music/"))
+
+(setq emms-player-mpd-server-name "localhost")
+(setq emms-player-mpd-server-port "6600")
+(setq emms-player-mpd-music-directory "~/Music")
+(add-to-list 'emms-info-functions 'emms-info-mpd)
+(add-to-list 'emms-player-list 'emms-player-mpd)
+(emms-player-mpd-connect)
 
 (setq emms-info-asynchronously nil)
 (setq emms-playlist-buffer-name "*Music*")
