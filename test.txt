@@ -1,0 +1,11 @@
+Namaskar hajur.
+
+Git is a tool used by developers to manage version control of their applications. 
+It is highly popular and used by many important projects such as GNOME and others. 
+It is also a fairly efficient application. One of the most important functions of Git
+ is the control of branches of development that help improve the creation of a project.
+ That’s why in this tutorial, we’ll show you how to use Git branches. Any project, including 
+one based on a VPS, will definitely benefit from this great feature.
+
+
+(Testing)
