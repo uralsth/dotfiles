@@ -22,7 +22,7 @@ set clipboard+=unnamedplus  " Copy/paste between vim and other programs
 
 :imap <C-g> <Esc>
 
-set timeoutlen=100
+set timeoutlen=200
 
 set mouse=a             " Mouse Scrolling
 
