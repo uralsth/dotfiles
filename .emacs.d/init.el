@@ -793,7 +793,7 @@ same directory as the org-buffer and insert a link to this file."
   :custom
   (corfu-cycle t)                ;; Enable cycling for `corfu-next/previous'
   (corfu-auto t)                 ;; Enable auto completion
-  (corfu-quit-at-boundary nil)   ;; Never quit at completion boundary
+  (corfu-quit-at-boundary t)   ;; Never quit at completion boundary
   ;; (corfu-quit-no-match nil)      ;; Never quit, even if there is no match
   (corfu-preview-current nil)    ;; Disable current candidate preview
   (corfu-preselect-first nil)    ;; Disable candidate preselection
@@ -1425,34 +1425,95 @@ same directory as the org-buffer and insert a link to this file."
   (elfeed-db-save)
   (quit-window))
 
+(setq browse-url-generic-program (executable-find "firefox")
+      browse-url-browser-function 'browse-url-generic
+      browse-url-generic-args '("-private-window"))
+(use-package engine-mode
+  :init
+  (engine-mode t)
+  :config
+  (engine/set-keymap-prefix (kbd "C-x e"))
+
+  ;; Search Engine
+  (defengine duckduckgo
+    "https://duckduckgo.com/?q=%s"
+    :keybinding "d")
+
+  (defengine github
+    "https://github.com/search?ref=simplesearch&q=%s"
+    :keybinding "g")
+
+  (defengine google-maps
+    "http://maps.google.com/maps?q=%s"
+    :docstring "Mappin' it up."
+    :keybinding "m")
+
+  (defengine project-gutenberg
+    "http://www.gutenberg.org/ebooks/search/?query=%s"
+    :keybinding "b")
+
+  (defengine stack-overflow
+    "https://stackoverflow.com/search?q=%s"
+    :keybinding "s")
+
+  (defengine youtube
+    "http://www.youtube.com/results?aq=f&oq=&search_query=%s"
+    :keybinding "y")
+
+  (defengine wolfram-alpha
+    "http://www.wolframalpha.com/input/?i=%s"
+    :keybinding "x")
+
+  (defengine twitter
+    "https://twitter.com/search?q=%s"
+    :keybinding "t")
+
+  (defengine archwiki
+    "https://wiki.archlinux.org/?search=%s"
+    :keybinding "a")
+
+  (defengine urbandictionary
+    "https://www.urbandictionary.com/define.php?term=%s"
+    :keybinding "u")
+
+  (defengine invidious
+    "https://invidious.flokinet.to/search?q=%s"
+    :keybinding "i")
+
+  (defengine wikipedia
+    "http://www.wikipedia.org/search-redirect.php?language=en&go=Go&search=%s"
+    :keybinding "w"
+    :docstring "Searchin' the wikis.")
+  )
+
 (use-package dired
-:straight nil
-:commands (dired dired-jump)
-:bind (("C-x C-j" . dired-jump))
-:custom ((dired-listing-switches "-agho --group-directories-first"))
-:config
-(evil-collection-define-key 'normal 'dired-mode-map
+  :straight nil
+  :commands (dired dired-jump)
+  :bind (("C-x C-j" . dired-jump))
+  :custom ((dired-listing-switches "-agho --group-directories-first"))
+  :config
+  (evil-collection-define-key 'normal 'dired-mode-map
     "h" 'dired-single-up-directory
     "l" 'dired-single-buffer))
 
 (use-package dired-single
-:commands (dired dired-jump))
+  :commands (dired dired-jump))
 
 (use-package all-the-icons-dired
-:hook (dired-mode . all-the-icons-dired-mode))
+  :hook (dired-mode . all-the-icons-dired-mode))
 
 (use-package dired-open
-:commands (dired dired-jump)
-:config
-;; Doesn't work as expected!
-;;(add-to-list 'dired-open-functions #'dired-open-xdg t)
-(setq dired-open-extensions '(("png" . "nsxiv")
+  :commands (dired dired-jump)
+  :config
+  ;; Doesn't work as expected!
+  ;;(add-to-list 'dired-open-functions #'dired-open-xdg t)
+  (setq dired-open-extensions '(("png" . "nsxiv")
                                 ("mkv" . "mpv"))))
 
 (use-package dired-hide-dotfiles
-:hook (dired-mode . dired-hide-dotfiles-mode)
-:config
-(evil-collection-define-key 'normal 'dired-mode-map
+  :hook (dired-mode . dired-hide-dotfiles-mode)
+  :config
+  (evil-collection-define-key 'normal 'dired-mode-map
     "H" 'dired-hide-dotfiles-mode))
 
 ;; Make gc pauses faster by decreasing the threshold.
