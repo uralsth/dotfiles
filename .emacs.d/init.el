@@ -43,6 +43,7 @@
 (straight-use-package 'consult)
 (straight-use-package 'marginalia)
 (straight-use-package 'evil)
+(straight-use-package 'openwith)
 (straight-use-package 'orderless)
 (straight-use-package 'savehist)
 (straight-use-package 'which-key)
@@ -76,6 +77,7 @@
 (straight-use-package 'ripgrep)
 (straight-use-package 'rg)
 (straight-use-package 'projectile-ripgrep)
+(straight-use-package 'htmlize)
 
 (server-start)
 
@@ -165,6 +167,7 @@
   (setq evil-want-keybinding nil)
   (setq evil-want-C-u-scroll t)
   (setq evil-want-C-i-jump nil)
+  (setq evil-respect-visual-line-mode t)
   (setq forge-add-default-bindings nil)
   ;;(evil-set-undo-system 'undo-tree)
   :config
@@ -478,6 +481,68 @@ targets."
 (gunner/leader-keys
   "s" '(hydra-scale-text/body :which-key "Text Scaling"))
 
+;; frame step forward
+(with-eval-after-load 'mpv
+  (defun mpv-frame-step ()
+    "Step one frame forward."
+    (interactive)
+    (mpv--enqueue '("frame-step") #'ignore)))
+
+
+;; frame step backward
+(with-eval-after-load 'mpv
+  (defun mpv-frame-back-step ()
+    "Step one frame backward."
+    (interactive)
+    (mpv--enqueue '("frame-back-step") #'ignore)))
+
+
+;; mpv take a screenshot
+(with-eval-after-load 'mpv
+  (defun mpv-screenshot ()
+    "Take a screenshot"
+    (interactive)
+    (mpv--enqueue '("screenshot") #'ignore)))
+
+
+;; mpv show osd
+(with-eval-after-load 'mpv
+  (defun mpv-osd ()
+    "Show the osd"
+    (interactive)
+    (mpv--enqueue '("set_property" "osd-level" "3") #'ignore)))
+
+
+;; add a newline in the current document
+(defun end-of-line-and-indented-new-line ()
+  (interactive)
+  (end-of-line)
+  (newline-and-indent))
+
+
+;; hydra --------------------------------------------------------------------------------------------------
+
+(defhydra hydra-mpv (:color red)
+  ("h" mpv-seek-backward "seek back -5" :column "Seek")
+  ("j" mpv-seek-backward "seek back -60")
+  ("k" mpv-seek-forward "seek forward 60")
+  ("l" mpv-seek-forward "seek forward 5")
+  ("," mpv-frame-back-step "back frame" :column "Actions")
+  ("." mpv-frame-step "forward frame")
+  ("SPC" mpv-pause "pause")
+  ("q" mpv-kill "quit mpv")
+  ("p" mpv-play "play")
+  ("s" mpv-screenshot "Screenshots" :column "General")
+  ("i" my/mpv-insert-playback-position "insert playback position")
+  ("o" mpv-osd "show the osd")
+  ("n" end-of-line-and-indented-new-line "insert a newline")
+  ("|" nil "quit menu" :color blue :column nil)
+  )
+
+
+(gunner/leader-keys
+  "m" '(hydra-mpv/body :which-key "Mpv control"))
+
 (defun gunner/org-mode-setup ()
   (org-indent-mode)
   (variable-pitch-mode 1)
@@ -763,6 +828,10 @@ same directory as the org-buffer and insert a link to this file."
   (org-tree-slide-breadcrumbs " > ")
   (org-image-actual-width nil))
 
+(use-package ox-reveal
+  :config
+  (setq org-reveal-root "https://cdn.jsdelivr.net/npm/reveal.js"))
+
 ;; Add extensions
 (use-package cape
   ;; Bind dedicated completion commands
@@ -872,6 +941,75 @@ same directory as the org-buffer and insert a link to this file."
   (kind-icon-default-face 'corfu-default) ; to compute blended backgrounds correctly
   :config
   (add-to-list 'corfu-margin-formatters #'kind-icon-margin-formatter))
+
+(use-package keycast
+  :config
+  ;; This works with doom-modeline, inspired by this comment:
+  ;; https://github.com/tarsius/keycast/issues/7#issuecomment-627604064
+  (define-minor-mode keycast-mode
+    "Show current command and its key binding in the mode line."
+    :global t
+    (if keycast-mode
+        (add-hook 'pre-command-hook 'keycast--update t)
+        (remove-hook 'pre-command-hook 'keycast--update)))
+
+  (add-to-list 'global-mode-string '("" keycast-mode-line " ")))
+
+(use-package avy
+  :config
+  (gunner/leader-keys
+   "j"   '(:ignore t :which-key "jump")
+   "jj"  '(avy-goto-char :which-key "jump to char")
+   "jw"  '(avy-goto-word-0 :which-key "jump to word")
+   "jl"  '(avy-goto-line :which-key "jump to line")))
+
+(use-package popper
+  :ensure t ; or :straight t
+  :bind (("C-`"   . popper-toggle-latest)
+         ("M-`"   . popper-cycle)
+         ("C-M-`" . popper-toggle-type))
+  :init
+  (setq popper-reference-buffers
+        '("\\*Messages\\*"
+          "Output\\*$"
+          "\\*Async Shell Command\\*"
+          "^\\*vterm.*\\*$"  vterm-mode
+          help-mode
+          compilation-mode))
+  (popper-mode +1)
+  (popper-echo-mode +1)
+  :config
+  (setq popper-group-function #'popper-group-by-projectile)
+  (setq popper-window-height 12)
+  )
+
+(use-package mpv
+  :init
+  )
+
+(use-package openwith
+  :custom
+  (setq openwith-associations
+        (list
+         (list (openwith-make-extension-regexp
+                '("mpg" "mpeg" "mp3" "mp4"
+                  "avi" "wmv" "wav" "mov" "flv"
+                  "ogm" "ogg" "mkv"))
+               "mpv"
+               '(file))
+         (list (openwith-make-extension-regexp
+                '("xbm" "pbm" "pgm" "ppm" "pnm"
+                  "png" "gif" "bmp" "tif" "jpeg")) ;; Removed jpg because Telega was
+               ;; causing feh to be opened...
+               "nsxiv"
+               '(file))
+         (list (openwith-make-extension-regexp
+                '("pdf"))
+               "zathura"
+               '(file))))
+  :init
+  (openwith-mode)
+  )
 
 (defun gunner/lsp-mode-setup ()
   (setq lsp-headerline-breadcrumb-segments '(path-up-to-project file symbols))
@@ -1099,12 +1237,20 @@ same directory as the org-buffer and insert a link to this file."
 (use-package dictionary
   :straight t)
 
+(use-package mw-thesaurus
+  :straight t
+  :defer t
+  :config
+  (setq mw-thesaurus--api-key "67d977d5-790b-412e-a547-9dbcc2bcd525")
+  (add-hook 'mw-thesaurus-mode-hook (lambda () (define-key evil-normal-state-local-map (kbd "q") 'mw-thesaurus--quit)))
+  )
+
 (use-package powerthesaurus
   :straight t)
 
 (use-package winum
   :bind (:map winum-keymap
-              ("C-`" . winum-select-window-by-number)
+              ("C-~" . winum-select-window-by-number)
               ("C-²" . winum-select-window-by-number)
               ("M-9" . winum-select-window-0-or-10)
               ("M-1" . winum-select-window-1)
@@ -1159,6 +1305,8 @@ same directory as the org-buffer and insert a link to this file."
 ;; Or if you use use-package
 (use-package dashboard
   :straight t
+  :init
+  (openwith-mode -1)
   :config
   (dashboard-setup-startup-hook)
 
@@ -1377,6 +1525,58 @@ same directory as the org-buffer and insert a link to this file."
 
   (mu4e t))
 
+;;functions to support syncing .elfeed between machines
+;;makes sure elfeed reads index from disk before launching
+(defun bjm/elfeed-load-db-and-open ()
+  "Wrapper to load the elfeed db from disk before opening"
+  (interactive)
+  (elfeed)
+  (elfeed-db-load)
+  (elfeed-search-update--force)
+  (elfeed-update))
+
+;;write to disk when quiting
+(defun bjm/elfeed-save-db-and-bury ()
+  "Wrapper to save the elfeed db to disk before burying buffer"
+  (interactive)
+  (elfeed-db-save)
+  (quit-window))
+
+(defun yt-dl-it (url)
+  "Downloads the URL in an async shell"
+  (let ((default-directory "~/Videos"))
+    (async-shell-command (format "youtube-dl %s" url))))
+
+(defun mpv-it (url)
+  "Play the URL in an async shell"
+  (let ((default-directory "~/Videos"))
+    (async-shell-command (format "mpv %s" url))))
+
+(defun elfeed-youtube-dl (&optional use-generic-p)
+  "Youtube-DL link"
+  (interactive "P")
+  (let ((entries (elfeed-search-selected)))
+    (cl-loop for entry in entries
+             do (elfeed-untag entry 'unread)
+             when (elfeed-entry-link entry)
+             do (yt-dl-it it))
+    (mapc #'elfeed-search-update-entry entries)
+    (unless (use-region-p) (forward-line))))
+
+(defun elfeed-mpv (&optional use-generic-p)
+  "mpv link"
+  (interactive "P")
+  (let ((entries (elfeed-search-selected)))
+    (cl-loop for entry in entries
+             do (elfeed-untag entry 'unread)
+             when (elfeed-entry-link entry)
+             do (mpv-it it))
+    (mapc #'elfeed-search-update-entry entries)
+    (unless (use-region-p) (forward-line))))
+
+(define-key elfeed-search-mode-map (kbd "d") 'elfeed-youtube-dl)
+(define-key elfeed-search-mode-map (kbd "D") 'elfeed-mpv)
+
 (setq elfeed-db-directory "~/Dropbox/elfeeddb")
 (use-package elfeed
   :straight t
@@ -1400,30 +1600,25 @@ same directory as the org-buffer and insert a link to this file."
   :hook (elfeed-show-mode-hook . visual-line-mode)
   :config
   (elfeed-goodies/setup)
-  (setq elfeed-goodies/entry-pane-size 0.5)
+  (setq elfeed-goodies/entry-pane-size 0.8)
+  (setq elfeed-goodies/entry-pane-position 'top)
   (evil-define-key 'normal elfeed-show-mode-map
     (kbd "J") 'elfeed-goodies/split-show-next
     (kbd "K") 'elfeed-goodies/split-show-prev)
   (evil-define-key 'normal elfeed-search-mode-map
     (kbd "J") 'elfeed-goodies/split-show-next
     (kbd "K") 'elfeed-goodies/split-show-prev)
+  (setq elfeed-goodies/search-header '((:left  ((:feed-name . 9)
+                                                (:tags . 12)
+                                                (:entry-title . 20))
+                                               :right ((:filter . 0)
+                                                       (:status . 0)
+                                                       )
+                                               )))
+  ;; (setq elfeed-goodies/search-header '((:feed-name) (:tags) (:entry-title)
+  ;;                                      (:empty . :fill)
+  ;;                                      (:filter) (:status) (:db-date)))
   )
-
-;;functions to support syncing .elfeed between machines
-;;makes sure elfeed reads index from disk before launching
-(defun bjm/elfeed-load-db-and-open ()
-  "Wrapper to load the elfeed db from disk before opening"
-  (interactive)
-  (elfeed-db-load)
-  (elfeed)
-  (elfeed-search-update--force))
-
-;;write to disk when quiting
-(defun bjm/elfeed-save-db-and-bury ()
-  "Wrapper to save the elfeed db to disk before burying buffer"
-  (interactive)
-  (elfeed-db-save)
-  (quit-window))
 
 (setq browse-url-generic-program (executable-find "firefox")
       browse-url-browser-function 'browse-url-generic
