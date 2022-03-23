@@ -865,7 +865,7 @@ same directory as the org-buffer and insert a link to this file."
   (corfu-quit-at-boundary t)   ;; Never quit at completion boundary
   ;; (corfu-quit-no-match nil)      ;; Never quit, even if there is no match
   (corfu-preview-current nil)    ;; Disable current candidate preview
-  (corfu-preselect-first nil)    ;; Disable candidate preselection
+  (corfu-preselect-first t)    ;; Disable candidate preselection
   ;; (corfu-on-exact-match nil)     ;; Configure handling of exact matches
   (corfu-echo-documentation t) ;; Disable documentation in the echo area
   ;; (corfu-scroll-margin 5)        ;; Use scroll margin
@@ -1206,6 +1206,22 @@ same directory as the org-buffer and insert a link to this file."
 
 (add-hook 'c-mode-hook 'lsp)
 (add-hook 'c++-mode-hook 'lsp)
+
+(use-package dumb-jump
+  :straight t)
+
+(defhydra hydra-dumb-jump (:color pink :columns 3)
+  "Dumb Jump"
+  ("g" dumb-jump-go "Go")
+  ("o" dumb-jump-go-other-window "Other window")
+  ("b" dumb-jump-back "Back")
+  ("l" dumb-jump-quick-look "Look")
+  ("e" dumb-jump-go-prefer-external "External")
+  ("x" dumb-jump-go-prefer-external-other-window "Go external other window")
+  ("q" nil "Quit" :color blue))
+
+(gunner/leader-keys
+  "d" '(hydra-dumb-jump/body :which-key "Dumb Jump"))
 
 (use-package flyspell-correct
   :bind ("C-M-," . flyspell-correct-at-point)
@@ -1574,8 +1590,8 @@ same directory as the org-buffer and insert a link to this file."
     (mapc #'elfeed-search-update-entry entries)
     (unless (use-region-p) (forward-line))))
 
-(define-key elfeed-search-mode-map (kbd "d") 'elfeed-youtube-dl)
-(define-key elfeed-search-mode-map (kbd "D") 'elfeed-mpv)
+;; (define-key elfeed-search-mode-map (kbd "d") 'elfeed-youtube-dl)
+;; (define-key elfeed-search-mode-map (kbd "D") 'elfeed-mpv)
 
 (setq elfeed-db-directory "~/Dropbox/elfeeddb")
 (use-package elfeed
