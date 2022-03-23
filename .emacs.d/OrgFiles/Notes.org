@@ -141,7 +141,26 @@ jjguy9439@gmail.com:Wjdwhdrb1!
 CLOCK: [2022-03-13 Sun 06:00]--[2022-03-13 Sun 06:00] =>  0:00
 :END:
 
-* Mount usb
+*** 2022-03-22 Tuesday
+
+**** 07:27 AM - Notes                                              :notes:
+:LOGBOOK:
+CLOCK: [2022-03-22 Tue 07:27]--[2022-03-22 Tue 07:28] =>  0:01
+:END:
+
+**** 07:28 AM - Notes                                              :notes:
+:LOGBOOK:
+CLOCK: [2022-03-22 Tue 07:28]--[2022-03-22 Tue 07:31] =>  0:03
+:END:
+
+**** 07:31 AM - Notes                                              :notes:
+:LOGBOOK:
+CLOCK: [2022-03-22 Tue 07:31]--[2022-03-22 Tue 07:31] =>  0:00
+:END:
+
+ FH 33, WC 35, BB 36?
+
+** Mount usb
 
 ** mount -o gid=users,fmask=113,dmask=002 /dev/sda1 /mnt/usbstick
 
