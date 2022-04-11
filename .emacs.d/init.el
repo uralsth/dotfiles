@@ -60,6 +60,8 @@
 (straight-use-package 'lsp-treemacs)
 (straight-use-package 'dap-mode)
 (straight-use-package 'pyvenv)
+(straight-use-package 'django-mode)
+(straight-use-package 'django-snippets)
 (straight-use-package 'lsp-pyright)
 (straight-use-package 'company)
 (straight-use-package 'company-box)
@@ -832,10 +834,15 @@ targets."
 	  ("tt" "Task" entry (file+olp "~/.emacs.d/OrgFiles/Tasks.org" "Inbox")
 	   "* TODO %?\n  %U\n  %a\n  %i" :empty-lines 1)
 
-	  ("r" "Randmon Notes")
+	  ("r" "Randmon")
 	  ("rn" "Notes" entry
 	   (file+olp+datetree "~/.emacs.d/OrgFiles/Notes.org")
 	   "\n* %<%I:%M %p> - Notes :notes:\n\n%?\n\n"
+	   :clock-in :clock-resume
+	   :empty-lines 1)
+	  ("rq" "Questions" entry
+	   (file+olp+datetree "~/.emacs.d/OrgFiles/Questions..org")
+	   "\n* %<%I:%M %p> - Questions:questions:\n\n%?\n\n"
 	   :clock-in :clock-resume
 	   :empty-lines 1)
 	  ("j" "Journal Entries")
@@ -1289,6 +1296,14 @@ same directory as the org-buffer and insert a link to this file."
 ;;     (add-to-list 'lsp-disabled-clients 'pyls)
 ;;     (add-to-list 'lsp-enabled-clients 'jedi)))
 
+(use-package django-mode
+  :straight t
+  :defer 40)
+
+(use-package djangonaut
+  :straight t
+  :defer 42)
+
 (use-package lsp-pyright
   :straight t
   :after python-mode
@@ -1682,6 +1697,32 @@ same directory as the org-buffer and insert a link to this file."
           (lambda ()
             (define-key global-map (kbd "C-c t") telega-prefix-map)))
 
+(use-package mu4e
+    :ensure nil
+    ;; :load-path "/usr/share/emacs/site-lisp/mu4e/"
+    ;; :defer 20 ; Wait until 20 seconds after startup
+    :config
+
+    ;; This is set to 't' to avoid mail syncing issues when using mbsync
+    (setq mu4e-change-filenames-when-moving t)
+
+    ;; Refresh mail using isync every 10 minutes
+    (setq mu4e-update-interval (* 10 60))
+    (setq mu4e-get-mail-command "mbsync -a")
+    (setq mu4e-maildir "~/.mail")
+
+    (setq mu4e-drafts-folder "/gmail/[Gmail]/Drafts")
+    (setq mu4e-sent-folder   "/gmail/[Gmail]/Sent Mail")
+    (setq mu4e-refile-folder "/gmail/[Gmail]/All Mail")
+    (setq mu4e-trash-folder  "/gmail/[Gmail]/Trash")
+
+(setq mu4e-maildir-shortcuts
+    '((:maildir "/gmail/Inbox"    :key ?i)
+      (:maildir "/gmail/[Gmail]/Sent Mail" :key ?s)
+      (:maildir "/gmail/[Gmail]/Trash"     :key ?t)
+      (:maildir "/gmail/[Gmail]/Drafts"    :key ?d)
+      (:maildir "/gmail/[Gmail]/All Mail"  :key ?a))))
+
 (use-package tracking
   :defer t
   :config
@@ -1697,35 +1738,6 @@ same directory as the org-buffer and insert a link to this file."
       erc-autojoin-channels-alist '(("irc-libera.chat" "#systemcrafters" "##soccers"))
       erc-kill-buffer-on-part t
       erc-auto-query 'bury)
-
-(use-package mu4e
-  :straight nil
-  ;; :load-path "/usr/share/emacs/site-lisp/mu4e/"
-  :defer 120 ; Wait until 20 seconds after startup
-  :config
-
-  ;; This is set to 't' to avoid mail syncing issues when using mbsync
-  (setq mu4e-change-filenames-when-moving t)
-
-  ;; Refresh mail using isync every 10 minutes
-  (setq mu4e-update-interval (* 10 60))
-  (setq mu4e-get-mail-command "mbsync -a")
-  (setq mu4e-maildir "~/Mail")
-
-  (setq mu4e-drafts-folder "/[Gmail]/Drafts")
-  (setq mu4e-sent-folder   "/[Gmail]/Sent Mail")
-  (setq mu4e-refile-folder "/[Gmail]/All Mail")
-  (setq mu4e-trash-folder  "/[Gmail]/Trash")
-
-
-  (setq mu4e-maildir-shortcuts
-        '((:maildir "/Inbox"    :key ?i)
-          (:maildir "/[Gmail]/Sent Mail" :key ?s)
-          (:maildir "/[Gmail]/Trash"     :key ?t)
-          (:maildir "/[Gmail]/Drafts"    :key ?d)
-          (:maildir "/[Gmail]/All Mail"  :key ?a)))
-
-  (mu4e t))
 
 ;;functions to support syncing .elfeed between machines
 ;;makes sure elfeed reads index from disk before launching
