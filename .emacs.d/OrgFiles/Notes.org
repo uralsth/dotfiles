@@ -160,7 +160,27 @@ CLOCK: [2022-03-22 Tue 07:31]--[2022-03-22 Tue 07:31] =>  0:00
 
  FH 33, WC 35, BB 36?
 
-** Mount usb
+*** 2022-03-24 Thursday
 
-** mount -o gid=users,fmask=113,dmask=002 /dev/sda1 /mnt/usbstick
+**** 04:50 PM - Notes                                              :notes:
+:LOGBOOK:
+CLOCK: [2022-03-24 Thu 16:50]--[2022-03-24 Thu 16:50] =>  0:00
+:END:
+
+***** To include math library
+gcc/g++  filename -lm
+
+***** Mount usb
+mount -o gid=users,fmask=113,dmask=002 /dev/sda1 /mnt/usbstick
+
+** 2022-04 April
+
+*** 2022-04-10 Sunday
+
+**** 08:36 AM - Notes                                              :notes:
+:LOGBOOK:
+CLOCK: [2022-04-10 Sun 08:36]--[2022-04-10 Sun 08:36] =>  0:00
+:END:
+
+***** first-of-type and last-of-type
 
