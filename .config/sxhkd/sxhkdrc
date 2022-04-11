@@ -7,6 +7,8 @@ super + r
       dm-websearch
 super + q
       firefox
+super + shift + f
+      firefox -private-window
 super + control + q
       qutebrowser
 super + e
