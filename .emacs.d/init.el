@@ -123,8 +123,6 @@
   (add-hook mode (lambda () (display-line-numbers-mode 0))))
 
 (setq display-line-numbers-type 'relative)
-;; (defun eshell-mode-hook-func ()
-;; (setq eshell-path-env (concat "/usr/local/bin:" eshell-path-env))
 (setenv "PATH" (concat (getenv "PATH") ":/home/ural/.local/bin"))
 
 ;; (add-hook 'eshell-mode-hook 'eshell-mode-hook-func)
@@ -958,6 +956,18 @@ same directory as the org-buffer and insert a link to this file."
 (use-package org-download
   :hook (dired-mode-hook . org-download-enable))
 
+(use-package org-pomodoro
+  :straight t
+  :commands (org-pomodoro)
+  :config
+  (setq
+   org-pomodoro-length 25
+   org-pomodoro-short-break-length 5
+   org-pomodoro-start-sound-p nil
+   org-pomodoro-finished-sound-p nil
+   org-pomodoro-clock-break t)
+  (setq alert-user-configuration (quote ((((:category . "org-pomodoro")) libnotify nil)))))
+
 (use-package org-roam
   :straight t
   :init
@@ -1203,6 +1213,24 @@ same directory as the org-buffer and insert a link to this file."
   :init
   (openwith-mode)
   )
+
+(use-package pomidor
+  :straight t
+  :bind (("<f12>" . pomidor))
+  :config
+  (setq pomidor-sound-tick nil
+        pomidor-sound-tack nil)
+  (setq alert-default-style 'libnotify)
+  (setq pomidor-seconds (* 25 60)) ; 25 minutes for the work period
+  (setq pomidor-break-seconds (* 5 60)) ; 5 minutes break time
+  (setq pomidor-breaks-before-long 4) ; wait 4 short breaks before long break
+  (setq pomidor-long-break-seconds (* 20 60)) ; 20 minutes long break time
+  :hook (pomidor-mode . (lambda ()
+                          (display-line-numbers-mode -1) ; Emacs 26.1+
+                          (setq left-fringe-width 0 right-fringe-width 0)
+                          (setq left-margin-width 2 right-margin-width 0)
+                          ;; force fringe update
+                          (set-window-buffer nil (current-buffer)))))
 
 (defun gunner/lsp-mode-setup ()
   (setq lsp-headerline-breadcrumb-segments '(path-up-to-project file symbols))
