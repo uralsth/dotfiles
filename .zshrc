@@ -301,5 +301,5 @@ ex=🎯:\
 *.java=♨:\
 "
 
-export JAVA_HOME='/usr/lib/jvm/java-8-openjdk'
-export PATH=$JAVA_HOME/bin:$PATH 
+export JAVA_HOME=/usr/lib64/jvm/java-8-openjdk
+export PATH=$JAVA_HOME/bin:$PATH
