@@ -5,6 +5,10 @@ export TERM="xterm-256color"
 export EDITOR="emacsclient -t -a ''"              # $EDITOR use Emacs in terminal
 export VISUAL="emacsclient -c -a emacs"           # $VISUAL use Emacs in GUI mode
 
+# Cleaning up my home folder
+export CARGO_HOME="$XDG_DATA_HOME"/cargo
+export GOPATH="$XDG_DATA_HOME"/go
+
 ### PATH
 if [ -d "$HOME/.bin" ] ;
   then PATH="$HOME/.bin:$PATH"

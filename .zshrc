@@ -20,6 +20,14 @@ export sudoedit="nvim"
 export NEXTCLOUD_PHP_CONFIG=/etc/webapps/nextcloud/php.ini
 
 
+# Cleaning up my home folder
+export CARGO_HOME="$XDG_DATA_HOME"/cargo
+export GOPATH="$XDG_DATA_HOME"/go
+
+# Flutter path
+export PATH="$PATH:/home/ural/Programs/flutter/bin"
+
+
 # Basic auto/tab complete:
 autoload -U compinit
 zstyle ':completion:*' menu select
