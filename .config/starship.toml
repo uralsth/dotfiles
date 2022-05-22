@@ -19,6 +19,9 @@ format = "[$path]($style)[$lock_symbol]($lock_style) "
 [python]
 disabled= true
 
+[nodejs]
+disabled= true
+
 [rust]
 disabled= true
 
