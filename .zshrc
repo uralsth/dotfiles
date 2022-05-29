@@ -220,6 +220,9 @@ eval "$(starship init zsh)"
 # Bitwarden Zsh Completion
 eval "$(bw completion --shell zsh); compdef _bw bw;"
 
+# Thfuck
+eval $(thefuck --alias)
+
 # Pretty-print man(1) pages.
 export LESS_TERMCAP_mb=$'\E[1;31m'
 export LESS_TERMCAP_md=$'\E[1;31m'
