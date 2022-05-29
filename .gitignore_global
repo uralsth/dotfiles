@@ -9,3 +9,6 @@ cask/
 .emacs.d/.last*
 NERDTree/
 plugged/
+error.log
+autoconfig.yml
+QtProject.conf
