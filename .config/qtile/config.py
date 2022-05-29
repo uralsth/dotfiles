@@ -12,7 +12,6 @@ terminal = "st"
 # Autostart hook
 @hook.subscribe.startup_once
 def autostart():
-    home = os.path.expanduser('~')
     subprocess.Popen([home + '/.config/qtile/scripts/autostart.sh'])
 
 keys = [
