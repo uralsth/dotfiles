@@ -141,8 +141,10 @@ alias ytv-best="youtube-dl -f bestvideo+bestaudio "
 alias randreset='autorandr --load mobile && autorandr --load docked'
 
 
-# Changing lf to lfrun
+# lf aliases
 alias lf='lfub'
+alias lfs='lf /media/Series'
+alias lfm='lf /media/Movies'
 
 
 ### Function extract for common file formats ###
