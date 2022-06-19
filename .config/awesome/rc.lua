@@ -345,6 +345,10 @@ globalkeys = mytable.join(
     awful.key({ }, "XF86MonBrightnessUp", function ()
 	  awful.util.spawn("brightnessctl set +5%") end),
 
+    -- Power management
+    awful.key({ }, "XF86PowerOff", function ()
+	  awful.util.spawn("rofi -show power-menu -modi power-menu:rofi-power-menu") end),
+
    -- Player manipulation 
     awful.key({ }, "XF86AudioPrev", function ()
 	  awful.util.spawn("playerctl previous") end),
