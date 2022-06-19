@@ -28,6 +28,8 @@ super + shift + alt + c
 super + period
       splatmoji type
 super + shift + period
-      splatmoji type
+      splatmoji copy
 super + z
       zathura 
+super + c
+      clipmenu
