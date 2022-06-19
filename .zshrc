@@ -19,6 +19,12 @@ export EXA_ICON_SPACING=2
 export sudoedit="nvim"
 export NEXTCLOUD_PHP_CONFIG=/etc/webapps/nextcloud/php.ini
 
+# clipboard
+export CM_SELECTIONS="clipboard"
+export CM_DEBUG=0
+export CM_OUTPUT_CLIP=1
+export CM_MAX_CLIP=15
+
 
 # Cleaning up my home folder
 export CARGO_HOME="$XDG_DATA_HOME"/cargo
