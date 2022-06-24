@@ -12,3 +12,5 @@ plugged/
 error.log
 autoconfig.yml
 QtProject.conf
+oldconfig.py
+__pycache__/
