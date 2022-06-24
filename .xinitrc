@@ -12,4 +12,4 @@ redshift-gtk &
 # ~/.fehbg &
 exec awesome 
 # exec dwm
-#exec qtile start
+# exec qtile start
