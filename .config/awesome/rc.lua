@@ -73,12 +73,12 @@ awful.spawn.with_shell(
 
 -- }}}
 
-local chosen_theme = "powerarrow-dark"
+local chosen_theme = "main-theme"
 local modkey       = "Mod4"
 local altkey       = "Mod1"
 local terminal     = "st"
-local vi_focus     = false -- vi-like client focus https://github.com/lcpz/awesome-copycats/issues/275
-local cycle_prev   = true  -- cycle with only the previously focused client or all https://github.com/lcpz/awesome-copycats/issues/274
+local vi_focus     = false
+local cycle_prev   = true  -- cycle with only the previously focused client
 local editor       = os.getenv("EDITOR") or "nvim"
 local browser      = "firefox"
 
@@ -147,6 +147,7 @@ awful.util.tasklist_buttons = mytable.join(
      awful.button({ }, 5, function() awful.client.focus.byidx(-1) end)
 )
 
+-- Iniatilized the theme setting
 beautiful.init(string.format("%s/.config/awesome/themes/%s/theme.lua", os.getenv("HOME"), chosen_theme))
 
 -- }}}
@@ -175,20 +176,20 @@ awful.util.mymainmenu = freedesktop.menu.build {
 
 -- Hide the menu when the mouse leaves it
 -- [[
--- awful.util.mymainmenu.wibox:connect_signal("mouse::leave", function()
---      if not awful.util.mymainmenu.active_child or
---         (awful.util.mymainmenu.wibox ~= mouse.current_wibox and
---         awful.util.mymainmenu.active_child.wibox ~= mouse.current_wibox) then
---          awful.util.mymainmenu:hide()
---      else
---          awful.util.mymainmenu.active_child.wibox:connect_signal("mouse::leave",
---          function()
---              if awful.util.mymainmenu.wibox ~= mouse.current_wibox then
---                  awful.util.mymainmenu:hide()
---              end
---          end)
---      end
---  end)
+awful.util.mymainmenu.wibox:connect_signal("mouse::leave", function()
+     if not awful.util.mymainmenu.active_child or
+        (awful.util.mymainmenu.wibox ~= mouse.current_wibox and
+        awful.util.mymainmenu.active_child.wibox ~= mouse.current_wibox) then
+         awful.util.mymainmenu:hide()
+     else
+         awful.util.mymainmenu.active_child.wibox:connect_signal("mouse::leave",
+         function()
+             if awful.util.mymainmenu.wibox ~= mouse.current_wibox then
+                 awful.util.mymainmenu:hide()
+             end
+         end)
+     end
+ end)
  --]]
 
 -- Set the Menubar terminal for applications that require it
@@ -224,7 +225,20 @@ screen.connect_signal("arrange", function (s)
 end)
 
 -- Create a wibox for each screen and add it
-awful.screen.connect_for_each_screen(function(s)  beautiful.at_screen_connect(s) end)
+awful.screen.connect_for_each_screen(function(s)
+      beautiful.at_screen_connect(s)
+      my_dropdown = lain.util.quake({
+	    app = "alacritty",
+	    argname = '--class %s',
+	    name = 'dropdownterminal',
+	    height = 0.5,
+	    width = 0.5,
+	    vert = "center",
+	    horiz = "center",
+	    followtag = true,
+	    visible = false
+      })
+end)
 
 -- }}}
 
@@ -252,7 +266,7 @@ globalkeys = mytable.join(
     -- Show help
     awful.key({ modkey,  }, "`",      hotkeys_popup.show_help,
               {description="show help", group="awesome"}),
-
+    awful.key({ modkey, "Shift" }, "z", function () my_dropdown:toggle() end),
     -- Tag browsing
     awful.key({ modkey,           }, "Left",   awful.tag.viewprev,
               {description = "view previous", group = "tag"}),
