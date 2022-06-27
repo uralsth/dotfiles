@@ -729,6 +729,12 @@ awful.rules.rules = {
 		     tag = "2",
       }
     },
+    { rule = { instance = "Toolkit"},
+      properties = { screen = s,
+		     sticky = true,
+		     skip_taskbar = true,
+      }
+    },
 
     -- Set Qutebrowser to always map on the tag named "4" on screen s.
     { rule = { class = "qutebrowser"},
