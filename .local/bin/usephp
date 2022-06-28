@@ -1,0 +1,16 @@
+#!/bin/sh
+[ "$#" -lt "1" ] && {
+  echo "Configure current shell to use a specific major PHP version.
+
+    Usage: usephp 7"
+  exit 0
+}
+binary="php${1}"
+wanted="/usr/bin/${binary}"
+[ ! -f "${wanted}" ] && {
+  echo "'${binary}' not found. Using 'php'."
+  wanted="/usr/bin/php"
+}
+ln -sf "${wanted}" "${HOME}/.local/bin/php"
+inUse=$(php -nr "echo phpversion();")
+echo "Shell configured to use PHP ${inUse}."
