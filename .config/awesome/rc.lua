@@ -227,12 +227,36 @@ end)
 -- Create a wibox for each screen and add it
 awful.screen.connect_for_each_screen(function(s)
       beautiful.at_screen_connect(s)
-      my_dropdown = lain.util.quake({
+      terminal_dropdown = lain.util.quake({
 	    app = "alacritty",
 	    argname = '--class %s',
 	    name = 'dropdownterminal',
 	    height = 0.5,
 	    width = 0.5,
+	    vert = "center",
+	    horiz = "center",
+	    followtag = true,
+	    visible = false
+      })
+      pulsemixer_dropdown = lain.util.quake({
+	    app = "alacritty",
+	    argname = '--class %s',
+	    extra = " -e pulsemixer",
+	    name = 'dropdownpulsemixer',
+	    height = 0.5,
+	    width = 0.5,
+	    vert = "center",
+	    horiz = "center",
+	    followtag = true,
+	    visible = false
+      })
+      ncmpcpp_dropdown = lain.util.quake({
+	    app = "alacritty",
+	    argname = '--class %s',
+	    extra = " -e ncmpcpp",
+	    name = 'ncmpcpppulsemixer',
+	    height = 0.8,
+	    width = 0.8,
 	    vert = "center",
 	    horiz = "center",
 	    followtag = true,
@@ -266,7 +290,15 @@ globalkeys = mytable.join(
     -- Show help
     awful.key({ modkey,  }, "`",      hotkeys_popup.show_help,
               {description="show help", group="awesome"}),
-    awful.key({ modkey, "Shift" }, "z", function () my_dropdown:toggle() end),
+
+    -- Quake
+    awful.key({ modkey, "Shift" }, "z", function () terminal_dropdown:toggle() end,
+              {description = "Empty terminal", group = "Quake"}),
+    awful.key({ modkey, "Shift" }, "o", function () pulsemixer_dropdown:toggle() end,
+              {description = "Pulsemixer terminal", group = "Quake"}),
+    awful.key({ modkey, "Shift" }, "x", function () ncmpcpp_dropdown:toggle() end,
+              {description = "ncmcpp terminal", group = "Quake"}),
+
     -- Tag browsing
     awful.key({ modkey,           }, "Left",   awful.tag.viewprev,
               {description = "view previous", group = "tag"}),
@@ -327,15 +359,17 @@ globalkeys = mytable.join(
 
     -- Brighness manipulation
     awful.key({ }, "XF86MonBrightnessDown", function ()
-	  awful.util.spawn("brightnessctl set 5%-") end),
+	  awful.util.spawn("brightnessctl set 5%-") end,
+       {description = "Decrease brightness by 5%", group = "Brightness Manipulaion"}),
     awful.key({ }, "XF86MonBrightnessUp", function ()
-	  awful.util.spawn("brightnessctl set +5%") end),
+	  awful.util.spawn("brightnessctl set +5%") end,
+       {description = "Increase brightness by 5%", group = "Brightness Manipulaion"}),
 
     -- Power management
     awful.key({ }, "XF86PowerOff", function ()
 	  awful.util.spawn("rofi -show power-menu -modi power-menu:rofi-power-menu") end),
 
-   -- Player manipulation 
+   -- Player manipulation
     awful.key({ }, "XF86AudioPrev", function ()
 	  awful.util.spawn("playerctl previous") end),
     awful.key({ }, "XF86AudioPlay", function ()
