@@ -322,3 +322,4 @@ ex=🎯:\
 
 export JAVA_HOME=/usr/lib64/jvm/java-8-openjdk
 export PATH=$JAVA_HOME/bin:$PATH
+export PATH="$PATH:$HOME/.config/composer/vendor/bin"
