@@ -13,3 +13,4 @@ redshift-gtk &
 exec awesome 
 # exec dwm
 # exec qtile start
+# exec i3
