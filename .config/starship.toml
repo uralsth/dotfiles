@@ -3,8 +3,13 @@ add_newline = false
 command_timeout = 1000
 
 # line break
-[line_break]
-disabled = true
+#[line_break]
+#disabled = true
+
+# Use custom format
+ format = """
+ [┌────>](bold green)$directory$rust$package
+ [└─>](bold green) """
 
 [character]
 error_symbol = "[✖](bold red) "
@@ -18,7 +23,9 @@ truncation_length = 5
 format = "[$path]($style)[$lock_symbol]($lock_style) "
 
 [python]
-disabled= true
+symbol = "🐍 "
+format = 'via [${symbol}(${version} )(\($virtualenv\) )]($style)'
+pyenv_version_name = true
 
 [nodejs]
 disabled= true
