@@ -7,9 +7,12 @@ command_timeout = 1000
 #disabled = true
 
 # Use custom format
+# format = """
+# [┌────> ](bold green)$directory$rust$package
+# [└─>](bold green) """
  format = """
- [┌────>](bold green)$directory$rust$package
- [└─>](bold green) """
+ [╭ ](bold green)$directory$package$git_branch$git_commit$git_state$git_metrics$git_status
+ [╰─>](bold green) """
 
 [character]
 error_symbol = "[✖](bold red) "
