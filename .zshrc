@@ -27,7 +27,6 @@ export CM_MAX_CLIP=15
 
 
 # Cleaning up my home folder
-export CARGO_HOME="$XDG_DATA_HOME"/cargo
 export GOPATH="$XDG_DATA_HOME"/go
 
 # Flutter path
@@ -323,3 +322,5 @@ ex=🎯:\
 export JAVA_HOME=/usr/lib64/jvm/java-8-openjdk
 export PATH=$JAVA_HOME/bin:$PATH
 export PATH="$PATH:$HOME/.config/composer/vendor/bin"
+export PATH=$PATH:/home/ural/.spicetify
+export CARGO_HOME=/home/ural/.cargo
