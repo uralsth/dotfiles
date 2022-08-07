@@ -8,6 +8,7 @@ clipmenud &
 # (wal -i ~/Pictures/Rick.jng -n) &
 autorandr --force --change &
 redshift-gtk &
+/usr/lib/kdeconnectd &
 # qutebrowser --nowindow &
 # ~/.fehbg &
 exec awesome 
