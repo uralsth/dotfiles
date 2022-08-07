@@ -11,7 +11,7 @@ command_timeout = 1000
 # [┌────> ](bold green)$directory$rust$package
 # [└─>](bold green) """
  format = """
- [╭ ](bold green)$directory$package$git_branch$git_commit$git_state$git_metrics$git_status
+ [╭ ](bold green)$directory$python$git_branch$git_commit$git_state$git_metrics$git_status
  [╰─>](bold green) """
 
 [character]
