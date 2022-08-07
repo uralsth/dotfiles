@@ -121,7 +121,7 @@ alias gitbw='bw get password Emacs1 | xclip -selection clipboard'
 
 
 # Dragon drag and drop
-alias ddd='dragon-drag-and-drop'
+alias ddd='dragon-drop'
 
 
 # Change capslock to ctrl
@@ -324,3 +324,5 @@ export PATH=$JAVA_HOME/bin:$PATH
 export PATH="$PATH:$HOME/.config/composer/vendor/bin"
 export PATH=$PATH:/home/ural/.spicetify
 export CARGO_HOME=/home/ural/.cargo
+export PATH="$PATH:/opt/mssql-tools/bin"
+export PATH="$PATH:/opt/mssql-tools/bin"
