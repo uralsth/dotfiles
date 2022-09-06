@@ -14,9 +14,11 @@ super + control + q
 super + e
       emacsclient -c -a '/usr/bin/emacs'
 super + s
-      spotify
+      LD_PRELOAD=/usr/local/lib/spotify-adblock.so spotify 
 super + shift + y
-      ytfzf -D 
+      ytfzf -D
+super + shift + alt + y
+      ytfzf -Dc S --sort
 super + w 
       switch
 super + alt +p
