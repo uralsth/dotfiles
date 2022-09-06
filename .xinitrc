@@ -6,7 +6,7 @@ xset dpms 0 0 0 && xset s noblank && xset s off &
 sxhkd &
 clipmenud &
 # (wal -i ~/Pictures/Rick.jng -n) &
-autorandr --force --change &
+# autorandr --force --change &
 redshift-gtk &
 /usr/lib/kdeconnectd &
 # qutebrowser --nowindow &
