@@ -17,7 +17,7 @@ export EDITOR="nvim"              # $EDITOR use Emacs in terminal
 export VISUAL="nvim"           # $VISUAL use Emacs in GUI mode
 export EXA_ICON_SPACING=2
 export sudoedit="nvim"
-export NEXTCLOUD_PHP_CONFIG=/etc/webapps/nextcloud/php.ini
+# export NEXTCLOUD_PHP_CONFIG=/etc/webapps/nextcloud/php.ini
 
 # clipboard
 export CM_SELECTIONS="clipboard"
@@ -27,10 +27,12 @@ export CM_MAX_CLIP=15
 
 
 # Cleaning up my home folder
-export GOPATH="$XDG_DATA_HOME"/go
+# export GOPATH="$XDG_DATA_HOME"/go
+export GOPATH=$HOME/go
+export PATH=$PATH:$GOPATH/bin
 
 # Flutter path
-export PATH="$PATH:/home/ural/Programs/flutter/bin"
+# export PATH="$PATH:/home/ural/Programs/flutter/bin"
 
 
 # Basic auto/tab complete:
@@ -240,6 +242,7 @@ export LESS_TERMCAP_se=$'\E[0m'
 export LESS_TERMCAP_us=$'\E[1;32m'
 
 
+# ex=🎯:\
 # This is the list for lf icons:
 export LF_ICONS="di=📁:\
 fi=📃:\
@@ -324,5 +327,3 @@ export PATH=$JAVA_HOME/bin:$PATH
 export PATH="$PATH:$HOME/.config/composer/vendor/bin"
 export PATH=$PATH:/home/ural/.spicetify
 export CARGO_HOME=/home/ural/.cargo
-export PATH="$PATH:/opt/mssql-tools/bin"
-export PATH="$PATH:/opt/mssql-tools/bin"
