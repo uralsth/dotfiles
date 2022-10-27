@@ -18,7 +18,7 @@ export VISUAL="nvim"           # $VISUAL use Emacs in GUI mode
 export EXA_ICON_SPACING=2
 export sudoedit="nvim"
 # export NEXTCLOUD_PHP_CONFIG=/etc/webapps/nextcloud/php.ini
-
+export CALIBRE_USE_DARK_PALETTE=1
 # clipboard
 export CM_SELECTIONS="clipboard"
 export CM_DEBUG=0
@@ -34,6 +34,8 @@ export PATH=$PATH:$GOPATH/bin
 # Flutter path
 # export PATH="$PATH:/home/ural/Programs/flutter/bin"
 
+# kdeconnect
+alias share="kdeconnect-cli -n uralg --share "
 
 # Basic auto/tab complete:
 autoload -U compinit
