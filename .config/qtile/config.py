@@ -168,3 +168,34 @@ wl_input_rules = None
 # We choose LG3D to maximize irony: it is a 3D non-reparenting WM written in
 # java that happens to be on java's whitelist.
 wmname = "LG3D"
+
+
+# autostart at startup
+@hook.subscribe.startup_once
+def autostart():
+    home = os.path.expanduser('~')
+    subprocess.Popen([home + '/.config/qtile/autostart.sh'])
+
+# Work around for matching Spotify
+@hook.subscribe.client_new
+def slight_delay(window):
+    time.sleep(0.04)
+
+# If Spotify opens move it to group 6
+@hook.subscribe.client_name_updated
+def spotify(window):
+    if window.name == 'Spotify':
+        window.togroup(group_name='5')
+
+# If mpv opens, change floating to tile
+# commented one: float it at pos x, y, w, h, borderwidth, border color
+@hook.subscribe.client_managed
+def repos(window):
+    if window.get_wm_class() and 'mpv' in window.get_wm_class():
+        window.floating = False
+        # window.place(1200, 650, 640, 360, 2, "#ffffff")
+
+@hook.subscribe.group_window_add
+def switchtogroup(group, window):
+    if 'term' not in window.get_wm_class() | 'pulsemixer' not in window.get_wm_class() | 'ncmpcpp' not in window.get_wm_class():  
+        group.cmd_toscreen()
