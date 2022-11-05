@@ -10,8 +10,8 @@ clipmenud &
 redshift-gtk &
 /usr/lib/kdeconnectd &
 # qutebrowser --nowindow &
-# ~/.fehbg &
-exec awesome 
+~/.fehbg &
+# exec awesome 
 # exec dwm
-# exec qtile start
+exec qtile start
 # exec i3
