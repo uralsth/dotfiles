@@ -89,8 +89,8 @@ layouts = [
 ]
 
 widget_defaults = dict(
-    font="Roboto",
-    fontsize=12,
+    font="Roboto, NotoSans Nerd Font",
+    fontsize=13,
     padding=3,
 )
 extension_defaults = widget_defaults.copy()
@@ -101,6 +101,7 @@ screens = [
             [
                 widget.GroupBox(),
                 widget.Prompt(),
+                widget.CurrentLayout(),
                 widget.WindowName(),
                 widget.Chord(
                     chords_colors={
@@ -114,7 +115,6 @@ screens = [
                 # widget.StatusNotifier(),
                 widget.Systray(),
                 widget.Clock(format="%Y-%m-%d %a %I:%M %p"),
-                widget.CurrentLayout(),
                 # widget.QuickExit(),
             ],
             24,
