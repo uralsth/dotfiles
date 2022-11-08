@@ -19,8 +19,6 @@ super + shift + y
       ytfzf -D
 super + shift + alt + y
       ytfzf -Dc S --sort
-super + w 
-      switch
 super + alt +p
       maim -u --select | xclip -selection clipboard -t image/png
 alt + p
