@@ -1,14 +1,46 @@
-from libqtile import bar, layout, widget
+from libqtile import bar, layout #, widget
 from libqtile.config import Click, Drag, DropDown, Group, Key, KeyChord, Match, ScratchPad, Screen
 from libqtile.lazy import lazy
-# import os
+import os
 # import subprocess
-# from libqtile import hook, qtile
-from settings.keys import keys
-
+ # from libqtile import hook, qtile
+from settings.keys import keys 
+from qtile_extras import widget
+from qtile_extras.widget.decorations import RectDecoration
 
 mod = "mod4"
 terminal = "st"
+
+catppuccin = {
+    "rosewater": "#f5e0dc",
+    "flamingo": "#f2cdcd",
+    "mauve": "#cba6f7",
+    "pink": "#f5c2e7",
+    "maroon": "#eba0ac",
+    "red": "#f38ba8",
+    "peach": "#fab387",
+    "yellow": "#f9e2af",
+    "green": "#a6e3a1",
+    "teal": "#94e2d5",
+    "blue": "#89b4fa",
+    "sky": "#89dceb",
+    "sapphire": "#74c7ec",
+    "lavender": "#b4befe",
+    "text": "#cdd6f4",
+    "subtext1": "#bac2de",
+    "subtext0": "#a6adc8",
+    "overlay2": "#9399b2",
+    "overlay0": "#7f849c",
+    "surface2": "#6c7086",
+    "surface1": "#585b70",
+    "surface0": "#313244",
+    "base": "#1e1e2e",
+    "mantle": "#181825",
+    "crust": "#11111b",
+    "white": "#d9e0ee",
+    "gray": "#6e6c7e",
+    "black": "#1a1826",
+    }
 
 ## Groups
 
@@ -104,7 +136,7 @@ layouts = [
     # layout.Stack(num_stacks=2),
     # layout.Bsp(),
     # layout.Matrix(),
-    layout.MonadTall(border_width=2, margin=20, border_focus="#6da3bb"),
+    layout.MonadTall(border_width=2, margin=20, border_focus="#20B7D2"),
     # layout.MonadWide(),
     # layout.RatioTile(),
     # layout.Tile(),
@@ -120,6 +152,7 @@ widget_defaults = dict(
     font="Roboto, NotoSans Nerd Font",
     fontsize=13,
     padding=2,
+    foreground=catppuccin["black"]
 )
 extension_defaults = widget_defaults.copy()
 
@@ -127,46 +160,128 @@ screens = [
     Screen(
         top=bar.Bar(
             [
-             widget.Spacer(
-                 length=10,
-                 background='#000000'
+
+             widget.Spacer(length=3,),
+
+             widget.GroupBox(
+                 highlight_color=[catppuccin["sapphire"], catppuccin["blue"]],
+                 inactive=catppuccin["surface1"],
+                 active=catppuccin["white"],
+                 highlight_method="line",
+                 decorations=[
+                        RectDecoration(
+                            colour=catppuccin["lavender"],
+                            radius=6,
+                            filled=True,
+                            # group=True,
+                        )
+                    ],
              ),
-             widget.GroupBox(),
-             widget.Spacer(
-                 length=10,
-                 background='#000000'
-             ),
-             widget.TaskList(
-                 icon_size=18,
-                 max_title_width=200,
-                 txt_floating=" ",
-                 txt_maximized="类 ",
-                 txt_minimized="絛 ",
-             ),
-             widget.Chord(
-                 chords_colors={
-                     "launch": ("#ff0000", "#ffffff"),
-             },
-                 name_transform=lambda name: name.upper(),
+
+             widget.Spacer(length=40,),
+
+             widget.WindowName(
+                 max_chars=70,
+                 fontsize=13.5,
+                 foreground=catppuccin["teal"],
+                 # background=catppuccin["base"],
             ),
-             # widget.Mpris2(
-             #     name = "Spotify",
-             #     objname = "org.mpris.MediaPlayer2.spotify",
-             #     display_metadata = ['xesam:title', 'xesam:artist'],
-             #     font = "Fira Code Nerd Font",
-             #     width = 150,
+
+             widget.Spacer(length=40,),
+
+             # widget.TaskList(
+             #     icon_size=18,
+             #     # max_title_width=200,
+             #     txt_floating=" ",
+             #     txt_maximized="类 ",
+             #     txt_minimized="絛 ",
+             #     foreground=catppuccin["white"],
+             #     # highlight_method="block",
+             #     # background=catppuccin["rosewater"],
              # ),
 
-             widget.Systray(),
-             widget.Spacer(
-                 length=10,
-                 background='#000000'
+             widget.Mpris2(
+                 name = "musicwidget",
+                 # objname = "org.mpris.MediaPlayer2.spotify",
+                 objname = None,
+                 display_metadata = ['xesam:title', 'xesam:artist'],
+                 paused_text = '  {track}',
+                 playing_text = '  {track}',
+                 no_metadata_text = '',
+                 font = "Fira Code Nerd Font",
+                 width = 200,
+                 padding=8,
+                 scroll_step=4,
+                 scroll_interval=0.2,
+                 scroll_clear=False,
+                 scroll_delay=2,
+                 foreground="#4E1C6B",
+                 decorations=[
+                        RectDecoration(
+                            colour=catppuccin["rosewater"],
+                            radius=6,
+                            filled=True,
+                            # group=True
+                        )
+                    ],
+                ),
+
+             widget.Spacer(length=5,),
+
+             widget.Systray(
+                 padding=3,
+                 foreground="#748278",
+                 background=catppuccin["surface0"],
              ),
+
+             widget.Spacer(length=5,),
+
+             widget.PulseVolume(
+                 # emoji = True,
+                 fmt= '墳 {:>4}',
+                 update_interval = 0.1,
+                 padding=10,
+                 foreground="#735557",
+                 get_volume_command=os.path.expanduser(
+                     "~/.local/bin/get_volume"
+                        ),
+                 # get_volume_command =["pamixer", "--get-volume-human"],
+                 volume_up_command = "pactl set-sink-volume 0 +5%",
+                 volume_down_command = "pactl set-sink-volume 0 -5%",
+                 mute_command = "pulsemixer --toggle-mute",
+
+                 decorations=[
+                     RectDecoration(
+                         colour=catppuccin["mauve"],
+                         radius=6,
+                         filled=True,
+                         # group=True,
+                              )
+                ],
+             ),
+
+             widget.Spacer(length=5,),
+
              widget.Backlight(
                  backlight_name="intel_backlight",
                  scroll=True,
+                 padding=10,
                  step=5,
+                 fmt='盛 {:>4}',
+                 foreground="#A16424",
+                 decorations=[
+                     RectDecoration(
+                         colour=catppuccin["green"],
+                         radius=6,
+                         filled=True,
+                         # group=True,
+                              )
+                              ],
+
              ),
+
+             widget.Spacer(length=5,),
+             
              widget.Battery(
                 battery=0,
                  charge_char="",
@@ -174,28 +289,46 @@ screens = [
                  empty_char="",
                  full_char="",
                  unknown_char="",
-                 format='{char} ',
+                 padding=10,
+                 format='BAT: {char} ',
                  show_short_text=False,
                  update_interval=15,
+                 foreground="#146286",
+
+                 decorations=[
+                     RectDecoration(
+                         colour=catppuccin["sapphire"],
+                         radius=6,
+                         filled=True,
+                         # group=True,
+                              )
+                ],
              ),
+
+             widget.Spacer(length=5,),
+             
              widget.Clock(
-                format = "%A, %B %d %H:%M:%S",
-                 # format="%-H:%M:%S"
+                format="  %A, %B %d - %H:%M:%S",
+                 padding=13,
+                 foreground="#6E6661",
+                 decorations=[
+                     RectDecoration(
+                         colour=catppuccin["peach"],
+                         radius=6,
+                         filled=True,
+                         group=True,
+                        )
+                    ],
+
              ),
              # widget.QuickExit(),
 
-             widget.CurrentLayoutIcon(
-                 custom_icons_paths=["~/.config/qtile/assets/icons/"],
-                 scale=0.7,
-             ),
-             widget.Spacer(
-                 length=6,
-                 background='#000000'
-             ),
+             widget.Spacer(length=5,),
             ],
-            25,
+            24,
             # border_width=[2, 0, 2, 0],  # Draw top and bottom borders
             # border_color=["ff00ff", "000000", "ff00ff", "000000"]  # Borders are magenta
+            background="#000000",
         ),
     ),
 ]
@@ -213,6 +346,8 @@ follow_mouse_focus = True
 bring_front_click = False
 cursor_warp = False
 floating_layout = layout.Floating(
+    border_focus="#20B7D2",
+    border_width=2,
     float_rules=[
         # Run the utility of `xprop` to see the wm class and name of an X client.
         *layout.Floating.default_float_rules,
@@ -244,3 +379,4 @@ wl_input_rules = None
 # We choose LG3D to maximize irony: it is a 3D non-reparenting WM written in
 # java that happens to be on java's whitelist.
 wmname = "qtile"
+
