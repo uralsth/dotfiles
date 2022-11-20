@@ -19,12 +19,12 @@ super + shift + y
       ytfzf -D
 super + shift + alt + y
       ytfzf -Dc S --sort
+alt + p
+      maim -u ~/Pictures/ss/$(date +"%Y_%m_%d_%I_%M_%p()").png
+alt + shift + p
+      ssmaim
 super + alt +p
       maim -u --select | xclip -selection clipboard -t image/png
-alt + p
-      maim -u ~/Pictures/ss/$(date +%s).png
-super + shift + alt + c
-      ctoc
 super + period
       splatmoji type
 super + shift + period
