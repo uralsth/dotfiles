@@ -20,11 +20,9 @@ choice=$(menu | dmenu -p "Pick One:" -i -l 20 | cut -d. -f1)
 cbtext=$(xclip -o -selection clipboard)
 paplay $HOME/.local/share/sounds/magic.ogg &
 
-aria2c --bt-metadata-only=true --bt-save-metadata=true "magnet:?xt=urn:btih:9DD4DC544CCDE9C22DBC2F2978D731F3BE194EC3&dn=Modern%20Family%20S04%20Season%204%20720p%205.1Ch%20BluRay%20ReEnc-DeeJayAhmed&tr=udp%3A%2F%2Ftracker.coppersurfer.tk%3A6969%2Fannounce&tr=udp%3A%2F%2Ftracker.openbittorrent.com%3A6969%2Fannounce&tr=udp%3A%2F%2F9.rarbg.to%3A2710%2Fannounce&tr=udp%3A%2F%2F9.rarbg.me%3A2780%2Fannounce&tr=udp%3A%2F%2F9.rarbg.to%3A2730%2Fannounce&tr=udp%3A%2F%2Ftracker.opentrackr.org%3A1337&tr=http%3A%2F%2Fp4p.arenabg.com%3A1337%2Fannounce&tr=udp%3A%2F%2Ftracker.torrent.eu.org%3A451%2Fannounce&tr=udp%3A%2F%2Ftracker.tiny-vps.com%3A6969%2Fannounce&tr=udp%3A%2F%2Fopen.stealth.si%3A80%2Fannounce"
-
 case $choice in
     1)
-	output=$(curl -s -F"shorten=$cbtext" 0x0.st)
+	output=$(curl -s -F "shorten=$cbtext" 0x0.st)
 	if [ "$output" = "Segmentation Fault" ]; then
 	    spell_failed
 	else
