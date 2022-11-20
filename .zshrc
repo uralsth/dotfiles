@@ -25,6 +25,8 @@ export CM_DEBUG=0
 export CM_OUTPUT_CLIP=1
 export CM_MAX_CLIP=15
 
+# add ~/.local/bin to a path
+export PATH="/home/ural/.local/bin:$PATH"
 
 # Cleaning up my home folder
 # export GOPATH="$XDG_DATA_HOME"/go
@@ -214,8 +216,6 @@ if [ -d "$HOME/Applications" ] ;
 fi
 
 
-# Load zsh-syntax-highlighting; should be last.
-source /usr/share/zsh/plugins/zsh-syntax-highlighting/zsh-syntax-highlighting.zsh 2>/dev/null
 PATH="$HOME/.local/bin:$PATH"
 PATH=$PATH:$HOME/.local/bin
 
@@ -329,3 +329,8 @@ export PATH=$JAVA_HOME/bin:$PATH
 export PATH="$PATH:$HOME/.config/composer/vendor/bin"
 export PATH=$PATH:/home/ural/.spicetify
 export CARGO_HOME=/home/ural/.cargo
+
+# Load zsh-syntax-highlighting; should be last.
+source ~/.zsh/catppuccin_mocha-zsh-syntax-highlighting.zsh
+
+source /usr/share/zsh/plugins/zsh-syntax-highlighting/zsh-syntax-highlighting.zsh 2>/dev/null
