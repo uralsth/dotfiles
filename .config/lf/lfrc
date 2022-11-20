@@ -78,6 +78,16 @@ cmd copyto ${{
 	notify-send "📋 File(s) copied." "File(s) copies to $dest."
 }}
 
+cmd share ${{
+	clear; tput cup $(($(tput lines)/3)); tput bold
+  set -f
+	printf "%s\n\t" "$fx"
+	printf "share?[y/N]"
+	read ans
+	[ $ans = "y" ] && kdeconnect-cli -l && ckdeconnect-cli -n uralg --share -- $fx &&
+  notify-send "File(s) shared to device."
+}}
+
 cmd setbg "$1"
 cmd bulkrename $vidir
 
@@ -89,6 +99,7 @@ map g top
 map D delete
 map E extract
 map C copyto
+map S share
 map M moveto
 map <c-n> push :mkdir<space>
 map <c-r> reload
