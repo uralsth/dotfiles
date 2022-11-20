@@ -1,10 +1,12 @@
 #!/bin/sh
 
 menu(){
-    printf "1. Laptop Full Screen\n"
-    printf "2. Laptop Clipboard\n"
-    printf "3. Monitor Full Screen\n"
-    printf "4. Monitor Clipboard\n"
+  printf "1. Full Screen (save)\n"
+  printf "2. Full Screen (clipboard)\n"
+  printf "3. Full Screen (save & clipboard)\n"
+  printf "4. Active Window (clipboard)\n"
+  printf "5. Active Window (save & clipboard)\n"
+  printf "6. Save Clipboard to ss file\n"
 }
 
 failed(){
@@ -16,22 +18,32 @@ file=$(date +"%Y_%m_%d_%I_%M_%p")
 
 case $choice in
     1)
-    maim -u -d 3 --quiet -g "1366x768+1024+0" ~/Pictures/ss/$(date +%s).png ||
+    maim -u -d 1 --quiet ~/Pictures/ss/$file.png ||
        failed
 	break
 	;;
     2)
-    maim -u -d 3 --quiet -g "1366x768+1024+0" | xclip -selection clipboard ||
+    maim -u -d 1 --quiet | xclip -selection clipboard ||
         failed
 	break
 	;;
     3)
-    maim -u -d 3 --quiet -g "1024x768+0+0" ~/Pictures/ss/$(date +%s).png ||
+    maim -u -d 1 --quiet | tee ~/Pictures/$file.png | xclip -selection clipboard -t image/png ||
         failed
 	break
 	;;
     4)
-    maim -u -d 3 --quiet -g "1024x768+0+0" | xclip -selection clipboard ||
+  maim -u -d 1 --quiet -i $(xdotool getactivewindow) | xclip -selection clipboard -t image/png ||
+        failed
+	break
+	;;
+    5)
+  maim -u -d 1 --quiet -i $(xdotool getactivewindow)| tee ~/Pictures/$file.png | xclip -selection clipboard -t image/png ||
+        failed
+	break
+	;;
+    6)
+  	xclip -selection clipboard -t image/png -o > $HOME/Pictures/ss/$file.png ||
         failed
 	break
 	;;
