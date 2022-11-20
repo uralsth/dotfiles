@@ -1,4 +1,4 @@
-from settings import customfunc
+from settings import functions
 from libqtile.lazy import lazy
 from libqtile.config import KeyChord, Key
 mod = "mod4"
@@ -94,10 +94,10 @@ keys = [
 
     # Gaps Manipulation
     Key([mod], 'g',
-        customfunc.change_layout_gap(adjustment=-1),
+        functions.change_layout_gap(adjustment=-1),
         desc='decrease gap by 1'),
     Key([mod, 'shift'], 'g',
-        customfunc.change_layout_gap(adjustment=1),
+        functions.change_layout_gap(adjustment=1),
         desc='increase gap by 1'),
 
 
@@ -128,27 +128,27 @@ keys = [
 
     # Resizing Floating Window
     KeyChord([mod],"x", [
-        Key([], "h", customfunc.resize_floating_window(width=10), desc='increase width by 10'), 
-        Key([], "l", customfunc.resize_floating_window(width=-10), desc='decrease width by 10'), 
-        Key([], "k", customfunc.resize_floating_window(height=10), desc='increase height by 10'), 
-        Key([], "j", customfunc.resize_floating_window(height=-10), desc='decrease height by 10'),
+        Key([], "h", functions.resize_floating_window(width=10), desc='increase width by 10'), 
+        Key([], "l", functions.resize_floating_window(width=-10), desc='decrease width by 10'), 
+        Key([], "k", functions.resize_floating_window(height=10), desc='increase height by 10'), 
+        Key([], "j", functions.resize_floating_window(height=-10), desc='decrease height by 10'),
         ],
              mode=True,
              name="Resize Floating Windows"),
 
 
     # Sticky Window Bindings
-    Key([mod], "w", customfunc.stick_win, desc="stick win"),
-    Key([mod, "shift"], "w", customfunc.unstick_win, desc="unstick win"),
+    Key([mod], "w", functions.stick_win, desc="stick win"),
+    Key([mod, "shift"], "w", functions.unstick_win, desc="unstick win"),
 
 
     # Sound Manipulation
     Key([], "XF86AudioMute", lazy.spawn("pulsemixer --toggle-mute")),
-    Key([], "XF86AudioLowerVolume", lazy.spawn("pactl set-sink-volume 0 -5%")),
-    Key([], "XF86AudioRaiseVolume", lazy.spawn("pactl set-sink-volume 0 +5%")),
-    Key([], "XF86AudioPlay", lazy.spawn("playerctl play-pause"), desc='playerctl'),
-    Key([], "XF86AudioPrev", lazy.spawn("playerctl previous"), desc='playerctl'),
-    Key([], "XF86AudioNext", lazy.spawn("playerctl next"), desc='playerctl'),
+    Key([], "XF86AudioLowerVolume", lazy.spawn("pactl set-sink-volume 0 -1%")),
+    Key([], "XF86AudioRaiseVolume", lazy.spawn("pactl set-sink-volume 0 +1%")),
+    Key([], "XF86AudioPlay", lazy.spawn("playerctl --ignore-player firefox --player spotify,mpd play-pause"), desc='playerctl'),
+    Key([], "XF86AudioPrev", lazy.spawn("playerctl --ignore-player firefox --player spotify,mpd previous"), desc='playerctl'),
+    Key([], "XF86AudioNext", lazy.spawn("playerctl --ignore-player firefox --player spotify,mpd next"), desc='playerctl'),
 
 
     # Brightnes Manipulatio
