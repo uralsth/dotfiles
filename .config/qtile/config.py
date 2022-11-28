@@ -3,7 +3,7 @@ from libqtile.config import Click, Drag, DropDown, Group, Key, KeyChord, Match, 
 from libqtile.lazy import lazy
 import os
 # import subprocess
- # from libqtile import hook, qtile
+# from libqtile import hook, qtile
 from settings.keys import keys 
 from qtile_extras import widget
 from qtile_extras.widget.decorations import RectDecoration
@@ -281,6 +281,22 @@ screens = [
              ),
 
              widget.Spacer(length=5,),
+
+             # widget.UPowerWidget(
+             #     text_charging = '({percentage:.0f}%) {ttf} until fully charged',
+             #     text_discharging = '({percentage:.0f}%) {tte} until empty',
+             #     padding=10,
+             #     fill_charge=catppuccin["gray"],
+             #     foreground="#146286",
+             #     decorations=[
+             #         RectDecoration(
+             #             colour=catppuccin["sapphire"],
+             #             radius=6,
+             #             filled=True,
+             #             # group=True,
+             #                  )
+             #    ],
+             # ),
              
              widget.Battery(
                 battery=0,
@@ -330,6 +346,14 @@ screens = [
             # border_color=["ff00ff", "000000", "ff00ff", "000000"]  # Borders are magenta
             background="#000000",
         ),
+
+  #       bottom=bar.Bar(
+  #       [
+  #        widget.LiveFootballScores(
+  #            teams=["Spain", "Arsenal"]),
+  #       ],
+  #       30,
+  # ),
     ),
 ]
 

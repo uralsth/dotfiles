@@ -103,7 +103,11 @@ keys = [
 
     # Toggle bar visibility
     Key([mod], 'b',
-        lazy.hide_show_bar(),
+        lazy.hide_show_bar("top"),
+        desc='Toggle bar visibility'),
+
+    Key([mod, "shift"], 'b',
+        lazy.hide_show_bar("bottom"),
         desc='Toggle bar visibility'),
     # Toggle between split and unsplit sides of stack.
     # Split = all windows displayed
@@ -147,8 +151,11 @@ keys = [
     Key([], "XF86AudioLowerVolume", lazy.spawn("pactl set-sink-volume 0 -1%")),
     Key([], "XF86AudioRaiseVolume", lazy.spawn("pactl set-sink-volume 0 +1%")),
     Key([], "XF86AudioPlay", lazy.spawn("playerctl --ignore-player firefox --player spotify,mpd play-pause"), desc='playerctl'),
+    Key(["mod1", "control"], "Up", lazy.spawn("playerctl --ignore-player firefox --player mpd,spotify play-pause")),
     Key([], "XF86AudioPrev", lazy.spawn("playerctl --ignore-player firefox --player spotify,mpd previous"), desc='playerctl'),
+    Key(["mod1", "control"], "Left", lazy.spawn("playerctl --ignore-player firefox --player mpd,spotify previous")),
     Key([], "XF86AudioNext", lazy.spawn("playerctl --ignore-player firefox --player spotify,mpd next"), desc='playerctl'),
+    Key(["mod1", "control"], "Right", lazy.spawn("playerctl --ignore-player firefox --player mpd,firefox next")),
 
 
     # Brightnes Manipulatio
