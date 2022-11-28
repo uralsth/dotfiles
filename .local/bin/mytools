@@ -5,7 +5,7 @@ menu(){
     printf "2. Download file in ~/dl\n"
     printf "3. Play videos in mpv\n"
     printf "4. Convert magnet link to torrent file\n"
-    printf "5. Save clipbaord image in ~/Pictures/save\n"
+    printf "5. Save clipbaord image in ~/Pictures/ss\n"
     printf "6. Send clipboard text with tgsend script\n"
     printf "7. This will run any shell command\n"
     printf "8. Clipboard text to speech with espeak\n"
@@ -46,7 +46,7 @@ case $choice in
 	;;
     5)
 	file=$(date +"%Y_%m_%d_%I_%M_%p")
-	xclip -selection clipboard -t image/png -o > $HOME/Pictures/save/$file.png ||
+	xclip -selection clipboard -t image/png -o > $HOME/Pictures/ss/$file.png ||
 	    spell_failed
 	break
 	;;
