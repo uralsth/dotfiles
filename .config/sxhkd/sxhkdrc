@@ -14,7 +14,7 @@ super + control + q
 super + e
       emacsclient -c -a '/usr/bin/emacs'
 super + s
-      LD_PRELOAD=/usr/local/lib/spotify-adblock.so spotify 
+      LD_PRELOAD=/usr/lib/spotify-adblock.so spotify 
 super + shift + y
       ytfzf -D
 super + shift + alt + y
