@@ -128,6 +128,8 @@ keys = [
     Key([mod, "control"], "r", lazy.reload_config(), desc="Reload the config"),
     Key([mod, "shift"], "q", lazy.shutdown(), desc="Shutdown Qtile"),
     Key([mod], "Escape", lazy.screen.toggle_group(), desc="Move to the last visited group"),
+    Key([], "XF86PowerOff", lazy.spawn("rofi -show p -modi p:rofi-power-menu")),
+    Key(["mod1", "control"], "l", lazy.spawn("slock")),
 
 
     # Resizing Floating Window
