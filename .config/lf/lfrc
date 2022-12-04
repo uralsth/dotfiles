@@ -84,7 +84,7 @@ cmd share ${{
 	printf "%s\n\t" "$fx"
 	printf "share?[y/N]"
 	read ans
-	[ $ans = "y" ] && kdeconnect-cli -l && ckdeconnect-cli -n uralg --share -- $fx &&
+	[ $ans = "y" ] && kdeconnect-cli -l && kdeconnect-cli -n uralg --share -- $fx &&
   notify-send "File(s) shared to device."
 }}
 
