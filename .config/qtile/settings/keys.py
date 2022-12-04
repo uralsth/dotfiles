@@ -140,10 +140,21 @@ keys = [
              mode=True,
              name="Resize Floating Windows"),
 
-
+    KeyChord([mod],"v", [
+        Key([], "j", functions.move_floating_window(y=10), desc='increase width by 10'), 
+        Key([], "k", functions.move_floating_window(y=-10), desc='decrease width by 10'), 
+        Key([], "l", functions.move_floating_window(x=10), desc='increase height by 10'), 
+        Key([], "h", functions.move_floating_window(x=-10), desc='decrease height by 10'),
+        ],
+             mode=True,
+             name="Resize Floating Windows"),
+    Key(["mod4", "mod1"], "f", functions.float_to_front),
+    Key([mod, "mod1"], "w", functions.fix_size_floating_window, desc="stick win"),
     # Sticky Window Bindings
     Key([mod], "w", functions.stick_win, desc="stick win"),
     Key([mod, "shift"], "w", functions.unstick_win, desc="unstick win"),
+
+    Key([mod], "o", lazy.run_extension(extension.WindowList(font="Roboto", fontsize=13, dmenu_ignorecase=True, item_format='{id}. {group}   {window}', dmenu_prompt="Select Window: "))),
 
 
     # Sound Manipulation
