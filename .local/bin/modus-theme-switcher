@@ -1,0 +1,21 @@
+#!/bin/sh
+
+pkill -f emacs && notify-send "Killed Emacs Process"
+
+menu(){
+  printf "1. dark\n"
+  printf "2. light\n"
+}
+
+dark="vivendi"
+light="operandi"
+
+
+choice=$(menu | dmenu -p "Pick One:" -i -l 20 | cut -d. -f1)
+case $choice in
+  1) sed  -i "s/$light/$dark/" ~/.emacs.d/init.el ~/.emacs.d/README.org;;
+  2) sed  -i "s/$dark/$light/" ~/.emacs.d/init.el ~/.emacs.d/README.org;;
+  *) echo "Not a correct input";;
+esac
+/usr/bin/emacs --daemon --debug-init && notify-send "Emacs Server Started Successfully!"
+emacsclient -c -a 'emacs' &
