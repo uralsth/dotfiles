@@ -1,6 +1,7 @@
 from settings import functions
 from libqtile.lazy import lazy
 from libqtile.config import KeyChord, Key
+from libqtile import extension
 mod = "mod4"
 terminal = "st"
 
