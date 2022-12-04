@@ -250,7 +250,7 @@ export LF_ICONS="di=📁:\
 fi=📃:\
 tw=🤝:\
 ow=📂:\
-ln=⛓:\
+ln=🔗:\
 or=❌:\
 ex=🎯:\
 *.txt=✍:\
