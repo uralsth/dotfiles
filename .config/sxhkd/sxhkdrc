@@ -15,9 +15,9 @@ super + e
       emacsclient -c -a '/usr/bin/emacs'
 super + s
       LD_PRELOAD=/usr/lib/spotify-adblock.so spotify 
-super + shift + y
+super + y
       ytfzf -D
-super + shift + alt + y
+super + shift + y
       ytfzf -Dc S --sort
 alt + p
       maim -u ~/Pictures/ss/$(date +"%Y_%m_%d_%I_%M_%p()").png
@@ -33,3 +33,5 @@ super + z
       zathura 
 super + c
       clipmenu
+super + alt + Escape
+     	pkill -USR1 -x sxhkd
