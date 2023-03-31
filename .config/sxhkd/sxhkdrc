@@ -16,11 +16,11 @@ super + e
 super + s
       LD_PRELOAD=/usr/lib/spotify-adblock.so spotify 
 super + y
-      ytfzf -D
+      ytfzf -D --sort --sort-by=relevance
 super + shift + y
       ytfzf -Dc S --sort
 alt + p
-      maim -u ~/Pictures/ss/$(date +"%Y_%m_%d_%I_%M_%p()").png
+      maim -u  ~/Pictures/ss/$(date +"%Y_%m_%d_%I_%M_%S_%p").png
 alt + shift + p
       ssmaim
 super + alt +p
